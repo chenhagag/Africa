@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "inventory-form-client-side-solution",
+    "id": "62aa6d74-d099-45a0-a475-9cfc9d616fc6",
+    "version": "1.0.0.4",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "User.Read.All"
+      }
+    ],
+    "metadata": {
+      "shortDescription": {
+        "default": "InventoryForm description"
+      },
+      "longDescription": {
+        "default": "InventoryForm description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "inventory-form Feature",
+        "description": "The feature that activates elements of the inventory-form solution.",
+        "id": "a2e91e2a-840c-4652-9e39-1c4b61cf0ea7",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/inventory-form.sppkg"
+  }
+}
