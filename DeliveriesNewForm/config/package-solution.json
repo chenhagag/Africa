@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "africa-delivery-new-form-client-side-solution",
+    "id": "eb62970b-b3e4-4343-8978-63e53d22e0bc",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AfricaDeliveryNewForm description"
+      },
+      "longDescription": {
+        "default": "AfricaDeliveryNewForm description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "africa-delivery-new-form Feature",
+        "description": "The feature that activates elements of the africa-delivery-new-form solution.",
+        "id": "8e1e61c9-3d2e-434d-9ffd-49a148695989",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/africa-delivery-new-form.sppkg"
+  }
+}
