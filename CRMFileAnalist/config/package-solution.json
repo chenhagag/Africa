@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "crm-file-analist-client-side-solution",
+    "id": "d77f90e8-7093-4f2e-9428-b69f7ac40ec8",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "CRMFileAnalist description"
+      },
+      "longDescription": {
+        "default": "CRMFileAnalist description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "crm-file-analist Feature",
+        "description": "The feature that activates elements of the crm-file-analist solution.",
+        "id": "8b36eb25-beec-4a31-8211-81e35ed3a74e",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/crm-file-analist.sppkg"
+  }
+}

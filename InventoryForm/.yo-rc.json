@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.14.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "inventory-form",
+    "libraryId": "62aa6d74-d099-45a0-a475-9cfc9d616fc6",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "InventoryForm",
+    "solutionShortDescription": "InventoryForm description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "crm-file-analist-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/crmFileAnalist/CrmFileAnalistWebPart.js",
+          "manifest": "./src/webparts/crmFileAnalist/CrmFileAnalistWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "CrmFileAnalistWebPartStrings": "lib/webparts/crmFileAnalist/loc/{locale}.js"
+  }
+}

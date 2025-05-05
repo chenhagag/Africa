@@ -135,13 +135,14 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       .expand("CurrLand","Item","CurrOwner").top(4999)
       .get();
   
+      debugger;
       const formattedItems: IInventoryItem[] = items.map((item: any) => ({
         id: item.ID,
         title: item.Title,
         type: item["Item"]?.TypeCTT || '',
         assignedTo: item["CurrOwner"]?.Title || '',
         serialNumber: item["ItemID"] || '',
-        available: item["Available"] === true,
+        available: !item["CurrOwner"]?.Title,
         isNew: false
       }));
 
@@ -187,6 +188,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   private async saveChanges(): Promise<void> {
     const { userItems, selectedUser } = this.state;
     const today = new Date().toISOString();
+
+    debugger;
   
     for (const item of userItems) {
       if (item.returnReason) {
@@ -223,7 +226,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
           Available: false,
           CurrOwnerId: selectedUser?.id
         });
-      
+  
+        debugger;
         // 2. בדיקה אם פריט כבר קיים ברשימת השאלות
         const existing = await sp.web.lists.getByTitle("השאלות").items
           .filter(`Title eq '${uniqueTitle}'`)
@@ -386,21 +390,27 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   };
   
   
-  private _handleUserSelect = (user: any) => {
-    this.setState({
-      selectedUser: { id: user.id, text: user.displayName },
-      searchText: user.displayName,
-      suggestedUsers: []
-    });
+  private _handleUserSelect = async (user: any) => {
+    try {
+      const ensuredUser = await sp.web.ensureUser(user.userPrincipalName); 
+      const spUserId = ensuredUser.data.Id; 
   
-    const filteredItems = this.state.allItems.filter(item => item.assignedTo === user.displayName);
-    this.setState({ userItems: filteredItems });
+      this.setState({
+        selectedUser: { id: spUserId, text: user.displayName },
+        searchText: user.displayName,
+        suggestedUsers: []
+      });
+
+      const filteredItems = this.state.allItems.filter(item => item.assignedTo === user.displayName);
+      this.setState({ userItems: filteredItems });
+
+    } catch (error) {
+      console.error('שגיאה בהבאת מזהה SharePoint:', error);
+    }
   };
-  
-  
+    
   public render(): React.ReactElement<IInventoryFormProps> {
      
-
     return (
       <section className={styles.inventoryForm}>
 
