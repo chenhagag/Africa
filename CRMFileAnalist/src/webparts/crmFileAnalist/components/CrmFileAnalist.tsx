@@ -1,100 +1,292 @@
 import * as React from 'react';
+import { sp } from "@pnp/sp/presets/all";
+
 import { ICrmFileAnalistProps } from './ICrmFileAnalistProps';
 
 interface IParsedLine {
   name: string;
   address: string;
   city: string;
-  creditNoteNumber: string;
+  zipCode: string; // מיקוד
+  mana: string;
+  CreditMessage: string;
   creditNoteDate: string;
   invoices: string[];
   general: string;
-  telephone: string;
+  bankBranchName: string;
   creationDate: string;
   accountNumber: string;
-  idNumber: string;
-  amount: string;
   referenceNumber: string;
+  bankBranch: string;        // CKMSUB
+  bankNumber: string;        // CKMBNK
+  bankAccount: string;       // CKMCHS
+  bankBranchCity: string;       // CKMSGH
+  bankName: string;     // CKMSHL
+  bankBranchAddress: string;      // CKMATA
   extraText1: string;
   extraText2: string;
 }
+
 
 interface IState {
   lines: IParsedLine[];
   fileUploaded: boolean;
   errorMessage: string | null;
+  showConfirmation: boolean;
+  isSending: boolean;
 }
 
 export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnalistProps, IState> {
   constructor(props: ICrmFileAnalistProps) {
-    super(props);
+
+      super(props);
     this.state = {
       lines: [],
       fileUploaded: false,
-      errorMessage: null
+      errorMessage: null,
+      showConfirmation: false,
+      isSending: false
     };
   }
 
-  private parseLine = (line: string): IParsedLine => {
-    const get = (from: number, to: number) => line.slice(from - 1, to).trim();
+  componentDidMount(): void {
+    sp.setup({
+      sp: {
+        baseUrl: "https://africaisrael.sharepoint.com/IT-Invntory"
+      }
+    });
+  }
 
-    const invoices = Array.from({ length: 39 }, (_, i) => {
-      const number = get(691 + i * 6, 691 + i * 6 + 5);
-      if (!number.trim()) return null;
 
-      const desc = get(925 + i * 25, 925 + i * 25 + 24);
-      const grossAmount = get(1900 + i * 15, 1900 + i * 15 + 14);
-      const deductionPercent = get(2485 + i * 5, 2485 + i * 5 + 4);
-      const deductionAmount = get(2680 + i * 15, 2680 + i * 15 + 14);
-      const netAmount = get(3265 + i * 15, 3265 + i * 15 + 14);
+  private async loadPositionConfig(): Promise<any> {
 
-      return `חשבונית מס ${number}, פרטים: ${desc}, סכום: ${grossAmount}, ניכוי %: ${deductionPercent}, סכום ניכוי: ${deductionAmount}, לתשלום: ${netAmount}`;
-    }).filter(Boolean) as string[];
-
-    return {
-      name: get(2, 26),
-      address: get(27, 46),
-      city: get(47, 61),
-      creditNoteNumber: get(82, 88),
-      creditNoteDate: get(89, 96),
-      accountNumber: get(97, 113),
-      idNumber: get(114, 123),
-      telephone: get(124, 133),
-      creationDate: get(67, 74),
-      amount: get(177, 187),
-      referenceNumber: get(935, 944),
-      general: get(3882, 3911),
-      extraText1: get(3912, 3961),
-      extraText2: get(3962, 4011),
-      invoices
-    };
-  };
-
+    const response = await fetch(`https://africaisrael.sharepoint.com/IT-Invntory/SiteAssets/CRMConfig.JSON`);
+    if (!response.ok) {
+      throw new Error('Failed to load configuration');
+    }
+    return response.json();
+  }
+  
   private handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
     const file = e.target.files?.[0];
     if (!file) return;
   
     try {
       const text = await file.text();
       const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
-      const parsedLines = lines.map(this.parseLine);
   
-      // נניח שהפענוח תקין אם יש שורות ויש שם כלשהו בשורה הראשונה
-      const isValid = parsedLines.length > 0 && parsedLines[0].name.length > 0;
+      const config = await this.loadPositionConfig();
+      const parsedLines = lines.map(line => this.parseLineWithConfig(line, config));
   
-      debugger;
-      if (isValid) {
-        this.setState({ lines: parsedLines, fileUploaded: true, errorMessage: null });
-      } else {
-        this.setState({ lines: [], fileUploaded: false, errorMessage: 'הקובץ שהועלה אינו תקין או שלא עבר המרה כהלכה.' });
-      }
+      const isValid = parsedLines.length > 0 && parsedLines[0].name?.length > 0;
+      this.setState({ 
+        lines: isValid ? parsedLines : [], 
+        fileUploaded: isValid, 
+        errorMessage: isValid ? null : 'הקובץ שהועלה אינו תקין או שלא עבר המרה כהלכה.' 
+      });
     } catch (err) {
       this.setState({ lines: [], fileUploaded: false, errorMessage: 'אירעה שגיאה בעת קריאת הקובץ.' });
     }
   };
+
+  private parseLineWithConfig(line: string, config: any): IParsedLine {
+    const get = (from: number, to: number) => line.slice(from - 1, to).trim();
+
+    const parsed: any = {};
+    for (const [key, range] of Object.entries(config) as [string, { start: number; end: number }][]) {
+      parsed[key] = get(range.start, range.end);
+    }    
   
+    const invFields = config.invoices.fields;
+    const invoiceCount = config.invoices.count;
+    
+    parsed.invoices = Array.from({ length: invoiceCount }, (_, i) => {
+      const number = get(invFields.number.start + i * invFields.number.length, invFields.number.start + i * invFields.number.length + invFields.number.length - 1);
+      if (!number.trim()) return null;
+    
+      const desc = get(invFields.desc.start + i * invFields.desc.length, invFields.desc.start + i * invFields.desc.length + invFields.desc.length - 1);
+      const grossAmount = get(invFields.grossAmount.start + i * invFields.grossAmount.length, invFields.grossAmount.start + i * invFields.grossAmount.length + invFields.grossAmount.length - 1);
+      const deductionPercent = get(invFields.deductionPercent.start + i * invFields.deductionPercent.length, invFields.deductionPercent.start + i * invFields.deductionPercent.length + invFields.deductionPercent.length - 1);
+      const deductionAmount = get(invFields.deductionAmount.start + i * invFields.deductionAmount.length, invFields.deductionAmount.start + i * invFields.deductionAmount.length + invFields.deductionAmount.length - 1);
+      const netAmount = get(invFields.netAmount.start + i * invFields.netAmount.length, invFields.netAmount.start + i * invFields.netAmount.length + invFields.netAmount.length - 1);
+    
+      return `חשבונית מס ${number} | פרטים: ${desc} | סכום: ${grossAmount} | ניכוי %: ${deductionPercent} | סכום ניכוי: ${deductionAmount} | לתשלום: ${netAmount}`;
+    }).filter(Boolean);
+    
+    
+    return parsed as IParsedLine;
+  }
+  
+    
+
+  // private parseLine = (line: string): IParsedLine => {
+  //   const get = (from: number, to: number) => line.slice(from - 1, to).trim();
+
+  //   return {
+  //     name: get(2, 26),
+  //     address: get(27, 46),
+  //     city: get(47, 61),
+  //     zipCode: get(62, 66),                 
+  //     creationDate: get(67, 74),
+  //     mana: get(75, 81),
+  //     CreditMessage: get(82, 88),
+  //     creditNoteDate: get(89, 96),
+  //     //97 T0 313 ?
+  //     accountNumber: get(317, 325),
+  //     bankBranch: get(326, 330),       
+  //     bankBranchName: get(331, 345),
+  //     bankNumber: get(346, 348),           
+  //     bankName: get(349, 363),        
+    
+  //     bankBranchAddress: get(364, 383),         
+  //     bankBranchCity: get(384, 393),          
+
+  //     bankAccount: get(394, 405),          // חש/הנה
+  //     referenceNumber: get(406, 417),  //ת.ז
+
+  //     //missing values 
+
+  //     general: get(3882, 3911),
+  //     extraText1: get(3912, 3961),
+  //     extraText2: get(3962, 4011),
+  //     invoices: Array.from({ length: 39 }, (_, i) => {
+  //       const number = get(691 + i * 6, 691 + i * 6 + 5);
+  //       if (!number.trim()) return null;
+  //       const desc = get(925 + i * 25, 925 + i * 25 + 24);
+  //       const grossAmount = get(1900 + i * 15, 1900 + i * 15 + 14);
+  //       const deductionPercent = get(2485 + i * 5, 2485 + i * 5 + 4);
+  //       const deductionAmount = get(2680 + i * 15, 2680 + i * 15 + 14);
+  //       const netAmount = get(3265 + i * 15, 3265 + i * 15 + 14);
+  //       return `חשבונית מס ${number} | פירוט: ${desc} | סכום: ${grossAmount} | ניכוי %: ${deductionPercent} | סכום ניכוי: ${deductionAmount} | לתשלום: ${netAmount}`;
+  //     }).filter(Boolean) as string[]
+  //   };
+
+  // };
+
+  // private handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
+
+  //   try {
+  //     const text = await file.text();
+  //     const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+  //     const parsedLines = lines.map(this.parseLine);
+
+  //     const isValid = parsedLines.length > 0 && parsedLines[0].name.length > 0;
+  //     if (isValid) {
+  //       this.setState({ lines: parsedLines, fileUploaded: true, errorMessage: null });
+  //     } else {
+  //       this.setState({ lines: [], fileUploaded: false, errorMessage: 'הקובץ שהועלה אינו תקין או שלא עבר המרה כהלכה.' });
+  //     }
+  //   } catch (err) {
+  //     this.setState({ lines: [], fileUploaded: false, errorMessage: 'אירעה שגיאה בעת קריאת הקובץ.' });
+  //   }
+  // };
+
+  private handleSendClick = () => {
+    this.setState({ showConfirmation: true });
+  };
+
+  private confirmSend = () => {
+    this.setState({ showConfirmation: false, isSending: true });
+    this.sendData();
+  };
+
+  private CreateMailContent(line : any) {
+    const customerData = `
+    <p><strong>פרטי לקוח:</strong></p>
+    <table>
+      <tr><td><strong>שם:</strong></td><td>${line.name}</td></tr>
+      <tr><td><strong>כתובת:</strong></td><td>${line.address}</td></tr>
+      <tr><td><strong>עיר:</strong></td><td>${line.city}</td></tr>
+      <tr><td><strong>מיקוד:</strong></td><td>${line.zipCode}</td></tr>
+      <tr><td><strong>תאריך יצירה:</strong></td><td>${line.creationDate}</td></tr>
+      <tr><td><strong>תעודת זהות:</strong></td><td>${line.referenceNumber}</td></tr>
+    </table>`;
+
+  const bankData = `
+    <p><strong>פרטי חשבון בנק:</strong></p>
+    <table>
+      <tr><td><strong>חשבון:</strong></td><td>${line.bankAccount}</td></tr>
+      <tr><td><strong>סניף:</strong></td><td>${line.bankBranch}</td></tr>
+      <tr><td><strong>שם סניף:</strong></td><td>${line.bankBranchName}</td></tr>
+      <tr><td><strong>מספר בנק:</strong></td><td>${line.bankNumber}</td></tr>
+      <tr><td><strong>שם בנק:</strong></td><td>${line.bankName}</td></tr>
+      <tr><td><strong>כתובת סניף:</strong></td><td>${line.bankBranchAddress}</td></tr>
+      <tr><td><strong>עיר סניף:</strong></td><td>${line.bankBranchCity}</td></tr>
+    </table>`;
+
+  const invoicesHtml = `
+    <p><strong>חשבוניות:</strong></p>
+    <ul>
+      ${line.invoices.map((inv: string) => `<li>${inv}</li>`).join('')}
+    </ul>`;
+
+  const fullHtml = `
+    <div dir="rtl" style="font-family: Arial; font-size: 14px;">
+      ${customerData}
+      <br/>
+      ${bankData}
+      <br/>
+      ${invoicesHtml}
+    </div>`;
+
+
+    return fullHtml;
+  }
+
+  private sendData = async () => {
+    const fileName = (document.getElementById('upload') as HTMLInputElement)?.files?.[0]?.name ?? 'UnknownFile.txt';
+  
+    try {
+      for (const line of this.state.lines) {
+      
+        const customerData = [
+          `שם: ${line.name}`,
+          `כתובת: ${line.address}`,
+          `עיר: ${line.city}`,
+          `מיקוד: ${line.zipCode}`,
+          `תאריך יצירה: ${line.creationDate}`,
+          `תעודת זהות: ${line.referenceNumber}`
+        ].join('\n');
+  
+        const bankData = [
+          `חשבון: ${line.bankAccount}`,
+          `סניף: ${line.bankBranch}`,
+          `שם סניף: ${line.bankBranchName}`,
+          `מספר בנק: ${line.bankNumber}`,
+          `שם בנק: ${line.bankName}`,
+          `כתובת סניף: ${line.bankBranchAddress}`,
+          `עיר סניף: ${line.bankBranchCity}`
+        ].join('\n');
+  
+        const invoicesText = line.invoices.join('\n');
+        const content = this.CreateMailContent(line)
+  
+        await sp.web.lists.getByTitle("CRM").items.add({
+          Title: line.name,
+          Mail: line.extraText2,
+          CustomerData: customerData,
+          BankData: bankData,
+          Invoices: invoicesText,
+          FileName: fileName,
+          mailContent: content
+        });
+      }
+  
+      this.setState({ isSending: false });
+      alert("הנתונים נשמרו בהצלחה לרשימה");
+    } catch (error) {
+      console.error("שגיאה בשמירת הנתונים:", error);
+      alert("אירעה שגיאה בשמירת הנתונים. בדוק את הקונסול לפרטים.");
+    }
+  };
+  
+  
+
   public render(): React.ReactElement {
-    const { lines, fileUploaded, errorMessage } = this.state;
+    const { lines, fileUploaded, errorMessage, showConfirmation } = this.state;
 
     return (
       <div style={{ fontFamily: 'Segoe UI, sans-serif', padding: '1em' }}>
@@ -131,46 +323,93 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
         )}
 
         <div style={{ marginBottom: '1em' }}>
-          <label
-            htmlFor="upload"
-            style={{
-              display: 'inline-block',
-              padding: '0.5em 1em',
-              backgroundColor: '#0078d4',
-              color: '#fff',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-          >
+          <label htmlFor="upload" style={{
+            display: 'inline-block',
+            padding: '0.5em 1em',
+            backgroundColor: '#0078d4',
+            color: '#fff',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px'
+          }}>
             העלה קובץ
           </label>
-          <input
-            id="upload"
-            type="file"
-            onChange={this.handleFile}
-            style={{ display: 'none' }}
-          />
+          <input id="upload" type="file" onChange={this.handleFile} style={{ display: 'none' }} />
         </div>
 
         {lines.length > 0 && (
           <>
-            <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1em' }}>
-              <button
-                onClick={() => alert('שמירת נתונים תתבצע כאן')}
-                style={{
-                  padding: '0.5em 1em',
-                  backgroundColor: '#107c10',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px'
-                }}
-              >
-                עדכן נתונים
-              </button>
-            </div>
+            {this.state.isSending ? (
+                <div style={{ margin: '1em 0' }}>
+                  <span>שולח נתונים...</span>
+                  <div className="spinner" style={{
+                    display: 'inline-block',
+                    width: '20px',
+                    height: '20px',
+                    border: '3px solid #ccc',
+                    borderTop: '3px solid #107c10',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    marginLeft: '10px',
+                    verticalAlign: 'middle'
+                  }} />
+                </div>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1em' }}>
+                  <button
+                    onClick={this.handleSendClick}
+                    style={{
+                      padding: '0.5em 1em',
+                      backgroundColor: '#107c10',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '14px'
+                    }}>
+                    שלח
+                  </button>
+                </div>
+              )}
+
+
+            {showConfirmation && (
+              <div style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #ccc',
+                padding: '1em',
+                borderRadius: '4px',
+                marginBottom: '1em',
+                maxWidth: '400px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+              }}>
+                <p style={{ marginBottom: '1em' }}>
+                  שליחת הנתונים תשלח מייל לכל אחד מהספקים עם הנתונים שלו. האם ברצונך להתקדם?
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5em' }}>
+                  <button onClick={this.confirmSend} style={{
+                    padding: '0.4em 1em',
+                    backgroundColor: '#0078d4',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}>
+                    שליחה
+                  </button>
+                  <button onClick={() => this.setState({ showConfirmation: false })} style={{
+                    padding: '0.4em 1em',
+                    backgroundColor: '#f3f2f1',
+                    color: '#333',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}>
+                    ביטול
+                  </button>
+                </div>
+              </div>
+            )}
 
             <table style={{
               width: '100%',
@@ -179,41 +418,59 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
               direction: 'rtl'
             }}>
               <thead style={{ backgroundColor: 'darkseagreen' }}>
-                <tr>
-                  {[
-                    'שם', 'כתובת', 'עיר', 'טלפון', 'מס\' זיהוי', 'מס\' חשבון',
-                    'תאריך יצירה', 'מס\' הודעת זיכוי', 'תאריך הודעה',
-                    'חשבוניות', 'תיאור', 'לבירורים', 'מייל'
-                  ].map((header, i) => (
-                    <th key={i} style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'right' }}>{header}</th>
-                  ))}
-                </tr>
+              <tr>
+                {[
+                  'שם חשבון', 'כתובת', 'עיר', 'מיקוד', 
+                  'תאריך הפקה', 'מנה', 'הודעת זיכוי', 'תאריך הודעה',
+                  'חשבון בנק', 'סניף בנק',
+                  'שם סניף בנק', 'מספר בנק', 'שם בנק','כתובת סניף בנק','עיר סניף בנק',
+                   'תיאור', 'לבירורים', 'מייל'
+                ].map((header, i) => (
+                  <th key={i} style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'right' }}>
+                    {header}
+                  </th>
+                ))}
+              </tr>
+
               </thead>
               <tbody>
-                {lines.map((line, index) => (
-                  <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#f9f9f9' }}>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.name}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.address}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.city}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.telephone}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.idNumber}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.accountNumber}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creationDate}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creditNoteNumber}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creditNoteDate}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>
-                      <ul style={{ paddingInlineStart: '1.2em', margin: 0 }}>
-                        {line.invoices.map((inv, i) => (
-                          <li key={i} style={{ marginBottom: '4px' }}>{inv}</li>
-                        ))}
-                      </ul>
-                    </td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.general}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.extraText1}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.extraText2}</td>
-                  </tr>
-                ))}
-              </tbody>
+  {lines.map((line, index) => (
+    <React.Fragment key={index}>
+      <tr style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#f9f9f9' }}>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.name}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.address}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.city}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.zipCode}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creationDate}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.mana}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.CreditMessage}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creditNoteDate}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankAccount}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankBranch}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankBranchName}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankNumber}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankName}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankBranchAddress}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankBranchCity}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.general}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.extraText1}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.extraText2}</td>
+      </tr>
+
+      <tr>
+        <td colSpan={18} style={{ border: '1px solid #ddd', padding: '6px', backgroundColor: '#f1f1f1' }}>
+          <strong>חשבוניות:</strong>
+          <ul style={{ paddingInlineStart: '1.2em', marginTop: '0.5em', marginBottom: 0 }}>
+            {line.invoices.map((inv, i) => (
+              <li key={i} style={{ marginBottom: '4px' }}>{inv}</li>
+            ))}
+          </ul>
+        </td>
+      </tr>
+    </React.Fragment>
+  ))}
+</tbody>
+
             </table>
           </>
         )}
