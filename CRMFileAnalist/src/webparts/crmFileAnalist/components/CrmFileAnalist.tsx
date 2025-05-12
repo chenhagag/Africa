@@ -131,16 +131,17 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
   };
 
   private CreateMailContent(line: any): string {
+    
     const name = line.name || '';
     const idNumber = line.referenceNumber || '';
     const invoices = line.invoices || [];
   
-    // עיבוד החשבוניות לטבלה
-    const invoiceRows = invoices.length > 0
-      ? invoices.map((inv: string) => `<tr><td colspan="1">${inv}</td></tr>`).join('')
-      : `<tr><td colspan="1">חשבונית מס/עסקה: טרם התקבלה</td></tr>`;
+    // חשבוניות כתצוגת שורות רגילות
+    const invoiceSection = invoices.length > 0
+      ? invoices.map((inv: string) => `<div>${inv}</div>`).join('')
+      : `<div>חשבונית מס/עסקה: טרם התקבלה</div>`;
   
-    // סכום כולל לתשלום – מחלץ מ"לתשלום: ..."
+    // סכום כולל לתשלום
     const totalToPay = invoices.reduce((sum: number, inv: string) => {
       const match = inv.match(/לתשלום: ([\d.]+)/);
       if (match && match[1]) {
@@ -148,6 +149,14 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
       }
       return sum;
     }, 0).toFixed(2);
+  
+    // הצגת הטקסט של "יש להפיק חשבוניות..." רק אם אין חשבוניות
+    const missingInvoiceNote = invoices.length === 0
+      ? `
+        <p style="margin-top: 1em;">
+          את החשבוניות יש להפיק עבור חברת <strong>"__________"</strong>, ח.פ. <strong>__________</strong>
+        </p>`
+      : '';
   
     const fullHtml = `
       <div dir="rtl" style="font-family: Arial; font-size: 14px;">
@@ -159,13 +168,9 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
           הרינו להודיעך שזיכינו את חשבונך בבנק בהתאם לפירוט הוראות התשלום הבאות:
         </p>
   
-        <table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 1em;">
-          ${invoiceRows}
-        </table>
+        ${invoiceSection}
   
-        <p style="margin-top: 1em;">
-          את החשבוניות יש להפיק עבור חברת <strong>"__________"</strong>, ח.פ. <strong>__________</strong>
-        </p>
+        ${missingInvoiceNote}
   
         <p style="margin-top: 1em;"><strong>סה"כ לתשלום: ${totalToPay}</strong></p>
   
@@ -174,8 +179,7 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
         <p>סניף: ${line.bankBranchName} - ${line.bankBranch}</p>
         <p>חשבון: ${line.accountNumber}</p>
   
-       <p style="margin-top: 1.5em;">${line.extraText1 || ''}</p>
-
+        <p style="margin-top: 1.5em;">${line.extraText1 || ''}</p>
   
         <p style="margin-top: 1.5em;">בברכה,<br/>אפריקה ישראל מגורים</p>
       </div>
@@ -183,6 +187,7 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
   
     return fullHtml;
   }
+  
   
 
   private sendData = async () => {

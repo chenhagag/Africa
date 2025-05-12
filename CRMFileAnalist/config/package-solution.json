@@ -3,7 +3,7 @@
   "solution": {
     "name": "crm-file-analist-client-side-solution",
     "id": "d77f90e8-7093-4f2e-9428-b69f7ac40ec8",
-    "version": "1.0.0.5",
+    "version": "1.0.0.6",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
