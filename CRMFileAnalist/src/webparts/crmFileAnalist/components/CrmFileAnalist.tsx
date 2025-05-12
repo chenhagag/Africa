@@ -5,6 +5,7 @@ import { ICrmFileAnalistProps } from './ICrmFileAnalistProps';
 
 interface IParsedLine {
   name: string;
+  supplierNum: string;
   address: string;
   city: string;
   zipCode: string; // מיקוד
@@ -25,6 +26,7 @@ interface IParsedLine {
   bankBranchAddress: string;      // CKMATA
   extraText1: string;
   extraText2: string;
+  message: string;
 }
 
 
@@ -118,71 +120,6 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
     return parsed as IParsedLine;
   }
   
-    
-
-  // private parseLine = (line: string): IParsedLine => {
-  //   const get = (from: number, to: number) => line.slice(from - 1, to).trim();
-
-  //   return {
-  //     name: get(2, 26),
-  //     address: get(27, 46),
-  //     city: get(47, 61),
-  //     zipCode: get(62, 66),                 
-  //     creationDate: get(67, 74),
-  //     mana: get(75, 81),
-  //     CreditMessage: get(82, 88),
-  //     creditNoteDate: get(89, 96),
-  //     //97 T0 313 ?
-  //     accountNumber: get(317, 325),
-  //     bankBranch: get(326, 330),       
-  //     bankBranchName: get(331, 345),
-  //     bankNumber: get(346, 348),           
-  //     bankName: get(349, 363),        
-    
-  //     bankBranchAddress: get(364, 383),         
-  //     bankBranchCity: get(384, 393),          
-
-  //     bankAccount: get(394, 405),          // חש/הנה
-  //     referenceNumber: get(406, 417),  //ת.ז
-
-  //     //missing values 
-
-  //     general: get(3882, 3911),
-  //     extraText1: get(3912, 3961),
-  //     extraText2: get(3962, 4011),
-  //     invoices: Array.from({ length: 39 }, (_, i) => {
-  //       const number = get(691 + i * 6, 691 + i * 6 + 5);
-  //       if (!number.trim()) return null;
-  //       const desc = get(925 + i * 25, 925 + i * 25 + 24);
-  //       const grossAmount = get(1900 + i * 15, 1900 + i * 15 + 14);
-  //       const deductionPercent = get(2485 + i * 5, 2485 + i * 5 + 4);
-  //       const deductionAmount = get(2680 + i * 15, 2680 + i * 15 + 14);
-  //       const netAmount = get(3265 + i * 15, 3265 + i * 15 + 14);
-  //       return `חשבונית מס ${number} | פירוט: ${desc} | סכום: ${grossAmount} | ניכוי %: ${deductionPercent} | סכום ניכוי: ${deductionAmount} | לתשלום: ${netAmount}`;
-  //     }).filter(Boolean) as string[]
-  //   };
-
-  // };
-
-  // private handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (!file) return;
-
-  //   try {
-  //     const text = await file.text();
-  //     const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
-  //     const parsedLines = lines.map(this.parseLine);
-
-  //     const isValid = parsedLines.length > 0 && parsedLines[0].name.length > 0;
-  //     if (isValid) {
-  //       this.setState({ lines: parsedLines, fileUploaded: true, errorMessage: null });
-  //     } else {
-  //       this.setState({ lines: [], fileUploaded: false, errorMessage: 'הקובץ שהועלה אינו תקין או שלא עבר המרה כהלכה.' });
-  //     }
-  //   } catch (err) {
-  //     this.setState({ lines: [], fileUploaded: false, errorMessage: 'אירעה שגיאה בעת קריאת הקובץ.' });
-  //   }
-  // };
 
   private handleSendClick = () => {
     this.setState({ showConfirmation: true });
@@ -193,48 +130,60 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
     this.sendData();
   };
 
-  private CreateMailContent(line : any) {
-    const customerData = `
-    <p><strong>פרטי לקוח:</strong></p>
-    <table>
-      <tr><td><strong>שם:</strong></td><td>${line.name}</td></tr>
-      <tr><td><strong>כתובת:</strong></td><td>${line.address}</td></tr>
-      <tr><td><strong>עיר:</strong></td><td>${line.city}</td></tr>
-      <tr><td><strong>מיקוד:</strong></td><td>${line.zipCode}</td></tr>
-      <tr><td><strong>תאריך יצירה:</strong></td><td>${line.creationDate}</td></tr>
-      <tr><td><strong>תעודת זהות:</strong></td><td>${line.referenceNumber}</td></tr>
-    </table>`;
+  private CreateMailContent(line: any): string {
+    const name = line.name || '';
+    const idNumber = line.referenceNumber || '';
+    const invoices = line.invoices || [];
+  
+    // עיבוד החשבוניות לטבלה
+    const invoiceRows = invoices.length > 0
+      ? invoices.map((inv: string) => `<tr><td colspan="1">${inv}</td></tr>`).join('')
+      : `<tr><td colspan="1">חשבונית מס/עסקה: טרם התקבלה</td></tr>`;
+  
+    // סכום כולל לתשלום – מחלץ מ"לתשלום: ..."
+    const totalToPay = invoices.reduce((sum: number, inv: string) => {
+      const match = inv.match(/לתשלום: ([\d.]+)/);
+      if (match && match[1]) {
+        return sum + parseFloat(match[1]);
+      }
+      return sum;
+    }, 0).toFixed(2);
+  
+    const fullHtml = `
+      <div dir="rtl" style="font-family: Arial; font-size: 14px;">
+        <p>לכבוד,</p>
+        <p><strong>${name}</strong></p>
+        <p>ח.פ./עוסק מורשה <strong>${idNumber}</strong></p>
+  
+        <p style="margin-top: 1em;">
+          הרינו להודיעך שזיכינו את חשבונך בבנק בהתאם לפירוט הוראות התשלום הבאות:
+        </p>
+  
+        <table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 1em;">
+          ${invoiceRows}
+        </table>
+  
+        <p style="margin-top: 1em;">
+          את החשבוניות יש להפיק עבור חברת <strong>"__________"</strong>, ח.פ. <strong>__________</strong>
+        </p>
+  
+        <p style="margin-top: 1em;"><strong>סה"כ לתשלום: ${totalToPay}</strong></p>
+  
+        <p style="margin-top: 1em;"><strong>פרטי חשבון בנק:</strong></p>
+        <p>בנק: ${line.bankName}</p>
+        <p>סניף: ${line.bankBranchName} - ${line.bankBranch}</p>
+        <p>חשבון: ${line.accountNumber}</p>
+  
+       <p style="margin-top: 1.5em;">${line.extraText1 || ''}</p>
 
-  const bankData = `
-    <p><strong>פרטי חשבון בנק:</strong></p>
-    <table>
-      <tr><td><strong>חשבון:</strong></td><td>${line.bankAccount}</td></tr>
-      <tr><td><strong>סניף:</strong></td><td>${line.bankBranch}</td></tr>
-      <tr><td><strong>שם סניף:</strong></td><td>${line.bankBranchName}</td></tr>
-      <tr><td><strong>מספר בנק:</strong></td><td>${line.bankNumber}</td></tr>
-      <tr><td><strong>שם בנק:</strong></td><td>${line.bankName}</td></tr>
-      <tr><td><strong>כתובת סניף:</strong></td><td>${line.bankBranchAddress}</td></tr>
-      <tr><td><strong>עיר סניף:</strong></td><td>${line.bankBranchCity}</td></tr>
-    </table>`;
-
-  const invoicesHtml = `
-    <p><strong>חשבוניות:</strong></p>
-    <ul>
-      ${line.invoices.map((inv: string) => `<li>${inv}</li>`).join('')}
-    </ul>`;
-
-  const fullHtml = `
-    <div dir="rtl" style="font-family: Arial; font-size: 14px;">
-      ${customerData}
-      <br/>
-      ${bankData}
-      <br/>
-      ${invoicesHtml}
-    </div>`;
-
-
+  
+        <p style="margin-top: 1.5em;">בברכה,<br/>אפריקה ישראל מגורים</p>
+      </div>
+    `;
+  
     return fullHtml;
   }
+  
 
   private sendData = async () => {
     const fileName = (document.getElementById('upload') as HTMLInputElement)?.files?.[0]?.name ?? 'UnknownFile.txt';
@@ -252,7 +201,7 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
         ].join('\n');
   
         const bankData = [
-          `חשבון: ${line.bankAccount}`,
+          `חשבון: ${line.accountNumber}`,
           `סניף: ${line.bankBranch}`,
           `שם סניף: ${line.bankBranchName}`,
           `מספר בנק: ${line.bankNumber}`,
@@ -271,7 +220,8 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
           BankData: bankData,
           Invoices: invoicesText,
           FileName: fileName,
-          mailContent: content
+          mailContent: content,
+          message: line.CreditMessage
         });
       }
   
@@ -420,11 +370,11 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
               <thead style={{ backgroundColor: 'darkseagreen' }}>
               <tr>
                 {[
-                  'שם חשבון', 'כתובת', 'עיר', 'מיקוד', 
+                  'שם ספק', 'מספר ספק',
                   'תאריך הפקה', 'מנה', 'הודעת זיכוי', 'תאריך הודעה',
                   'חשבון בנק', 'סניף בנק',
                   'שם סניף בנק', 'מספר בנק', 'שם בנק','כתובת סניף בנק','עיר סניף בנק',
-                   'תיאור', 'לבירורים', 'מייל'
+                   'פרויקט', 'לבירורים', 'מייל'
                 ].map((header, i) => (
                   <th key={i} style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'right' }}>
                     {header}
@@ -438,14 +388,12 @@ export default class CrmFileAnalistWebPart extends React.Component<ICrmFileAnali
     <React.Fragment key={index}>
       <tr style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#f9f9f9' }}>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.name}</td>
-        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.address}</td>
-        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.city}</td>
-        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.zipCode}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.supplierNum}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creationDate}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.mana}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.CreditMessage}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.creditNoteDate}</td>
-        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankAccount}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.accountNumber}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankBranch}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankBranchName}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{line.bankNumber}</td>
