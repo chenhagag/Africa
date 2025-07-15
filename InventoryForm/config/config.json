@@ -9,11 +9,29 @@
           "manifest": "./src/webparts/inventoryForm/InventoryFormWebPart.manifest.json"
         }
       ]
+    },
+    "invetory-display-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/invetoryDisplay/InvetoryDisplayWebPart.js",
+          "manifest": "./src/webparts/invetoryDisplay/InvetoryDisplayWebPart.manifest.json"
+        }
+      ]
+    },
+    "signature-page-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/signaturePage/SignaturePageWebPart.js",
+          "manifest": "./src/webparts/signaturePage/SignaturePageWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "InventoryFormWebPartStrings": "lib/webparts/inventoryForm/loc/{locale}.js",
-    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
+    "InvetoryDisplayWebPartStrings": "lib/webparts/invetoryDisplay/loc/{locale}.js",
+    "SignaturePageWebPartStrings": "lib/webparts/signaturePage/loc/{locale}.js"
   }
 }

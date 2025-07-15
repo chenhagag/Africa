@@ -21,6 +21,9 @@ export interface IInventoryItem {
   isNew?: boolean;
   isReturning?: boolean;
   returnReason?: string;
+  returnNotes?: string;
+  accessories?: { name: string; imageFile?: File; imageUrl?: string; isSelected?: boolean }[];
+
 }
 
 export interface IInventoryFormState {
@@ -36,6 +39,12 @@ export interface IInventoryFormState {
   availableItems: IInventoryItem[];
   newItems: IInventoryItem[];
   removedItems: IInventoryItem[];
+  isSaving: boolean;
+  printItems: IInventoryItem[]; 
+  printUserName: string;
+  subscriptionNumber: string;
+  linkedAccessories: { name: string; imageFile?: File; imageUrl?: string; isSelected?: boolean }[];
+
 }
 
 export default class InventoryForm extends React.Component<IInventoryFormProps, IInventoryFormState> {
@@ -55,7 +64,12 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       removedItems: [],
       searchText: '',
       suggestedUsers: [],
-      allUsers: []
+      allUsers: [],
+      isSaving: false,
+      printItems: [],
+      printUserName: '',
+      subscriptionNumber: '',
+      linkedAccessories: []
     };
   }
 
@@ -116,17 +130,14 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       console.error('שגיאה בטעינת יוזרים מה-Graph:', error);
     }
   }
-  
-  
-
-
 
   private async GetFullInventory() {
+
     try {
       const items = await sp.web.lists.getByTitle("מלאי").items.select(
         "ID",
         "Title",
-        "Item/Title","Item/TypeCTT",
+        "Item/Title","ItemType",
         "CurrLand/userCTT",
         "ItemID",
         "Available",
@@ -135,17 +146,17 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       .expand("CurrLand","Item","CurrOwner").top(4999)
       .get();
   
-      debugger;
       const formattedItems: IInventoryItem[] = items.map((item: any) => ({
         id: item.ID,
         title: item.Title,
-        type: item["Item"]?.TypeCTT || '',
+        type: item.ItemType || '',
         assignedTo: item["CurrOwner"]?.Title || '',
         serialNumber: item["ItemID"] || '',
         available: !item["CurrOwner"]?.Title,
         isNew: false
       }));
 
+      debugger;
       const availableItems = formattedItems.filter(item => item.available);
 
       this.setState({
@@ -168,39 +179,61 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       availableItems: [],
       newItems: [],
       removedItems: [],
-      userItems: []
+      userItems: [],
+       linkedAccessories: []
     });
 
     this.GetFullInventory();    
   }
 
-  private _handleCancelForm = (): void => {
+ private _handleCancelForm = (): void => {
+  const confirmCancel = window.confirm("האם את בטוחה שברצונך לבטל את הטופס? כל השינויים יאבדו.");
 
-    this.ResetForm();
+  if (!confirmCancel) {
+    return; 
+  }
 
-    this.setState({
-      selectedUser: null,
-      searchText: '',
-      suggestedUsers: []
-    });
-  };
+  this.ResetForm();
+
+  this.setState({
+    selectedUser: null,
+    searchText: '',
+    suggestedUsers: []
+  });
+};
 
   private async saveChanges(): Promise<void> {
+
+
+    if (
+      this.state.selectedItemType === 'סלולרי' &&
+      !this.state.subscriptionNumber.trim()
+    ) {
+      alert('יש להזין מספר מנוי עבור מכשיר סלולרי');
+      return;
+    }
+
+    this.setState({ isSaving: true });
+
     const { userItems, selectedUser } = this.state;
     const today = new Date().toISOString();
-
-    debugger;
   
     for (const item of userItems) {
       if (item.returnReason) {
         // פריט להחזרה
-  
+        var itemStatus = "נגרע";
+        debugger;
+        if (item.returnReason == "הפריט הוחזר") 
+            itemStatus = 'פנוי להשאלה';
+
         // 1. עדכון ברשימת "מלאי"
         await sp.web.lists.getByTitle("מלאי").items.getById(item.id).update({
           Available: true,
           CurrLandId: null,
-          CurrOwnerId: null
-        });
+          CurrOwnerId: null,
+          ItemStatus: itemStatus,
+          ReturnReason: item.returnReason       
+         });
 
         const uniqueTitle = `${selectedUser?.id}-${item.id}`;
   
@@ -212,9 +245,10 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   
         if (query.length > 0) {
           await sp.web.lists.getByTitle("השאלות").items.getById(query[0].ID).update({
-            CurrOwnerId: null,
-            userCTT: '',
-            ReturnDate: today
+            Status: 'הוחזר',
+            ReturnDate: today,
+            ReturnReason: item.returnReason,
+            ReturnNotes: item.returnNotes || ''
           });
         }
   
@@ -224,109 +258,225 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
         // 1. עדכון ברשימת "מלאי"
         await sp.web.lists.getByTitle("מלאי").items.getById(item.id).update({
           Available: false,
-          CurrOwnerId: selectedUser?.id
+          CurrOwnerId: selectedUser?.id,
+          ItemStatus: 'מושאל',
+          ReturnReason: 'הפריט בהשאלה'
         });
   
-        debugger;
         // 2. בדיקה אם פריט כבר קיים ברשימת השאלות
         const existing = await sp.web.lists.getByTitle("השאלות").items
-          .filter(`Title eq '${uniqueTitle}'`)
+  .filter(`Title eq '${uniqueTitle}' and Status eq 'השאלה פעילה'`)
           .top(1)()
           .catch(() => []);
       
-        if (existing.length === 0) {
-          // 3. הוספת פריט חדש
-          await sp.web.lists.getByTitle("השאלות").items.add({
-            Title: uniqueTitle,
-            LandingDate: today,
-            CurrOwnerId: selectedUser?.id,
-            userCTT: selectedUser?.text,
-            ItemId: item.id
-          });
-        }
+if (existing.length === 0) {
+  // איסוף מוצרים נלווים מהמוצר עצמו
+  const itemAccessories = (item as any).accessories || [];
+  const selectedAccessories = itemAccessories
+  .filter((acc: { name?: string; isSelected?: boolean }) => acc.isSelected && acc.name?.trim())
+  .map((acc: { name: string }) => ({ ...acc, name: acc.name.trim() }));
+
+  const accessoriesText = selectedAccessories.map((acc: { name: string }) => acc.name).join(', ');
+
+  // יצירת פריט חדש ברשימת השאלות
+  const addedItem = await sp.web.lists.getByTitle("השאלות").items.add({
+    Title: uniqueTitle,
+    LandingDate: today,
+    CurrOwnerId: selectedUser?.id,
+    userCTT: selectedUser?.text,
+    ItemId: item.id,
+    Status: 'השאלה פעילה',
+    Accessories: accessoriesText,
+    subscription: this.state.subscriptionNumber || null
+
+  });
+
+  const itemId = addedItem.data.ID;
+        // הוספת התמונות כקבצים מצורפים
+        for (const acc of selectedAccessories) {
+          if (acc.imageFile) {
+            const safeName = acc.name || `accessory-${Date.now()}`;
+            try {
+              await sp.web.lists
+                .getByTitle("השאלות")
+                .items.getById(itemId)
+                .attachmentFiles.add(`${safeName}.jpg`, acc.imageFile);
+              } catch (err) {
+               console.error(`שגיאה בהעלאת קובץ עבור ${safeName}`, err);
+              }
+            }
+          }
+        } 
       }
-      
     }
-  
-    alert("השינויים נשמרו בהצלחה 🎉");
-   
-    this.ResetForm(); 
+        
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     let currUser = {
       Title: this.state.selectedUser?.text,
       Id: this.state.selectedUser?.id
-    }
+    };
 
-    
     setTimeout(() => {
-      this._handleUserSelect(currUser);
-    }, 1000);
+      this.ResetForm(); 
+      this.setState({ isSaving: false });
+      alert("השינויים נשמרו בהצלחה 🎉");
+
+      setTimeout(() => {
+        const filteredItems = this.state.allItems.filter(item => item.assignedTo === currUser.Title);
+        this.setState({ 
+          userItems: filteredItems,
+          printItems: filteredItems,
+          printUserName: currUser.Title  || 'משתמש נוכחי',
+          subscriptionNumber: ''
+        });         
+       }, 1000);    
+   }, 1000);
+
   }
-  
+
   
   private _handleAddItemClick = (): void => {
+   
     this.setState({
       isAddingItem: true,
       showForm: true
-    });
+    });   
   };
-  
 
-  private _handleItemTypeChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  private _handleAddAccessory = (): void => {
+  this.setState(prev => ({
+    linkedAccessories: [...prev.linkedAccessories, { name: '', isSelected: true }]
+  }));
+};
+
   
-    const selectedType = event.target.value;
-  
-    if (!selectedType) {
-      // אם לא נבחר כלום – נאפס גם את המערך
-      this.setState({
-        selectedItemType: '',
-        availableItems: []
-      });
-      return;
-    }
-  
-    // סינון מתוך allItems לפי סוג וזמינות
-    const filteredItems = this.state.allItems.filter(item =>
-      item.type === selectedType && item.available === true
-    );
-  
-    this.setState({
-      selectedItemType: selectedType,
-      availableItems: filteredItems
-    });
+  private _handlePrint = (): void => {
+  const printWindow = window.open('', '_blank');
+
+  if (!printWindow) return;
+
+  const { printUserName, userItems } = this.state;
+
+  const htmlContent = `
+    <html dir="rtl" lang="he">
+      <head>
+        <title>רשימת פריטים</title>
+        <style>
+          body { font-family: Arial; padding: 20px; }
+          h2 { text-align: center; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #999; padding: 8px; text-align: right; }
+          th { background-color: #f0f0f0; }
+        </style>
+      </head>
+      <body>
+        <h2>פריטים של ${printUserName}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>שם פריט</th>
+              <th>סוג</th>
+              <th>מספר סידורי</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${userItems.map(item => `
+              <tr>
+                <td>${item.title}</td>
+                <td>${item.type}</td>
+                <td>${item.serialNumber || ''}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
+
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
   };
-    
-   
- private addSelectedItem() {
+};
 
-  if (!this.currSelectedItemId) return;
-  
-  let selectedItem: IInventoryItem | undefined;
 
-  for (let i = 0; i < this.state.availableItems.length; i++) {
-    if (this.state.availableItems[i].id === this.currSelectedItemId) {
-      selectedItem = this.state.availableItems[i];
-      break;
-    }
+ private _handleItemTypeChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+ 
+  debugger;
+  const selectedType = event.target.value;
+
+  let linkedAccessories: any = [];
+
+  if (selectedType === "מחשב נייד") {
+    linkedAccessories = [
+      { name: "עכבר" },
+      { name: "מקלדת" },
+      { name: "מסך" }
+    ];
   }
- if (!selectedItem) return;
 
-  // לבדוק אם כבר הוסף לרשימה
-  const alreadyExists = this.state.userItems.some(item => item.id === this.currSelectedItemId);
+  const filteredItems = this.state.allItems.filter(item =>
+    item.type === selectedType && item.available === true
+  );
+
+  this.setState({
+    selectedItemType: selectedType,
+    availableItems: filteredItems,
+    linkedAccessories: linkedAccessories
+  });
+};
+
+   
+private _handleAccessoryImageChange = (index: number, file: File): void => {
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const newAccessories = [...this.state.linkedAccessories];
+    newAccessories[index].imageFile = file;
+    newAccessories[index].imageUrl = reader.result as string;
+    this.setState({ linkedAccessories: newAccessories });
+  };
+  reader.readAsDataURL(file);
+};
+
+   
+private addSelectedItem() {
+  if (!this.currSelectedItemId) return;
+
+  const selectedItem = this.state.availableItems.find(
+    item => item.id === this.currSelectedItemId
+  );
+
+  if (!selectedItem) return;
+
+  const alreadyExists = this.state.userItems.some(
+    item => item.id === this.currSelectedItemId
+  );
   if (alreadyExists) return;
 
+  // צרף את המוצרים הנלווים למוצר הזה
   const newItem = {
     ...selectedItem,
-    isNew: true
+    isNew: true,
+    accessories: this.state.linkedAccessories // ← כאן השיוך
   };
+
+  const updatedAll = this.state.allItems.filter(
+    i => i.id !== this.currSelectedItemId
+  );
 
   this.setState(prevState => ({
     userItems: [...prevState.userItems, newItem],
     isAddingItem: false,
     selectedItemType: '',
-    availableItems: []
+    allItems: updatedAll,
+    linkedAccessories: [] // ← אפס את הטופס של המוצרים הנלווים
   }));
+}
 
- } 
 
  private currSelectedItemId = 0;
 
@@ -335,29 +485,37 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   
   };
   
-  private _handleRemoveItem(item: IInventoryItem): void {
+private _handleRemoveItem(item: IInventoryItem): void {
+  const updatedUserItems = this.state.userItems.filter(i => i.id !== item.id);
 
-    const updatedUserItems = this.state.userItems.filter(i => i.id !== item.id);
+  // סינון כפילויות - רק אם עוד לא קיים ב־availableItems
+  const alreadyAvailable = this.state.allItems.some(i => i.id === item.id);
+  const updatedAvailableItems = alreadyAvailable
+    ? this.state.allItems
+    : [...this.state.allItems, { ...item, isNew: false }];
 
-    let updatedAvailableItems = this.state.availableItems;
-  
-    if (item.available) {
-      updatedAvailableItems = [...this.state.availableItems, { ...item, isNew: false }];
-    }
-  
-    this.setState({
-      userItems: updatedUserItems,
-      availableItems: updatedAvailableItems
-    });
-  }
+  this.setState({
+    userItems: updatedUserItems,
+    allItems: updatedAvailableItems
+  });
+}
   
   private _handleReturnItem = (item: IInventoryItem): void => {
-    const updatedItems = this.state.userItems.map(i =>
-      i.id === item.id ? { ...i, isReturning: true } : i
-    );
   
-    this.setState({ userItems: updatedItems, showForm: true });
-  };
+    const updatedItems = this.state.userItems.map(i =>
+    i.id === item.id ? { ...i, isReturning: true } : i
+  );
+
+  const updatedAvailableItems = this.state.allItems.filter(i => i.id !== item.id);
+
+  this.setState({
+    userItems: updatedItems,
+    allItems: updatedAvailableItems,
+    showForm: true,
+    isAddingItem: false
+  });
+};
+
 
   private _handleReturnReasonChange = (itemId: number, reason: string): void => {
     const updatedItems = this.state.userItems.map(i =>
@@ -398,16 +556,28 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       this.setState({
         selectedUser: { id: spUserId, text: user.displayName },
         searchText: user.displayName,
-        suggestedUsers: []
+        suggestedUsers: [],
+        printUserName: ''
       });
 
       const filteredItems = this.state.allItems.filter(item => item.assignedTo === user.displayName);
       this.setState({ userItems: filteredItems });
 
+
     } catch (error) {
       console.error('שגיאה בהבאת מזהה SharePoint:', error);
     }
+
   };
+
+
+  private _handleReturnNotesChange = (itemId: number, notes: string): void => {
+  const updatedItems = this.state.userItems.map(i =>
+    i.id === itemId ? { ...i, returnNotes: notes } : i
+  );
+  this.setState({ userItems: updatedItems });
+};
+
     
   public render(): React.ReactElement<IInventoryFormProps> {
      
@@ -416,6 +586,14 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
 
           <div>
           <h2>טופס ניהול מלאי</h2>
+
+          {this.state.isSaving && (
+            <div className={styles.spinnerOverlay}>
+              <div className={styles.spinner}></div>
+              <div className={styles.spinnerText}>שומר שינויים...</div>
+            </div>
+          )}
+
 
           <div className={styles.formGroup}>
         <label>בחר משתמש:</label>
@@ -480,6 +658,14 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
                             <option value="הפריט אבד">הפריט אבד</option>
                             <option value="הפריט נקנה על ידי השואל">הפריט נקנה על ידי השואל</option>
                           </select>
+
+                            <textarea
+                              placeholder="הקלד הערות..."
+                              value={item.returnNotes || ''}
+                              onChange={(e) => this._handleReturnNotesChange(item.id, e.target.value)}
+                              className={styles.notesTextarea}
+                            />
+
                           <button
                             className={styles.iconButton}
                             onClick={() => this._handleSaveReturn(item.id)}
@@ -494,6 +680,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
                           >
                             <i className="fa-solid fa-xmark"></i>
                           </button>
+
+                     
                         </div>
                       ) : item.returnReason ? (
                         <span className={styles.returnedLabel}>{item.returnReason}</span>
@@ -520,18 +708,26 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
             + השאלה חדשה
           </button>
 
+            {this.state.printItems.length >= 0 && this.state.printUserName != '' && (
+                <button className={styles.printBtn} onClick={this._handlePrint}>
+                  הדפס פריטים
+                </button>
+              )}
+
           </div>
           : <div/>}
           
 
           {this.state.isAddingItem ?  <div className={styles.addSection}>
+
+
             <div className={styles.formGroup}>
               <label htmlFor="item-type">סוג מוצר:</label>
               <select id="item-type" onChange={this._handleItemTypeChange}>
                 <option value="">בחר סוג</option>
                 <option>מחשב נייד</option>
                 <option>מחשב נייח</option>
-                <option>סלולר</option>
+                <option>סלולרי</option>
               </select>
             </div>
 
@@ -543,21 +739,84 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
                     <option key={item.id} value={item.id}>{item.title}</option>
                   ))}
               </select>
-              <button onClick={() => this.addSelectedItem()} className={styles.addBtn}  >הוסף</button>
+
+              {this.state.selectedItemType === 'סלולרי' && (
+              <div className={styles.formGroup}>
+                <label htmlFor="subscription-number">מספר מנוי:</label>
+                <input
+                  type="text"
+                  id="subscription-number"
+                  value={this.state.subscriptionNumber}
+                  onChange={(e) => this.setState({ subscriptionNumber: e.target.value })}
+                  placeholder="הכנס מספר מנוי"
+                />
+              </div>
+            )}
+
+              
             </div>
+      {(this.state.linkedAccessories.length > 0 && this.currSelectedItemId ) && (
+  <div className={styles.accessoriesSection}>
+    <h4>מוצרים נלווים</h4>
+    {this.state.linkedAccessories.map((acc, index) => (
+      <div key={index} className={styles.accessoryRow}>
+        <input
+          type="checkbox"
+          checked={!!acc.isSelected}
+          onChange={(e) => {
+            const updated = [...this.state.linkedAccessories];
+            updated[index].isSelected = e.target.checked;
+            this.setState({ linkedAccessories: updated });
+          }}
+        />
+        <input
+          type="text"
+          value={acc.name}
+          onChange={(e) => {
+            const updated = [...this.state.linkedAccessories];
+            updated[index].name = e.target.value;
+            this.setState({ linkedAccessories: updated });
+          }}
+          placeholder="שם מוצר נלווה"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files?.length) {
+              this._handleAccessoryImageChange(index, e.target.files[0]);
+            }
+          }}
+        />
+        {acc.imageUrl && (
+          <img src={acc.imageUrl} alt={acc.name} style={{ maxWidth: 80 }} />
+        )}
+      </div>
+    ))}
+
+    <button type="button" onClick={this._handleAddAccessory}>
+      + הוסף מוצר נלווה נוסף
+    </button>
+  </div>
+)}
+
+           <button onClick={() => this.addSelectedItem()} className={styles.addBtn}  >הוסף</button>           
           </div> : <div/>}
-         
+
+
 
           {!this.state.showForm ? (
              <div></div>
           ) : (            
             <div className={styles.formActions}>
-              <button className={styles.saveBtn} onClick={() => this.saveChanges()}>
+              <button className={styles.saveBtn} onClick={() => this.saveChanges()}
+                disabled={this.state.isAddingItem}>
               שמור
             </button>
               <button className={styles.cancelBtn} onClick={this._handleCancelForm}>
                 בטל
               </button>
+
             </div>
             )}
 
