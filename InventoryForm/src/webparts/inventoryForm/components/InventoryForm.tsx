@@ -76,6 +76,7 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
 
   public componentDidMount(): void {
 
+    debugger;
     this.loadAllUsers();
     this.GetFullInventory();
 
@@ -121,7 +122,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
         nextLink = response['@odata.nextLink'] ? response['@odata.nextLink'].replace('https://graph.microsoft.com/v1.0', '') : undefined;
       }
       
-  
+    debugger;
+ 
       const licensedUsers = allUsers.filter((user: any) => user.assignedLicenses && user.assignedLicenses.length > 0);
   
       this.setState({ allUsers: licensedUsers });
@@ -138,12 +140,11 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
         "ID",
         "Title",
         "Item/Title","ItemType",
-        "CurrLand/userCTT",
         "ItemID",
         "Available",
         "CurrOwner/ID","CurrOwner/Title" 
       )
-      .expand("CurrLand","Item","CurrOwner").top(4999)
+      .expand("Item","CurrOwner").top(4999)
       .get();
   
       const formattedItems: IInventoryItem[] = items.map((item: any) => ({
@@ -215,6 +216,7 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
 
     this.setState({ isSaving: true });
 
+    debugger;
     const { userItems, selectedUser } = this.state;
     const today = new Date().toISOString();
   
@@ -253,7 +255,7 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
         }
   
       } else if (item.isNew) {
-        const uniqueTitle = `${selectedUser?.id}-${item.id}`;
+        const uniqueTitle = `${selectedUser?.text}-${item.id}`;
       
         // 1. עדכון ברשימת "מלאי"
         await sp.web.lists.getByTitle("מלאי").items.getById(item.id).update({
@@ -283,7 +285,6 @@ if (existing.length === 0) {
     Title: uniqueTitle,
     LandingDate: today,
     CurrOwnerId: selectedUser?.id,
-    userCTT: selectedUser?.text,
     ItemId: item.id,
     Status: 'השאלה פעילה',
     Accessories: accessoriesText,
@@ -755,8 +756,9 @@ private _handleRemoveItem(item: IInventoryItem): void {
 
               
             </div>
-      {(this.state.linkedAccessories.length > 0 && this.currSelectedItemId ) && (
-  <div className={styles.accessoriesSection}>
+      {(this.state.linkedAccessories.length > 0 ) && (
+ 
+ <div className={styles.accessoriesSection}>
     <h4>מוצרים נלווים</h4>
     {this.state.linkedAccessories.map((acc, index) => (
       <div key={index} className={styles.accessoryRow}>
@@ -800,7 +802,7 @@ private _handleRemoveItem(item: IInventoryItem): void {
   </div>
 )}
 
-           <button onClick={() => this.addSelectedItem()} className={styles.addBtn}  >הוסף</button>           
+           <button onClick={() => this.addSelectedItem()} className={styles.addBtn}>הוסף</button>           
           </div> : <div/>}
 
 
