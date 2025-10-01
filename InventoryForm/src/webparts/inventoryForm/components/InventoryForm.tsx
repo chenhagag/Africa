@@ -44,6 +44,7 @@ export interface IInventoryFormState {
   printUserName: string;
   subscriptionNumber: string;
   linkedAccessories: { name: string; imageFile?: File; imageUrl?: string; isSelected?: boolean }[];
+  isUnlicensed?: boolean;
 
 }
 
@@ -69,7 +70,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       printItems: [],
       printUserName: '',
       subscriptionNumber: '',
-      linkedAccessories: []
+      linkedAccessories: [],
+      isUnlicensed: false
     };
   }
 
@@ -77,7 +79,7 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   public componentDidMount(): void {
 
     debugger;
-    this.loadAllUsers();
+    this.loadAllUsers(false);
     this.GetFullInventory();
 
     const link = document.createElement('link');
@@ -109,7 +111,7 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   };
   
 
-  private async loadAllUsers(): Promise<void> {
+  private async loadAllUsers(showUnlicensed: boolean): Promise<void> {
     try {
       const client: MSGraphClientV3 = await this.props.context.msGraphClientFactory.getClient('3');
   
@@ -124,10 +126,13 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       
     debugger;
  
-      const licensedUsers = allUsers.filter((user: any) => user.assignedLicenses && user.assignedLicenses.length > 0);
-  
-      this.setState({ allUsers: licensedUsers });
-  
+      if(showUnlicensed) {
+        this.setState({ allUsers: allUsers, isUnlicensed: true });
+      } else {    
+        const licensedUsers = allUsers.filter((user: any) => user.assignedLicenses && user.assignedLicenses.length > 0);
+          this.setState({ allUsers: licensedUsers , isUnlicensed: false });
+      }
+    
     } catch (error) {
       console.error('שגיאה בטעינת יוזרים מה-Graph:', error);
     }
@@ -221,6 +226,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
     const today = new Date().toISOString();
   
     for (const item of userItems) {
+
+      debugger;
       if (item.returnReason) {
         // פריט להחזרה
         var itemStatus = "נגרע";
@@ -237,11 +244,13 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
           ReturnReason: item.returnReason       
          });
 
-        const uniqueTitle = `${selectedUser?.id}-${item.id}`;
+
+        debugger;
   
         // 2. עדכון ברשימת "השאלות"
         const query = await sp.web.lists.getByTitle("השאלות").items
-          .filter(`Title eq '${uniqueTitle}'`)
+          .filter(`ItemId eq ${item.id} and CurrOwnerId eq ${selectedUser?.id} and Status eq 'השאלה פעילה'`)
+
           .top(1)()
           .catch(() => []);
   
@@ -416,7 +425,10 @@ if (existing.length === 0) {
     linkedAccessories = [
       { name: "עכבר" },
       { name: "מקלדת" },
-      { name: "מסך" }
+      { name: "מסך" },
+      { name: "תחנת עגינה" },
+      { name: "רמקול" },
+      { name: "מצלמה" }
     ];
   }
 
@@ -618,6 +630,11 @@ private _handleRemoveItem(item: IInventoryItem): void {
           </ul>
         )}
       </div>
+
+      {this.state.isUnlicensed ? (      <button className={styles.licensedBtn} onClick={() => this.loadAllUsers(false)}>הצג משתמשים פעילים בלבד</button>
+      ) : (      <button className={styles.licensedBtn} onClick={() => this.loadAllUsers(true)}>הצג משתמשים שאינם פעילים</button>
+      )}      
+      
 
 
 

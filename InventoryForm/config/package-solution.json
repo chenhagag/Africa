@@ -3,7 +3,7 @@
   "solution": {
     "name": "inventory-form-client-side-solution",
     "id": "62aa6d74-d099-45a0-a475-9cfc9d616fc6",
-    "version": "1.0.0.12",
+    "version": "1.0.0.19",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

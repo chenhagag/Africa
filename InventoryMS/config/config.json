@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "inventory-ms-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/inventoryMs/InventoryMsApplicationCustomizer.js",
+          "manifest": "./src/extensions/inventoryMs/InventoryMsApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "InventoryMsApplicationCustomizerStrings": "lib/extensions/inventoryMs/loc/{locale}.js"
+  }
+}

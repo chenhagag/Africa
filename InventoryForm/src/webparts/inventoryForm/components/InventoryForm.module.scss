@@ -318,7 +318,18 @@ table {
   cursor: not-allowed;
 }
 
-
-
-
+.licensedBtn {
+  color: black;
+  font-size: 14px;
+  background: aliceblue;
+  height: 30px;
+  margin-top: -10px;
+  padding-top: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  margin-left: 10px;
+}
 }

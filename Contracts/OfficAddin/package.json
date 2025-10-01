@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "generator-office": "^3.0.2",
+    "yo": "^5.1.0"
+  }
+}

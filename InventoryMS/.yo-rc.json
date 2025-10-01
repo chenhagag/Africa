@@ -1,21 +1,22 @@
 {
   "@microsoft/generator-sharepoint": {
     "plusBeta": false,
-    "isCreatingSolution": false,
-    "nodeVersion": "18.20.7",
+    "isCreatingSolution": true,
+    "nodeVersion": "22.14.0",
     "sdksVersions": {
       "@microsoft/microsoft-graph-client": "3.0.2",
       "@microsoft/teams-js": "2.24.0"
     },
     "version": "1.20.0",
-    "libraryName": "inventory-form",
-    "libraryId": "62aa6d74-d099-45a0-a475-9cfc9d616fc6",
+    "libraryName": "inventory-ms",
+    "libraryId": "baa7681a-e23f-4ed3-82cf-2b1b11822f3a",
     "environment": "spo",
     "packageManager": "npm",
-    "solutionName": "InventoryForm",
-    "solutionShortDescription": "InventoryForm description",
+    "solutionName": "InventoryMS",
+    "solutionShortDescription": "InventoryMS description",
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
-    "componentType": "webpart"
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
   }
 }

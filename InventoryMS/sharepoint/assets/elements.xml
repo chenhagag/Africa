@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="InventoryMs"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="b95b6343-57b1-4591-a759-c9e32feceb8b"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
