@@ -5,20 +5,21 @@
            xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
            xsi:type="TaskPaneApp">
 
-  <Id>d8f0fc93-7736-43c1-8e12-8e193f543cd4</Id>
+  <Id>5fef90a1-8b89-4f73-a0c9-490e8ec84f4e</Id>
   <Version>1.0.0.3</Version>
   <ProviderName>Contracts</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="ContractsAddin-Africa"/>
+  <DisplayName DefaultValue="ContractsAddin-Knowedge"/>
   <Description DefaultValue="Contracts template add-in"/>
 
+  <!-- אייקונים -->
   <IconUrl DefaultValue="https://knowedge.co.il/matrix/downloads/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://knowedge.co.il/matrix/downloads/assets/icon-64.png"/>
 
   <SupportUrl DefaultValue="https://www.contoso.com/help"/>
 
   <AppDomains>
-    <AppDomain>https://africaisrael.sharepoint.com</AppDomain>
+    <AppDomain>https://knowedge.sharepoint.com</AppDomain>
     <AppDomain>https://knowedge.co.il</AppDomain>
     <AppDomain>https://localhost:3000</AppDomain>
   </AppDomains>

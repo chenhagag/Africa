@@ -4,9 +4,9 @@ import { PublicClientApplication, type AccountInfo } from "@azure/msal-browser";
 /* =========
    Config
    ========= */
-const SP_HOSTNAME = "africaisrael.sharepoint.com";
-const SP_SITE_PATH = "ContractsNew";
-const SITE_IS_UNDER_SITES = false;
+const SP_HOSTNAME = "knowedge.sharepoint.com";
+const SP_SITE_PATH = "Knowedge";
+const SITE_IS_UNDER_SITES = true;
 
 // Status dropdown source
 const STATUS_LIST_DISPLAY_NAME = "ContractStatus";
@@ -28,17 +28,23 @@ const HELPER_LIST_SERVER_RELATIVE_URL = SITE_IS_UNDER_SITES
   ? `/sites/${SP_SITE_PATH}/Lists/${HELPER_LIST_DISPLAY_NAME}`
   : `/${SP_SITE_PATH}/Lists/${HELPER_LIST_DISPLAY_NAME}`;
 
+const DEFAULT_REDIRECT_URI = "https://knowedge.co.il/matrix/downloads/taskpane.html";
+
+const runtimeRedirectUri =
+  typeof window !== "undefined"
+    ? window.location.origin + window.location.pathname 
+    : DEFAULT_REDIRECT_URI;
+
 const MSAL_CONFIG = {
   auth: {
-    clientId: "d8f0fc93-7736-43c1-8e12-8e193f543cd4",
-    authority: "https://login.microsoftonline.com/b4d149d3-3aef-42b5-a6f1-b5018284caf9",
-    redirectUri: "https://knowedge.co.il/matrix/downloads/taskpane.html"
+    clientId: "5fef90a1-8b89-4f73-a0c9-490e8ec84f4e",
+    authority: "https://login.microsoftonline.com/b9465ebd-f455-470a-895c-7e26882877fa",
+    redirectUri: runtimeRedirectUri
   },
   cache: { cacheLocation: "localStorage", storeAuthStateInCookie: true }
 };
 
 const GRAPH_SCOPES = ["User.Read", "Sites.ReadWrite.All", "Files.ReadWrite.All"];
-
 /* =========
    Auth (MSAL)
    ========= */
