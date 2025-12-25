@@ -10,6 +10,113 @@
   <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
   <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
   <link href="taskpane.css" rel="stylesheet" />
+
+  <style>
+    .tabs-container{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:8px;
+      padding:8px 0 12px;
+      border-bottom:1px solid #e1e1e1;
+      margin-bottom:12px;
+    }
+    @media (max-width: 420px){
+      .tabs-container{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .tab-button{
+      border:1px solid #e1e1e1;
+      background:#fafafa;
+      cursor:pointer;
+      padding:10px 8px;
+      border-radius:10px;
+      font-weight:600;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .tab-button.tab-active{
+      background:#ffffff;
+      border-color:#0078d4;
+      box-shadow: 0 0 0 2px rgba(0,120,212,.12);
+    }
+
+    .tab-panel{ display:none; }
+    .tab-panel.is-active{ display:block; }
+
+    .section-card{
+      border:1px solid #e9e9e9;
+      border-radius:12px;
+      padding:12px;
+      background:#fff;
+      margin-bottom:12px;
+    }
+    .section-title{
+      font-weight:700;
+      margin:0 0 10px 0;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 420px){
+      .grid-2{ grid-template-columns: 1fr; }
+    }
+
+    .field-item{ margin-bottom:10px; }
+    .field-item label{ display:block; }
+    .field-item input, .field-item select, .field-item textarea{
+      width:100%;
+      margin-top:6px;
+    }
+
+    .muted{
+      color:#666;
+      font-size:.9rem;
+    }
+
+    .btn-row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-top:8px;
+    }
+    .mini-btn{
+      border:1px solid #d0d0d0;
+      background:#fafafa;
+      padding:6px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .mini-btn.primary{
+      border-color:#0078d4;
+      background:#eef6ff;
+    }
+
+    .preview-box{
+      margin-top:10px;
+      border:1px dashed #cfcfcf;
+      border-radius:12px;
+      padding:10px;
+      background:#fbfbfb;
+      min-height:54px;
+      white-space:pre-line;
+    }
+
+    .readonly-block{
+      border:1px solid #e9e9e9;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+      margin-bottom:10px;
+      white-space:pre-line;
+    }
+
+    .hidden{ display:none !important; }
+  </style>
 </head>
 
 <body class="ms-font-m ms-Fabric">
@@ -27,33 +134,231 @@
   </section>
 
   <main id="app-body" class="ms-welcome__main" style="display:none;">
-    <h2 class="ms-font-xl">פאנל עדכון</h2>
 
-    <ul class="ms-List ms-welcome__features" style="list-style:none; padding:0; margin:0 0 12px;">
-      <li class="ms-ListItem" style="margin-bottom:10px;">
-        <label for="recipientInput" class="ms-font-m">נמען</label>
-        <input id="recipientInput" type="text" placeholder="הקלד/י נמען…" style="width:100%; margin-top:6px;" />
-      </li>
+    <!-- טאבים -->
+    <div class="tabs-container" role="tablist" aria-label="טאבים">
+      <button type="button" class="tab-button tab-active" data-tab="generalTab" role="tab" aria-selected="true">פרטים כלליים</button>
+      <button type="button" class="tab-button" data-tab="partiesTab" role="tab" aria-selected="false">צדדים בחוזה</button>
+      <button type="button" class="tab-button" data-tab="costTab" role="tab" aria-selected="false">נתוני עלות</button>
+      <button type="button" class="tab-button" data-tab="readonlyTab" role="tab" aria-selected="false">צפייה בלבד</button>
+    </div>
 
-      <li class="ms-ListItem" style="margin-bottom:10px;">
-        <label for="statusSelect" class="ms-font-m">בחר/י סטטוס מהרשימה</label>
-        <select id="statusSelect" style="width:100%; margin-top:6px;">
-          <option value="">— טוען סטטוס… —</option>
-        </select>
-      </li>
+    <!-- טאב פרטים כלליים -->
+    <div id="generalTab" class="tab-panel is-active">
 
-      <li class="ms-ListItem" style="margin-bottom:10px;">
-        <label for="addressInput" class="ms-font-m">כתובת</label>
-        <input id="addressInput" type="text" placeholder="הקלד/י כתובת…" style="width:100%; margin-top:6px;" />
-      </li>
+      <div class="section-card">
+        <h3 class="section-title">1) מידע על החוזה</h3>
+        <div class="grid-2">
+          <div class="field-item">
+            <label for="contractNumberInput">מספר חוזה</label>
+            <input id="contractNumberInput" type="text" placeholder="הקלד/י מספר חוזה…" />
+          </div>
 
-      <li class="ms-ListItem">
-        <label for="projectSelect" class="ms-font-m">בחר/י פרויקט</label>
-        <select id="projectSelect" style="width:100%; margin-top:6px;">
-          <option value="">— טוען פרויקטים… —</option>
-        </select>
-      </li>
-    </ul>
+          <div class="field-item">
+            <label for="contractVersionInput">גרסת חוזה</label>
+            <input id="contractVersionInput" type="text" placeholder="הקלד/י גרסת חוזה…" />
+          </div>
+
+          <div class="field-item" style="grid-column:1/-1;">
+            <label for="templateSelect">תבנית</label>
+            <select id="templateSelect">
+              <option value="">— טוען תבניות… —</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h3 class="section-title">2) מידע על הפרויקט</h3>
+        <div class="grid-2">
+          <div class="field-item">
+            <label for="projectSelect">שם הפרויקט</label>
+            <select id="projectSelect">
+              <option value="">— טוען פרויקטים… —</option>
+            </select>
+          </div>
+
+          <div class="field-item">
+            <label for="siteSelect">אתר</label>
+            <select id="siteSelect">
+              <option value="">— טוען אתרים… —</option>
+            </select>
+            <div class="muted">הנתונים נשלפים מרשימת אתרים באתר</div>
+          </div>
+
+          <div class="field-item">
+            <label for="municipalitySelect">רשות מקומית</label>
+            <select id="municipalitySelect">
+              <option value="">— טוען רשויות… —</option>
+            </select>
+          </div>
+
+          <div class="field-item" style="grid-column:1/-1;">
+            <label for="workDescriptionInput">תיאור העבודה</label>
+            <textarea id="workDescriptionInput" rows="3" placeholder="הקלד/י תיאור עבודה…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h3 class="section-title">3) תאריכים</h3>
+        <div class="grid-2">
+          <div class="field-item">
+            <label for="signDateInput">תאריך חתימה החוזה</label>
+            <input id="signDateInput" type="date" />
+          </div>
+
+          <div class="field-item">
+            <label for="startDateInput">מועד התחלה</label>
+            <input id="startDateInput" type="date" />
+          </div>
+
+          <div class="field-item">
+            <label for="monthsInput">מספר חודשים</label>
+            <input id="monthsInput" type="number" min="0" step="1" placeholder="למשל 12" />
+          </div>
+
+          <div class="field-item">
+            <label for="expectedEndDateInput">מועד סיום צפוי</label>
+            <input id="expectedEndDateInput" type="date" disabled />
+            <div class="muted">מחושב אוטומטית לפי מועד התחלה + מספר חודשים</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h3 class="section-title">4) מידע נוסף</h3>
+        <div class="field-item">
+          <label for="statusSelect">סטטוס</label>
+          <select id="statusSelect">
+            <option value="">— טוען סטטוס… —</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- טאב צדדים בחוזה -->
+    <div id="partiesTab" class="tab-panel">
+
+      <!-- צד א' -->
+      <div class="section-card">
+        <h3 class="section-title">צד א'</h3>
+
+        <div class="grid-2">
+          <div class="field-item">
+            <label for="companyASelect">בחירת חברה</label>
+            <select id="companyASelect">
+              <option value="">— טוען חברות… —</option>
+            </select>
+          </div>
+
+          <div class="field-item">
+            <label for="companyAAddressInput">כתובת חברה</label>
+            <input id="companyAAddressInput" type="text" disabled />
+          </div>
+
+          <div class="field-item">
+            <label for="companyAHpInput">ח.פ</label>
+            <input id="companyAHpInput" type="text" disabled />
+          </div>
+
+          <div class="field-item">
+            <label for="partyANamePercentInput">צד א' שם ואחוז</label>
+            <input id="partyANamePercentInput" type="text" placeholder="למשל: ישראל ישראלי – 50%" />
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" id="partyAAddBtn" class="mini-btn primary">הוסף</button>
+          <button type="button" id="partyAClearBtn" class="mini-btn">נקה</button>
+        </div>
+
+        <div id="partyAPreview" class="preview-box">לא הוזן צד א' עדיין.</div>
+      </div>
+
+      <!-- צד ב' -->
+      <div class="section-card">
+        <h3 class="section-title">צד ב'</h3>
+
+        <div class="field-item">
+          <label style="display:flex; gap:8px; align-items:center;">
+            <input id="showSuppliersCheckbox" type="checkbox" />
+            <span>הצג רשימת ספקים</span>
+          </label>
+        </div>
+
+        <!-- בלי רשימת ספקים -->
+        <div id="partyBManualWrap">
+          <div class="grid-2">
+            <div class="field-item">
+              <label for="partyBCompanyNameInput">שם חברה</label>
+              <input id="partyBCompanyNameInput" type="text" placeholder="הקלד/י שם חברה…" />
+            </div>
+
+            <div class="field-item">
+              <label for="partyBAddressInput">כתובת</label>
+              <input id="partyBAddressInput" type="text" placeholder="הקלד/י כתובת…" />
+            </div>
+
+            <div class="field-item">
+              <label for="partyBHpInput">ח.פ</label>
+              <input id="partyBHpInput" type="text" placeholder="הקלד/י ח.פ…" />
+            </div>
+          </div>
+        </div>
+
+        <!-- עם רשימת ספקים -->
+        <div id="partyBSuppliersWrap" class="hidden">
+          <div class="grid-2">
+            <div class="field-item">
+              <label for="supplierTypeSelect">סוג ספק</label>
+              <select id="supplierTypeSelect">
+                <option value="">— טוען סוגי ספקים… —</option>
+              </select>
+            </div>
+
+            <div class="field-item">
+              <label for="supplierSelect">שם ספק</label>
+              <select id="supplierSelect">
+                <option value="">— בחר/י סוג ספק קודם —</option>
+              </select>
+            </div>
+
+            <div class="field-item" style="grid-column:1/-1;">
+              <label for="supplierAddressInput">כתובת (נשתלת מהספק)</label>
+              <input id="supplierAddressInput" type="text" disabled />
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" id="partyBAddBtn" class="mini-btn primary">הוסף</button>
+          <button type="button" id="partyBClearBtn" class="mini-btn">נקה</button>
+        </div>
+
+        <div id="partyBPreview" class="preview-box">לא הוזן צד ב' עדיין.</div>
+      </div>
+
+    </div>
+
+    <!-- טאב נתוני עלות (נמשיך אחר כך) -->
+    <div id="costTab" class="tab-panel">
+      <div class="section-card">
+        <h3 class="section-title">נתוני עלות</h3>
+        <div class="muted">נמשיך אחר כך.</div>
+      </div>
+    </div>
+
+    <!-- טאב צפייה בלבד -->
+    <div id="readonlyTab" class="tab-panel">
+      <div class="section-card">
+        <h3 class="section-title">סיכום להזנה (צפייה בלבד)</h3>
+
+        <div id="readonlyGeneral" class="readonly-block">—</div>
+        <div id="readonlyParties" class="readonly-block">—</div>
+      </div>
+    </div>
 
     <p class="ms-font-l" style="margin:12px 0;">בחרי פעולה:</p>
 
@@ -69,5 +374,30 @@
       <label id="item-subject" class="ms-font-m" aria-live="polite"></label>
     </p>
   </main>
+
+  <!-- טאבים -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var buttons = Array.prototype.slice.call(document.querySelectorAll(".tab-button"));
+      var panels  = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
+
+      function activate(tabId) {
+        panels.forEach(function(p){ p.classList.toggle("is-active", p.id === tabId); });
+        buttons.forEach(function(b){
+          var isActive = b.getAttribute("data-tab") === tabId;
+          b.classList.toggle("tab-active", isActive);
+          b.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          activate(btn.getAttribute("data-tab"));
+        });
+      });
+
+      activate("generalTab");
+    });
+  </script>
 </body>
 </html>
