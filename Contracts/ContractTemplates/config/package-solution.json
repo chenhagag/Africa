@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "contracts-templates-client-side-solution",
+    "id": "111becfe-9e9f-4bde-a969-f73d5d6d05e0",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "ContractsTemplates description"
+      },
+      "longDescription": {
+        "default": "ContractsTemplates description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "contracts-templates Feature",
+        "description": "The feature that activates elements of the contracts-templates solution.",
+        "id": "152a7c0e-ab62-46e8-b753-1ea825304f3d",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/contracts-templates.sppkg"
+  }
+}

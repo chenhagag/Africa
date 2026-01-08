@@ -8,52 +8,51 @@ const SP_SITE_PATH = "ContractsNew";
 const SITE_IS_UNDER_SITES = false;
 
 /* =========
-   LOOKUP LISTS (עדכני כאן לפי שמות אצלכם)
+   LOOKUP LISTS
    ========= */
-
-// Status dropdown source
 const STATUS_LIST_DISPLAY_NAME = "ContractStatus";
 const STATUS_FIELD_NAME = "Title";
 
-// Projects dropdown source
 const PROJECTS_LIST_DISPLAY_NAME = "projects";
 const PROJECTS_FIELD_NAME = "Title";
 
-// Templates dropdown source (תבניות)
-const TEMPLATES_LIST_DISPLAY_NAME = "ContractTemplates"; // <-- עדכני לפי הרשימה בפועל
+const TEMPLATES_LIST_DISPLAY_NAME = "ContractTemplates";
 const TEMPLATES_FIELD_NAME = "Title";
 
-// Sites dropdown source (אתרים)
-const SITES_LIST_DISPLAY_NAME = "Sites"; // <-- עדכני לפי הרשימה בפועל
+const SITES_LIST_DISPLAY_NAME = "אתרים";
 const SITES_FIELD_NAME = "Title";
 
-// Municipalities dropdown source (רשויות מקומיות)
-const MUNICIPALITIES_LIST_DISPLAY_NAME = "רשויות מקומיות"; // <-- עדכני אם השם שונה
+const MUNICIPALITIES_LIST_DISPLAY_NAME = "רשויות מקומיות";
 const MUNICIPALITIES_FIELD_NAME = "Title";
 
-// Companies list (לצד א')
-const COMPANIES_LIST_DISPLAY_NAME = "חברות"; // <-- עדכני לפי הרשימה בפועל
+const INDEX_TYPES_LIST_DISPLAY_NAME = "סוגי מדדים";
+const INDEX_TYPES_FIELD_NAME = "Title";
+
+const COMPANIES_LIST_DISPLAY_NAME = "חברות";
 const COMPANIES_FIELDS = {
   title: "Title",
-  address: "Address", // <-- internal name
-  hp: "HP"            // <-- internal name (ח.פ)
+  address: "Address",
+  hp: "hp"
 };
 
-// Suppliers types list
-const SUPPLIER_TYPES_LIST_DISPLAY_NAME = "סוגי ספקים"; // <-- עדכני לפי הרשימה בפועל
+const SUPPLIER_TYPES_LIST_DISPLAY_NAME = "סוגי ספקים";
 const SUPPLIER_TYPES_FIELD_NAME = "Title";
 
-// Suppliers list
-const SUPPLIERS_LIST_DISPLAY_NAME = "Suppliers"; // כבר היה אצלך
+const SUPPLIERS_LIST_DISPLAY_NAME = "Suppliers";
 const SUPPLIERS_FIELDS = {
   title: "Title",
-  address: "Address",         // <-- internal name
-  type: "SupplierType"        // <-- internal name שמחזיק את סוג הספק (טקסט/lookup title)
+  address: "Address",
+  type: "SupplierType"
 };
 
 /* =========
-   URLs for list resolving
+   Helper list target
    ========= */
+const HELPER_LIST_DISPLAY_NAME = "FieldsUpdateHelper";
+const HELPER_LIST_SERVER_RELATIVE_URL = SITE_IS_UNDER_SITES
+  ? `/sites/${SP_SITE_PATH}/Lists/${HELPER_LIST_DISPLAY_NAME}`
+  : `/${SP_SITE_PATH}/Lists/${HELPER_LIST_DISPLAY_NAME}`;
+
 function listUrl(displayName: string) {
   return SITE_IS_UNDER_SITES
     ? `/sites/${SP_SITE_PATH}/Lists/${displayName}`
@@ -65,16 +64,14 @@ const PROJECTS_LIST_SERVER_RELATIVE_URL = listUrl(PROJECTS_LIST_DISPLAY_NAME);
 const TEMPLATES_LIST_SERVER_RELATIVE_URL = listUrl(TEMPLATES_LIST_DISPLAY_NAME);
 const SITES_LIST_SERVER_RELATIVE_URL = listUrl(SITES_LIST_DISPLAY_NAME);
 const MUNICIPALITIES_LIST_SERVER_RELATIVE_URL = listUrl(MUNICIPALITIES_LIST_DISPLAY_NAME);
+const INDEX_TYPES_LIST_SERVER_RELATIVE_URL = listUrl(INDEX_TYPES_LIST_DISPLAY_NAME);
 const COMPANIES_LIST_SERVER_RELATIVE_URL = listUrl(COMPANIES_LIST_DISPLAY_NAME);
 const SUPPLIER_TYPES_LIST_SERVER_RELATIVE_URL = listUrl(SUPPLIER_TYPES_LIST_DISPLAY_NAME);
 const SUPPLIERS_LIST_SERVER_RELATIVE_URL = listUrl(SUPPLIERS_LIST_DISPLAY_NAME);
 
-// Helper list target
-const HELPER_LIST_DISPLAY_NAME = "FieldsUpdateHelper";
-const HELPER_LIST_SERVER_RELATIVE_URL = SITE_IS_UNDER_SITES
-  ? `/sites/${SP_SITE_PATH}/Lists/${HELPER_LIST_DISPLAY_NAME}`
-  : `/${SP_SITE_PATH}/Lists/${HELPER_LIST_DISPLAY_NAME}`;
-
+/* =========
+   MSAL
+   ========= */
 const MSAL_CONFIG = {
   auth: {
     clientId: "d8f0fc93-7736-43c1-8e12-8e193f543cd4",
@@ -213,7 +210,6 @@ async function getListId(siteId: string, token: string, displayName: string, wan
   found = lists.value.find(l => (l.webUrl || "").toLowerCase().endsWith(wanted));
   if (found) return found.id;
 
-  console.warn("Lists returned:", lists.value.map(l => ({ displayName: l.displayName, webUrl: l.webUrl })));
   throw new Error(`List not found: ${displayName}`);
 }
 
@@ -289,6 +285,12 @@ function getSelectValue(id: string): string {
   return (el?.value || "").trim();
 }
 
+function setSelectValue(id: string, value: string) {
+  const el = document.getElementById(id) as HTMLSelectElement | null;
+  if (!el) return;
+  el.value = (value ?? "").toString();
+}
+
 function setText(id: string, text: string) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -301,8 +303,16 @@ function toggleHidden(id: string, hidden: boolean) {
   el.classList.toggle("hidden", hidden);
 }
 
+function pickField(fields: Record<string, any>, ...keys: string[]) {
+  for (const k of keys) {
+    const v = fields?.[k];
+    if (v !== undefined && v !== null && `${v}`.trim() !== "") return v;
+  }
+  return undefined;
+}
+
 /* =========
-   Local UI state (לצפייה בלבד + צדדים)
+   Local UI state
    ========= */
 const uiState = {
   partyA: {
@@ -321,6 +331,17 @@ const uiState = {
     supplierName: "",
     supplierAddress: "",
     summary: ""
+  },
+  cost: {
+    compMethod: "",
+    contractScope: "",
+    currency: "",
+    indexType: "",
+    baseIndexDate: "",
+    indexMode: "",
+    indexPoints: "",
+    paymentTerms: "",
+    summary: ""
   }
 };
 
@@ -334,17 +355,15 @@ let companiesByTitle = new Map<string, Company>();
 let suppliersAll: Supplier[] = [];
 
 /* =========
-   Date calc (מועד סיום צפוי)
+   Dates calc (ExpectedEndDate)
    ========= */
 function addMonthsToDateISO(startIso: string, months: number): string {
   if (!startIso || !months || months <= 0) return "";
   const [y, m, d] = startIso.split("-").map(Number);
   if (!y || !m || !d) return "";
   const dt = new Date(Date.UTC(y, m - 1, d));
-  const targetMonth = dt.getUTCMonth() + months;
-  dt.setUTCMonth(targetMonth);
+  dt.setUTCMonth(dt.getUTCMonth() + months);
 
-  // שמירה כ-YYYY-MM-DD
   const yy = dt.getUTCFullYear();
   const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
   const dd = String(dt.getUTCDate()).padStart(2, "0");
@@ -368,7 +387,7 @@ function wireDates() {
 }
 
 /* =========
-   Parties behavior
+   Parties summaries
    ========= */
 function buildPartyASummary() {
   const lines: string[] = [];
@@ -393,12 +412,131 @@ function buildPartyBSummary() {
   return lines.join("\n");
 }
 
+/* =========
+   Cost summary + preview
+   ========= */
+function getCostIndexMode(): string {
+  const r1 = document.getElementById("costIndexModeFor") as HTMLInputElement | null;
+  const r2 = document.getElementById("costIndexModeKnown") as HTMLInputElement | null;
+  if (r1 && r1.checked) return r1.value;
+  if (r2 && r2.checked) return r2.value;
+  return "";
+}
+
+function setCostIndexMode(value: string) {
+  const r1 = document.getElementById("costIndexModeFor") as HTMLInputElement | null;
+  const r2 = document.getElementById("costIndexModeKnown") as HTMLInputElement | null;
+  if (r1) r1.checked = value === r1.value;
+  if (r2) r2.checked = value === r2.value;
+}
+
+function buildCostSummary(): string {
+  const lines: string[] = [];
+  if (uiState.cost.compMethod) lines.push(`אופן התמורה: ${uiState.cost.compMethod}`);
+  if (uiState.cost.contractScope) lines.push(`היקף החוזה: ${uiState.cost.contractScope}`);
+  if (uiState.cost.currency) lines.push(`מטבע: ${uiState.cost.currency}`);
+  if (uiState.cost.indexType) lines.push(`סוג מדד: ${uiState.cost.indexType}`);
+  if (uiState.cost.baseIndexDate) lines.push(`מדד בסיס (תאריך): ${uiState.cost.baseIndexDate}`);
+  if (uiState.cost.indexMode) lines.push(`שיטת מדד: ${uiState.cost.indexMode}`);
+  if (uiState.cost.indexPoints) lines.push(`נקודות מדד: ${uiState.cost.indexPoints}`);
+  if (uiState.cost.paymentTerms) lines.push(`תנאי תשלום: ${uiState.cost.paymentTerms}`);
+  return lines.join("\n");
+}
+
+function refreshCostStateFromUI() {
+  uiState.cost.compMethod = getSelectValue("costCompMethodSelect");
+  uiState.cost.contractScope = getInputValue("costContractScopeInput");
+  uiState.cost.currency = getSelectValue("costCurrencySelect");
+  uiState.cost.indexType = getSelectValue("costIndexTypeSelect");
+  uiState.cost.baseIndexDate = getInputValue("costBaseIndexDateInput");
+  uiState.cost.indexMode = getCostIndexMode();
+  uiState.cost.indexPoints = getInputValue("costIndexPointsInput");
+  uiState.cost.paymentTerms = getSelectValue("costPaymentTermsSelect");
+}
+
+function refreshCostPreview() {
+  const txt = uiState.cost.summary || "לא הוזנו נתוני עלות עדיין.";
+  setText("costPreview", txt);
+}
+
+function wireCostUI() {
+  const addBtn = document.getElementById("costAddBtn") as HTMLButtonElement | null;
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      refreshCostStateFromUI();
+      uiState.cost.summary = buildCostSummary();
+      refreshCostPreview();
+      refreshReadonly();
+    });
+  }
+
+  const clearBtn = document.getElementById("costClearBtn") as HTMLButtonElement | null;
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      const compSel = document.getElementById("costCompMethodSelect") as HTMLSelectElement | null;
+      if (compSel) compSel.value = "";
+      setInputValue("costContractScopeInput", "");
+
+      const curSel = document.getElementById("costCurrencySelect") as HTMLSelectElement | null;
+      if (curSel) curSel.value = "";
+
+      const idxSel = document.getElementById("costIndexTypeSelect") as HTMLSelectElement | null;
+      if (idxSel) idxSel.value = "";
+
+      setInputValue("costBaseIndexDateInput", "");
+      setCostIndexMode("");
+      setInputValue("costIndexPointsInput", "");
+
+      const paySel = document.getElementById("costPaymentTermsSelect") as HTMLSelectElement | null;
+      if (paySel) paySel.value = "";
+
+      uiState.cost = {
+        compMethod: "",
+        contractScope: "",
+        currency: "",
+        indexType: "",
+        baseIndexDate: "",
+        indexMode: "",
+        indexPoints: "",
+        paymentTerms: "",
+        summary: ""
+      };
+
+      refreshCostPreview();
+      refreshReadonly();
+    });
+  }
+
+  const ids = [
+    "costCompMethodSelect",
+    "costContractScopeInput",
+    "costCurrencySelect",
+    "costIndexTypeSelect",
+    "costBaseIndexDateInput",
+    "costIndexPointsInput",
+    "costPaymentTermsSelect"
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("change", refreshReadonly);
+    el.addEventListener("input", refreshReadonly);
+  });
+
+  const r1 = document.getElementById("costIndexModeFor") as HTMLInputElement | null;
+  const r2 = document.getElementById("costIndexModeKnown") as HTMLInputElement | null;
+  if (r1) r1.addEventListener("change", refreshReadonly);
+  if (r2) r2.addEventListener("change", refreshReadonly);
+}
+
+/* =========
+   Previews + readonly
+   ========= */
 function refreshPartyPreviews() {
   const a = uiState.partyA.summary || "לא הוזן צד א' עדיין.";
   const b = uiState.partyB.summary || "לא הוזן צד ב' עדיין.";
   setText("partyAPreview", a);
   setText("partyBPreview", b);
-  refreshReadonly();
 }
 
 function refreshReadonly() {
@@ -416,42 +554,46 @@ function refreshReadonly() {
   const expectedEnd = getInputValue("expectedEndDateInput");
   const status = getSelectValue("statusSelect");
 
-  generalLines.push("פרטים כלליים:");
-  if (contractNumber) generalLines.push(`• מספר חוזה: ${contractNumber}`);
-  if (contractVersion) generalLines.push(`• גרסת חוזה: ${contractVersion}`);
-  if (template) generalLines.push(`• תבנית: ${template}`);
-  if (project) generalLines.push(`• פרויקט: ${project}`);
-  if (site) generalLines.push(`• אתר: ${site}`);
-  if (municipality) generalLines.push(`• רשות מקומית: ${municipality}`);
-  if (workDesc) generalLines.push(`• תיאור עבודה: ${workDesc}`);
-  if (signDate) generalLines.push(`• תאריך חתימה: ${signDate}`);
-  if (startDate) generalLines.push(`• מועד התחלה: ${startDate}`);
-  if (months) generalLines.push(`• מספר חודשים: ${months}`);
-  if (expectedEnd) generalLines.push(`• מועד סיום צפוי: ${expectedEnd}`);
-  if (status) generalLines.push(`• סטטוס: ${status}`);
+  if (contractNumber) generalLines.push(`מספר חוזה: ${contractNumber}`);
+  if (contractVersion) generalLines.push(`גרסת חוזה: ${contractVersion}`);
+  if (template) generalLines.push(`תבנית: ${template}`);
+  if (project) generalLines.push(`פרויקט: ${project}`);
+  if (site) generalLines.push(`אתר: ${site}`);
+  if (municipality) generalLines.push(`רשות מקומית: ${municipality}`);
+  if (workDesc) generalLines.push(`תיאור העבודה: ${workDesc}`);
+  if (signDate) generalLines.push(`תאריך חתימה: ${signDate}`);
+  if (startDate) generalLines.push(`מועד התחלה: ${startDate}`);
+  if (months) generalLines.push(`מספר חודשים: ${months}`);
+  if (expectedEnd) generalLines.push(`מועד סיום צפוי: ${expectedEnd}`);
+  if (status) generalLines.push(`סטטוס: ${status}`);
 
   const partiesLines: string[] = [];
-  partiesLines.push("צדדים בחוזה:");
   partiesLines.push("צד א':");
   partiesLines.push(uiState.partyA.summary ? uiState.partyA.summary : "—");
   partiesLines.push("");
   partiesLines.push("צד ב':");
   partiesLines.push(uiState.partyB.summary ? uiState.partyB.summary : "—");
 
-  setText("readonlyGeneral", generalLines.join("\n"));
+  const costLines: string[] = [];
+  costLines.push(uiState.cost.summary ? uiState.cost.summary : "—");
+
+  setText("readonlyGeneral", generalLines.length ? generalLines.join("\n") : "—");
   setText("readonlyParties", partiesLines.join("\n"));
+  setText("readonlyCost", costLines.join("\n"));
 }
 
+/* =========
+   Parties wiring
+   ========= */
 function wirePartiesUI() {
-  // צד א' - בחירת חברה => מילוי כתובת וח.פ
   const companyASelect = document.getElementById("companyASelect") as HTMLSelectElement | null;
   if (companyASelect) {
     companyASelect.addEventListener("change", () => {
       const title = getSelectValue("companyASelect");
       const c = companiesByTitle.get(title);
       uiState.partyA.companyName = title;
-      uiState.partyA.address = c?.address || "";
-      uiState.partyA.hp = c?.hp || "";
+      uiState.partyA.address = c ? (c.address || "") : "";
+      uiState.partyA.hp = c ? (c.hp || "") : "";
       setInputValue("companyAAddressInput", uiState.partyA.address);
       setInputValue("companyAHpInput", uiState.partyA.hp);
       refreshReadonly();
@@ -471,24 +613,29 @@ function wirePartiesUI() {
     partyAAddBtn.addEventListener("click", () => {
       uiState.partyA.summary = buildPartyASummary();
       refreshPartyPreviews();
+      refreshReadonly();
     });
   }
 
   const partyAClearBtn = document.getElementById("partyAClearBtn") as HTMLButtonElement | null;
   if (partyAClearBtn) {
     partyAClearBtn.addEventListener("click", () => {
-      uiState.partyA = { companyName: "", address: "", hp: "", namePercent: "", summary: "" };
-      // clear fields
+      uiState.partyA.companyName = "";
+      uiState.partyA.address = "";
+      uiState.partyA.hp = "";
+      uiState.partyA.namePercent = "";
+      uiState.partyA.summary = "";
+
       const sel = document.getElementById("companyASelect") as HTMLSelectElement | null;
       if (sel) sel.value = "";
       setInputValue("companyAAddressInput", "");
       setInputValue("companyAHpInput", "");
       setInputValue("partyANamePercentInput", "");
       refreshPartyPreviews();
+      refreshReadonly();
     });
   }
 
-  // צד ב' - toggle ספקים
   const chk = document.getElementById("showSuppliersCheckbox") as HTMLInputElement | null;
   if (chk) {
     chk.addEventListener("change", () => {
@@ -499,7 +646,6 @@ function wirePartiesUI() {
     });
   }
 
-  // צד ב' ידני
   ["partyBCompanyNameInput", "partyBAddressInput", "partyBHpInput"].forEach(id => {
     const el = document.getElementById(id) as HTMLInputElement | null;
     if (!el) return;
@@ -511,7 +657,6 @@ function wirePartiesUI() {
     });
   });
 
-  // צד ב' ספקים - סוג ספק => סינון ספקים
   const supplierTypeSelect = document.getElementById("supplierTypeSelect") as HTMLSelectElement | null;
   if (supplierTypeSelect) {
     supplierTypeSelect.addEventListener("change", () => {
@@ -521,7 +666,6 @@ function wirePartiesUI() {
       uiState.partyB.supplierAddress = "";
       setInputValue("supplierAddressInput", "");
 
-      // fill suppliers by type
       const filtered = suppliersAll
         .filter(s => (s.type || "").toString().trim() === type)
         .map(s => ({ value: s.title, label: s.title }))
@@ -532,14 +676,14 @@ function wirePartiesUI() {
     });
   }
 
-  // בחירת ספק => שתילת כתובת
   const supplierSelect = document.getElementById("supplierSelect") as HTMLSelectElement | null;
   if (supplierSelect) {
     supplierSelect.addEventListener("change", () => {
       const name = getSelectValue("supplierSelect");
       uiState.partyB.supplierName = name;
+
       const s = suppliersAll.find(x => x.title === name);
-      uiState.partyB.supplierAddress = s?.address || "";
+      uiState.partyB.supplierAddress = s ? (s.address || "") : "";
       setInputValue("supplierAddressInput", uiState.partyB.supplierAddress);
       refreshReadonly();
     });
@@ -550,6 +694,7 @@ function wirePartiesUI() {
     partyBAddBtn.addEventListener("click", () => {
       uiState.partyB.summary = buildPartyBSummary();
       refreshPartyPreviews();
+      refreshReadonly();
     });
   }
 
@@ -571,62 +716,63 @@ function wirePartiesUI() {
 
       const st = document.getElementById("supplierTypeSelect") as HTMLSelectElement | null;
       if (st) st.value = "";
+
       const ss = document.getElementById("supplierSelect") as HTMLSelectElement | null;
       if (ss) {
         ss.innerHTML = "";
         ss.append(new Option("— בחר/י סוג ספק קודם —", ""));
       }
+
       refreshPartyPreviews();
+      refreshReadonly();
     });
   }
 }
 
 /* =========
-   load dropdowns + caches
+   Load dropdowns + caches
    ========= */
 async function loadLookups() {
-  console.log("******** VERS GENERAL+PARTIES **************");
-
   try {
     const token = await getGraphToken();
     const siteId = await getSiteId(token);
 
-    // Status
     setSelectDisabled("statusSelect", true, "— טוען סטטוס… —");
     const statusListId = await getListId(siteId, token, STATUS_LIST_DISPLAY_NAME, STATUS_LIST_SERVER_RELATIVE_URL);
     const statusValues = await getListItemsByField(siteId, statusListId, token, STATUS_FIELD_NAME);
     fillSelectById("statusSelect", statusValues, "— בחר/י סטטוס —");
     setSelectDisabled("statusSelect", false);
 
-    // Projects
     setSelectDisabled("projectSelect", true, "— טוען פרויקטים… —");
     const projectsListId = await getListId(siteId, token, PROJECTS_LIST_DISPLAY_NAME, PROJECTS_LIST_SERVER_RELATIVE_URL);
     const projectValues = await getListItemsByField(siteId, projectsListId, token, PROJECTS_FIELD_NAME);
     fillSelectById("projectSelect", projectValues, "— בחר/י פרויקט —");
     setSelectDisabled("projectSelect", false);
 
-    // Templates
     setSelectDisabled("templateSelect", true, "— טוען תבניות… —");
     const templatesListId = await getListId(siteId, token, TEMPLATES_LIST_DISPLAY_NAME, TEMPLATES_LIST_SERVER_RELATIVE_URL);
     const templateValues = await getListItemsByField(siteId, templatesListId, token, TEMPLATES_FIELD_NAME);
     fillSelectById("templateSelect", templateValues, "— בחר/י תבנית —");
     setSelectDisabled("templateSelect", false);
 
-    // Sites
     setSelectDisabled("siteSelect", true, "— טוען אתרים… —");
     const sitesListId = await getListId(siteId, token, SITES_LIST_DISPLAY_NAME, SITES_LIST_SERVER_RELATIVE_URL);
     const siteValues = await getListItemsByField(siteId, sitesListId, token, SITES_FIELD_NAME);
     fillSelectById("siteSelect", siteValues, "— בחר/י אתר —");
     setSelectDisabled("siteSelect", false);
 
-    // Municipalities
     setSelectDisabled("municipalitySelect", true, "— טוען רשויות… —");
     const munListId = await getListId(siteId, token, MUNICIPALITIES_LIST_DISPLAY_NAME, MUNICIPALITIES_LIST_SERVER_RELATIVE_URL);
     const munValues = await getListItemsByField(siteId, munListId, token, MUNICIPALITIES_FIELD_NAME);
     fillSelectById("municipalitySelect", munValues, "— בחר/י רשות —");
     setSelectDisabled("municipalitySelect", false);
 
-    // Companies (Side A) - need address+hp cache
+    setSelectDisabled("costIndexTypeSelect", true, "— טוען סוגי מדדים… —");
+    const idxListId = await getListId(siteId, token, INDEX_TYPES_LIST_DISPLAY_NAME, INDEX_TYPES_LIST_SERVER_RELATIVE_URL);
+    const idxValues = await getListItemsByField(siteId, idxListId, token, INDEX_TYPES_FIELD_NAME);
+    fillSelectById("costIndexTypeSelect", idxValues, "— בחר/י סוג מדד —");
+    setSelectDisabled("costIndexTypeSelect", false);
+
     setSelectDisabled("companyASelect", true, "— טוען חברות… —");
     const companiesListId = await getListId(siteId, token, COMPANIES_LIST_DISPLAY_NAME, COMPANIES_LIST_SERVER_RELATIVE_URL);
     const companyItems = await getListItemsFields(siteId, companiesListId, token, [
@@ -645,17 +791,15 @@ async function loadLookups() {
       companiesByTitle.set(title, { title, address, hp });
       companyTitles.push(title);
     });
-    fillSelectById("companyASelect", Array.from(new Set(companyTitles)).sort((a,b)=>a.localeCompare(b,"he")), "— בחר/י חברה —");
+    fillSelectById("companyASelect", Array.from(new Set(companyTitles)).sort((a, b) => a.localeCompare(b, "he")), "— בחר/י חברה —");
     setSelectDisabled("companyASelect", false);
 
-    // Supplier Types
     setSelectDisabled("supplierTypeSelect", true, "— טוען סוגי ספקים… —");
     const supTypeListId = await getListId(siteId, token, SUPPLIER_TYPES_LIST_DISPLAY_NAME, SUPPLIER_TYPES_LIST_SERVER_RELATIVE_URL);
     const supTypes = await getListItemsByField(siteId, supTypeListId, token, SUPPLIER_TYPES_FIELD_NAME);
     fillSelectById("supplierTypeSelect", supTypes, "— בחר/י סוג ספק —");
     setSelectDisabled("supplierTypeSelect", false);
 
-    // Suppliers cache (title+address+type)
     const suppliersListId = await getListId(siteId, token, SUPPLIERS_LIST_DISPLAY_NAME, SUPPLIERS_LIST_SERVER_RELATIVE_URL);
     const supplierItems = await getListItemsFields(siteId, suppliersListId, token, [
       SUPPLIERS_FIELDS.title,
@@ -671,7 +815,6 @@ async function loadLookups() {
       }))
       .filter(s => !!s.title);
 
-    // supplierSelect starts with a hint
     const supplierSelect = document.getElementById("supplierSelect") as HTMLSelectElement | null;
     if (supplierSelect) {
       supplierSelect.innerHTML = "";
@@ -680,151 +823,12 @@ async function loadLookups() {
 
   } catch (e: any) {
     console.error("Lookups load error:", e);
-    alert("לא ניתן לטעון נתוני רשימות (סטטוס/פרויקט/תבניות/אתרים/חברות/ספקים). בדקי הרשאות ושמות רשימות/עמודות.");
+    alert("לא ניתן לטעון נתוני רשימות (סטטוס/פרויקט/תבניות/אתרים/חברות/ספקים/מדדים). בדקי הרשאות ושמות.");
   }
 }
 
 /* =========
-   Word actions (השארתי את הפונקציות, אבל כרגע שומרות רק recipient/otherSides + שדות כלליים)
-   ========= */
-async function updateDocumentFields(fields: {
-  // General
-  contractNumber?: string;
-  contractVersion?: string;
-  template?: string;
-  project?: string;
-  site?: string;
-  municipality?: string;
-  workDescription?: string;
-  signDate?: string;
-  startDate?: string;
-  months?: string;
-  expectedEndDate?: string;
-  status?: string;
-
-  // Parties summaries mapped to existing tags
-  recipient?: string;   // צד א' (summary)
-  otherSides?: string;  // צד ב' (summary)
-}) {
-  await Word.run(async (context) => {
-    const tags = [
-      "contractNumber",
-      "contractVersion",
-      "template",
-      "project",
-      "site",
-      "municipality",
-      "workDescription",
-      "signDate",
-      "startDate",
-      "months",
-      "expectedEndDate",
-      "status",
-      "recipient",
-      "otherSides"
-    ] as const;
-
-    const valuesByTag: Record<string, string | undefined> = {
-      contractNumber: fields.contractNumber,
-      contractVersion: fields.contractVersion,
-      template: fields.template,
-      project: fields.project,
-      site: fields.site,
-      municipality: fields.municipality,
-      workDescription: fields.workDescription,
-      signDate: fields.signDate,
-      startDate: fields.startDate,
-      months: fields.months,
-      expectedEndDate: fields.expectedEndDate,
-      status: fields.status,
-      recipient: fields.recipient,
-      otherSides: fields.otherSides
-    };
-
-    const collections = tags.map(tag => {
-      const col = context.document.contentControls.getByTag(tag);
-      col.load("items");
-      return { tag, col };
-    });
-
-    await context.sync();
-
-    for (const { tag, col } of collections) {
-      const val = (valuesByTag[tag] || "").toString();
-      if (!val) continue;
-
-      if (col.items.length > 0) {
-        col.items.forEach(cc => cc.insertText(val, Word.InsertLocation.replace));
-      } else {
-        const range = context.document.getSelection();
-        const cc = range.insertContentControl();
-        cc.tag = tag;
-        cc.title = tag;
-        cc.insertText(val, Word.InsertLocation.replace);
-      }
-    }
-
-    await context.sync();
-  });
-}
-
-/* =========
-   Helper list save (כאן שמרתי מינימום כדי לא לשבור את הסכימה הקיימת אצלך)
-   ========= */
-async function saveToHelper(fields: {
-  titleItemId: string;
-  libName?: string;
-
-  // keep old columns (if exist)
-  recipient: string;
-  otherSides: string;
-  status: string;
-
-  // new-ish (אם קיימים אצלכם בעמודות helper – אפשר להוסיף; אם לא, אפשר להשאיר רק מה שיש)
-  contractNumber?: string;
-  contractVersion?: string;
-  template?: string;
-  project?: string;
-  site?: string;
-  municipality?: string;
-  workDescription?: string;
-  signDate?: string;
-  startDate?: string;
-  months?: string;
-  expectedEndDate?: string;
-}): Promise<string> {
-  const token = await getGraphToken();
-  const siteId = await getSiteId(token);
-  const helperListId = await getListId(siteId, token, HELPER_LIST_DISPLAY_NAME, HELPER_LIST_SERVER_RELATIVE_URL);
-
-  const helperFields: Record<string, any> = {
-    Title: fields.titleItemId,
-    recipient: fields.recipient,
-    otherSides: fields.otherSides,
-    status: fields.status
-  };
-
-  // נסיון לשמור גם שדות חדשים אם קיימים ברשימה (אם אין— Graph יחזיר שגיאה; במקרה כזה תסירי/נשנה לשמות נכונים)
-  if (fields.contractNumber) helperFields.contractNumber = fields.contractNumber;
-  if (fields.contractVersion) helperFields.contractVersion = fields.contractVersion;
-  if (fields.template) helperFields.template = fields.template;
-  if (fields.project) helperFields.project = fields.project;
-  if (fields.site) helperFields.site = fields.site;
-  if (fields.municipality) helperFields.municipality = fields.municipality;
-  if (fields.workDescription) helperFields.workDescription = fields.workDescription;
-  if (fields.signDate) helperFields.signDate = fields.signDate;
-  if (fields.startDate) helperFields.startDate = fields.startDate;
-  if (fields.months) helperFields.months = fields.months;
-  if (fields.expectedEndDate) helperFields.expectedEndDate = fields.expectedEndDate;
-
-  if (fields.libName) helperFields.libName = fields.libName;
-
-  const created = await createListItem(siteId, helperListId, token, helperFields);
-  return created.id;
-}
-
-/* =========
-   Existing helpers for file identity + url
+   File identity helpers
    ========= */
 async function getCurrentDocumentUrl(): Promise<string | null> {
   return new Promise((resolve) => {
@@ -868,6 +872,210 @@ function getLibraryNameFromWebUrl(webUrl: string): string | null {
   } catch { return null; }
 }
 
+function toDateInputValue(val: any): string {
+  const s = (val ?? "").toString().trim();
+  if (!s) return "";
+  return s.length >= 10 ? s.substring(0, 10) : s; // YYYY-MM-DD
+}
+
+/* =========
+   ✅ Apply all loaded fields into UI + uiState
+   ========= */
+function applyLoadedFieldsToUI(fields: Record<string, any>) {
+  // ===== General =====
+  const contractNumber = pickField(fields, "ContractNumber");
+  const contractVersion = pickField(fields, "contractVersion"); // ✅ כפי שאמרת
+  if (contractNumber) setInputValue("contractNumberInput", `${contractNumber}`);
+  if (contractVersion) setInputValue("contractVersionInput", `${contractVersion}`);
+
+  const template = pickField(fields, "ContractTemplate");
+  const project = pickField(fields, "project");
+  const site = pickField(fields, "SiteName");
+  const municipality = pickField(fields, "Municipality");
+  const workDescription = pickField(fields, "WorkDescription");
+  const signDate = pickField(fields, "SignDate0");
+  const startDate = pickField(fields, "StartDate");
+  const months = pickField(fields, "DurationMonths");
+  const expectedEnd = pickField(fields, "ExpectedEndDate");
+  const status = pickField(fields, "status"); // ✅ כפי שאמרת
+
+  if (template) setSelectValue("templateSelect", `${template}`);
+  if (project) setSelectValue("projectSelect", `${project}`);
+  if (site) setSelectValue("siteSelect", `${site}`);
+  if (municipality) setSelectValue("municipalitySelect", `${municipality}`);
+  if (workDescription) setInputValue("workDescriptionInput", `${workDescription}`);
+
+  if (signDate) setInputValue("signDateInput", toDateInputValue(signDate));
+  if (startDate) setInputValue("startDateInput", toDateInputValue(startDate));
+  if (months) setInputValue("monthsInput", `${months}`);
+  if (expectedEnd) setInputValue("expectedEndDateInput", toDateInputValue(expectedEnd));
+  if (status) setSelectValue("statusSelect", `${status}`);
+
+  // ===== Party A =====
+  const partyACompanyName = pickField(fields, "PartyACompanyName");
+  const partyACompanyAddress = pickField(fields, "PartyACompanyAddress");
+  const partyACompanyHp = pickField(fields, "PartyACompanyHp");
+  const partyAContactNamePercent = pickField(fields, "PartyAContactNamePercent");
+
+  if (partyACompanyName) {
+    uiState.partyA.companyName = `${partyACompanyName}`.trim();
+    setSelectValue("companyASelect", uiState.partyA.companyName);
+
+    const fromCache = companiesByTitle.get(uiState.partyA.companyName);
+    uiState.partyA.address = `${partyACompanyAddress ?? fromCache?.address ?? ""}`.trim();
+    uiState.partyA.hp = `${partyACompanyHp ?? fromCache?.hp ?? ""}`.trim();
+
+    setInputValue("companyAAddressInput", uiState.partyA.address);
+    setInputValue("companyAHpInput", uiState.partyA.hp);
+  } else {
+    if (partyACompanyAddress) uiState.partyA.address = `${partyACompanyAddress}`.trim();
+    if (partyACompanyHp) uiState.partyA.hp = `${partyACompanyHp}`.trim();
+    setInputValue("companyAAddressInput", uiState.partyA.address);
+    setInputValue("companyAHpInput", uiState.partyA.hp);
+  }
+
+  if (partyAContactNamePercent) {
+    uiState.partyA.namePercent = `${partyAContactNamePercent}`.trim();
+    setInputValue("partyANamePercentInput", uiState.partyA.namePercent);
+  }
+
+  uiState.partyA.summary = buildPartyASummary();
+
+  // ===== Party B =====
+  const partyBMode = pickField(fields, "PartyBMode"); // "Supplier" / "Manual"
+  const partyBManualCompanyName = pickField(fields, "PartyBManualCompanyName");
+  const partyBManualAddress = pickField(fields, "PartyBManualAddress");
+  const partyBManualHp = pickField(fields, "PartyBManualHp");
+
+  const partyBSupplierType = pickField(fields, "PartyBSupplierType");
+  const partyBSupplierName = pickField(fields, "PartyBSupplierName");
+  const partyBSupplierAddress = pickField(fields, "PartyBSupplierAddress");
+
+  const useSuppliers = `${partyBMode ?? ""}`.toLowerCase() === "supplier";
+  uiState.partyB.useSuppliers = useSuppliers;
+
+  const chk = document.getElementById("showSuppliersCheckbox") as HTMLInputElement | null;
+  if (chk) chk.checked = useSuppliers;
+  toggleHidden("partyBManualWrap", useSuppliers);
+  toggleHidden("partyBSuppliersWrap", !useSuppliers);
+
+  if (!useSuppliers) {
+    uiState.partyB.manualCompany = `${partyBManualCompanyName ?? ""}`.trim();
+    uiState.partyB.manualAddress = `${partyBManualAddress ?? ""}`.trim();
+    uiState.partyB.manualHp = `${partyBManualHp ?? ""}`.trim();
+
+    setInputValue("partyBCompanyNameInput", uiState.partyB.manualCompany);
+    setInputValue("partyBAddressInput", uiState.partyB.manualAddress);
+    setInputValue("partyBHpInput", uiState.partyB.manualHp);
+
+    uiState.partyB.supplierType = "";
+    uiState.partyB.supplierName = "";
+    uiState.partyB.supplierAddress = "";
+    setSelectValue("supplierTypeSelect", "");
+    setSelectValue("supplierSelect", "");
+    setInputValue("supplierAddressInput", "");
+  } else {
+    uiState.partyB.supplierType = `${partyBSupplierType ?? ""}`.trim();
+    uiState.partyB.supplierName = `${partyBSupplierName ?? ""}`.trim();
+    uiState.partyB.supplierAddress = `${partyBSupplierAddress ?? ""}`.trim();
+
+    setSelectValue("supplierTypeSelect", uiState.partyB.supplierType);
+
+    const filtered = suppliersAll
+      .filter(s => (s.type || "").toString().trim() === uiState.partyB.supplierType)
+      .map(s => ({ value: s.title, label: s.title }))
+      .sort((a, b) => a.label.localeCompare(b.label, "he"));
+
+    fillSelectByIdPairs("supplierSelect", filtered, "— בחר/י ספק —");
+    setSelectValue("supplierSelect", uiState.partyB.supplierName);
+
+    if (!uiState.partyB.supplierAddress && uiState.partyB.supplierName) {
+      const s = suppliersAll.find(x => x.title === uiState.partyB.supplierName);
+      uiState.partyB.supplierAddress = s ? (s.address || "") : "";
+    }
+    setInputValue("supplierAddressInput", uiState.partyB.supplierAddress);
+
+    uiState.partyB.manualCompany = "";
+    uiState.partyB.manualAddress = "";
+    uiState.partyB.manualHp = "";
+    setInputValue("partyBCompanyNameInput", "");
+    setInputValue("partyBAddressInput", "");
+    setInputValue("partyBHpInput", "");
+  }
+
+  uiState.partyB.summary = buildPartyBSummary();
+
+  // אם קיימים שדות summary מוכנים בספרייה — נעדיף אותם
+  const recipient = pickField(fields, "recipient");
+  const otherSides = pickField(fields, "otherSides");
+  if (recipient) uiState.partyA.summary = `${recipient}`.trim();
+  if (otherSides) uiState.partyB.summary = `${otherSides}`.trim();
+
+  // ===== Cost (אם העמודות קיימות בספרייה) =====
+  uiState.cost.compMethod = `${pickField(fields, "CostCompMethod") ?? ""}`.trim();
+  uiState.cost.contractScope = `${pickField(fields, "CostContractScope") ?? ""}`.trim();
+  uiState.cost.currency = `${pickField(fields, "CostCurrency") ?? ""}`.trim();
+  uiState.cost.indexType = `${pickField(fields, "CostIndexType") ?? ""}`.trim();
+  uiState.cost.baseIndexDate = toDateInputValue(pickField(fields, "CostBaseIndexDate"));
+  uiState.cost.indexMode = `${pickField(fields, "CostIndexMode") ?? ""}`.trim();
+  uiState.cost.indexPoints = `${pickField(fields, "CostIndexPoints") ?? ""}`.trim();
+  uiState.cost.paymentTerms = `${pickField(fields, "CostPaymentTerms") ?? ""}`.trim();
+
+  if (uiState.cost.compMethod) setSelectValue("costCompMethodSelect", uiState.cost.compMethod);
+  if (uiState.cost.contractScope) setInputValue("costContractScopeInput", uiState.cost.contractScope);
+  if (uiState.cost.currency) setSelectValue("costCurrencySelect", uiState.cost.currency);
+  if (uiState.cost.indexType) setSelectValue("costIndexTypeSelect", uiState.cost.indexType);
+  if (uiState.cost.baseIndexDate) setInputValue("costBaseIndexDateInput", uiState.cost.baseIndexDate);
+  if (uiState.cost.indexMode) setCostIndexMode(uiState.cost.indexMode);
+  if (uiState.cost.indexPoints) setInputValue("costIndexPointsInput", uiState.cost.indexPoints);
+  if (uiState.cost.paymentTerms) setSelectValue("costPaymentTermsSelect", uiState.cost.paymentTerms);
+
+  uiState.cost.summary = buildCostSummary();
+
+  // ===== Refresh UI =====
+  refreshPartyPreviews();
+  refreshCostPreview();
+  refreshReadonly();
+}
+
+/* =========
+   ✅ Load from library -> loads ALL fields (per saveToHelper)
+   ========= */
+async function loadFromLibraryIntoUI() {
+  try {
+    const absUrl = await getCurrentDocumentUrl();
+    if (!absUrl) return;
+
+    const token = await getGraphToken();
+    const shareId = toShareIdFromWebUrl(absUrl);
+
+    const data = await graph<{
+      listItem?: { fields?: Record<string, any> };
+    }>(
+      `/shares/${encodeURIComponent(shareId)}/driveItem?$expand=listItem($expand=fields)`,
+      token
+    );
+
+    const fields = data?.listItem?.fields;
+    if (!fields) return;
+
+    applyLoadedFieldsToUI(fields);
+  } catch (e) {
+    console.warn("loadFromLibraryIntoUI failed:", e);
+  }
+}
+
+/* =========
+   Save to Helper list
+   ========= */
+async function saveToHelper(fields: Record<string, any>): Promise<string> {
+  const token = await getGraphToken();
+  const siteId = await getSiteId(token);
+  const helperListId = await getListId(siteId, token, HELPER_LIST_DISPLAY_NAME, HELPER_LIST_SERVER_RELATIVE_URL);
+  const created = await createListItem(siteId, helperListId, token, fields);
+  return created.id;
+}
+
 function showCloseDocMessage() {
   const root = document.getElementById("app-body");
   if (!root) return;
@@ -880,12 +1088,46 @@ function showCloseDocMessage() {
 }
 
 /* =========
+   Word update
+   ========= */
+async function updateDocumentFields(fields: Record<string, string | undefined>) {
+  await Word.run(async (context) => {
+    const tags = Object.keys(fields);
+
+    const collections = tags.map(tag => {
+      const col = context.document.contentControls.getByTag(tag);
+      col.load("items");
+      return { tag, col };
+    });
+
+    await context.sync();
+
+    for (const { tag, col } of collections) {
+      const val = (fields[tag] || "").toString();
+      if (!val) continue;
+
+      if (col.items.length > 0) {
+        col.items.forEach(cc => cc.insertText(val, Word.InsertLocation.replace));
+      } else {
+        const range = context.document.getSelection();
+        const cc = range.insertContentControl();
+        cc.tag = tag;
+        cc.title = tag;
+        cc.insertText(val, Word.InsertLocation.replace);
+      }
+    }
+
+    await context.sync();
+  });
+}
+
+/* =========
    Buttons
    ========= */
 export async function runUpdateDoc() {
-  // general
   const contractNumber = getInputValue("contractNumberInput");
   const contractVersion = getInputValue("contractVersionInput");
+
   const template = getSelectValue("templateSelect");
   const project = getSelectValue("projectSelect");
   const site = getSelectValue("siteSelect");
@@ -897,13 +1139,13 @@ export async function runUpdateDoc() {
   const expectedEndDate = getInputValue("expectedEndDateInput");
   const status = getSelectValue("statusSelect");
 
-  // parties (summaries)
   const recipient = uiState.partyA.summary || "";
   const otherSides = uiState.partyB.summary || "";
 
-  if (![contractNumber, contractVersion, template, project, site, municipality, workDescription, signDate, startDate, months, expectedEndDate, status, recipient, otherSides].some(Boolean)) {
-    alert("יש למלא לפחות שדה אחד לעדכון במסמך.");
-    return;
+  if (!uiState.cost.summary) {
+    refreshCostStateFromUI();
+    uiState.cost.summary = buildCostSummary();
+    refreshCostPreview();
   }
 
   try {
@@ -921,7 +1163,15 @@ export async function runUpdateDoc() {
       expectedEndDate,
       status,
       recipient,
-      otherSides
+      otherSides,
+      costCompMethod: uiState.cost.compMethod,
+      costContractScope: uiState.cost.contractScope,
+      costCurrency: uiState.cost.currency,
+      costIndexType: uiState.cost.indexType,
+      costBaseIndexDate: uiState.cost.baseIndexDate,
+      costIndexMode: uiState.cost.indexMode,
+      costIndexPoints: uiState.cost.indexPoints,
+      costPaymentTerms: uiState.cost.paymentTerms
     });
 
     const lbl = document.getElementById("item-subject");
@@ -933,7 +1183,9 @@ export async function runUpdateDoc() {
 }
 
 export async function runSaveSystem() {
-  // general
+  refreshCostStateFromUI();
+  if (!uiState.cost.summary) uiState.cost.summary = buildCostSummary();
+
   const contractNumber = getInputValue("contractNumberInput");
   const contractVersion = getInputValue("contractVersionInput");
   const template = getSelectValue("templateSelect");
@@ -947,27 +1199,24 @@ export async function runSaveSystem() {
   const expectedEndDate = getInputValue("expectedEndDateInput");
   const status = getSelectValue("statusSelect");
 
-  const recipient = uiState.partyA.summary || "נתון חסר";
-  const otherSides = uiState.partyB.summary || "נתון חסר";
+  const partyACompanyName = uiState.partyA.companyName;
+  const partyACompanyAddress = uiState.partyA.address;
+  const partyACompanyHp = uiState.partyA.hp;
+  const partyAContactNamePercent = uiState.partyA.namePercent;
+
+  const partyBMode = uiState.partyB.useSuppliers ? "Supplier" : "Manual";
+  const partyBManualCompanyName = uiState.partyB.manualCompany;
+  const partyBManualAddress = uiState.partyB.manualAddress;
+  const partyBManualHp = uiState.partyB.manualHp;
+
+  const partyBSupplierType = uiState.partyB.supplierType;
+  const partyBSupplierName = uiState.partyB.supplierName;
+  const partyBSupplierAddress = uiState.partyB.supplierAddress;
+
+  const recipient = uiState.partyA.summary || "";
+  const otherSides = uiState.partyB.summary || "";
 
   try {
-    await updateDocumentFields({
-      contractNumber: contractNumber || undefined,
-      contractVersion: contractVersion || undefined,
-      template: template || undefined,
-      project: project || undefined,
-      site: site || undefined,
-      municipality: municipality || undefined,
-      workDescription: workDescription || undefined,
-      signDate: signDate || undefined,
-      startDate: startDate || undefined,
-      months: months || undefined,
-      expectedEndDate: expectedEndDate || undefined,
-      status: status || undefined,
-      recipient: recipient || undefined,
-      otherSides: otherSides || undefined
-    });
-
     const absUrl = await getCurrentDocumentUrl();
     if (!absUrl) { alert("לא מזוהה כתובת למסמך. שמרי את המסמך ב-SharePoint ונסי שוב."); return; }
 
@@ -975,29 +1224,52 @@ export async function runSaveSystem() {
     const itemId = await getListItemIdByWebUrl(token, absUrl);
     if (!itemId) { alert("לא ניתן להביא את מזהה הפריט של המסמך (List Item ID)."); return; }
 
-    const libName = getLibraryNameFromWebUrl(absUrl) || undefined;
+    const libName = getLibraryNameFromWebUrl(absUrl) || "";
 
     await saveToHelper({
-      titleItemId: itemId,
-      libName,
-      recipient,
-      otherSides,
-      status: status || "נתון חסר",
-      contractNumber: contractNumber || undefined,
-      contractVersion: contractVersion || undefined,
-      template: template || undefined,
+      Title: itemId,
+      libName: libName || undefined,
+
+      ContractNumber: contractNumber || undefined,
+      contractVersion: contractVersion || undefined, 
+      ContractTemplate: template || undefined,
       project: project || undefined,
-      site: site || undefined,
-      municipality: municipality || undefined,
-      workDescription: workDescription || undefined,
+      siteName: site || undefined,
+      Municipality: municipality || undefined,
+      WorkDescription: workDescription || undefined,
       signDate: signDate || undefined,
-      startDate: startDate || undefined,
-      months: months || undefined,
-      expectedEndDate: expectedEndDate || undefined
+      StartDate: startDate || undefined,
+      DurationMonths: months || undefined,
+      ExpectedEndDate: expectedEndDate || undefined,
+      status: status || undefined,
+
+      PartyACompanyName: partyACompanyName || undefined,
+      PartyACompanyAddress: partyACompanyAddress || undefined,
+      PartyACompanyHp: partyACompanyHp || undefined,
+      PartyAContactNamePercent: partyAContactNamePercent || undefined,
+
+      PartyBMode: partyBMode || undefined,
+      PartyBManualCompanyName: partyBManualCompanyName || undefined,
+      PartyBManualAddress: partyBManualAddress || undefined,
+      PartyBManualHp: partyBManualHp || undefined,
+      PartyBSupplierType: partyBSupplierType || undefined,
+      PartyBSupplierName: partyBSupplierName || undefined,
+      PartyBSupplierAddress: partyBSupplierAddress || undefined,
+
+      recipient: recipient || undefined,
+      otherSides: otherSides || undefined,
+
+      CostCompMethod: uiState.cost.compMethod || undefined,
+      CostContractScope: uiState.cost.contractScope || undefined,
+      CostCurrency: uiState.cost.currency || undefined,
+      CostIndexType: uiState.cost.indexType || undefined,
+      CostBaseIndexDate: uiState.cost.baseIndexDate || undefined,
+      CostIndexMode: uiState.cost.indexMode || undefined,
+      CostIndexPoints: uiState.cost.indexPoints || undefined,
+      CostPaymentTerms: uiState.cost.paymentTerms || undefined
     });
 
     await Word.run(async (ctx) => { await ctx.document.save(); });
-
     showCloseDocMessage();
   } catch (e: any) {
     console.error("runSaveSystem error:", e);
@@ -1010,8 +1282,10 @@ export async function runSaveSystem() {
    ========= */
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
+
+    console.log("******* VERS 8 ************");
+
     (document.getElementById("sideload-msg") as HTMLElement).style.display = "none";
-    // חשוב: block ולא flex, כדי שהפריסה (grid) תעבוד יציב
     (document.getElementById("app-body") as HTMLElement).style.display = "block";
 
     const btnUpdate = document.getElementById("runUpdateDoc");
@@ -1022,8 +1296,8 @@ Office.onReady((info) => {
 
     wireDates();
     wirePartiesUI();
+    wireCostUI();
 
-    // refresh readonly on any general change
     [
       "contractNumberInput","contractVersionInput","templateSelect","projectSelect","siteSelect",
       "municipalitySelect","workDescriptionInput","signDateInput","startDateInput","monthsInput",
@@ -1035,9 +1309,14 @@ Office.onReady((info) => {
       el.addEventListener("input", refreshReadonly);
     });
 
-    loadLookups().then(() => {
+    loadLookups().then(async () => {
       refreshPartyPreviews();
+      refreshCostStateFromUI();
+      refreshCostPreview();
       refreshReadonly();
+
+      // ✅ Load ALL fields from the library item
+      await loadFromLibraryIntoUI();
     });
   } else {
     (document.getElementById("sideload-msg") as HTMLElement).style.display = "block";

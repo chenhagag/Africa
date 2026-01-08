@@ -1,0 +1,148 @@
+.templatePickerRoot {
+  direction: rtl;
+  font-family: "Segoe UI", Arial;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.subTitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+
+.loading {
+  padding: 14px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.tile {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: right;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+.tileTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tileMeta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+
+.templatesArea {
+  margin-top: 10px;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* עטיפה של שורת החיפוש */
+.searchBoxWrap {
+  width: 380px;
+  max-width: 100%;
+}
+
+/* קונטיינר מעוצב סביב ה-SearchBox */
+.searchBoxStyled {
+  background: linear-gradient(135deg, #f0f6ff, #f8fbff);
+  border: 1px solid #d0e2ff;
+  border-radius: 999px;          // עיגול מלא
+  padding: 4px 12px;
+  box-shadow: 0 4px 12px rgba(0, 90, 200, 0.08);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+/* כשהחיפוש בפוקוס */
+.searchBoxStyled:focus-within {
+  border-color: #5b9bff;
+  box-shadow: 0 6px 18px rgba(0, 90, 200, 0.18);
+}
+
+/* התאמה פנימית ל-SearchBox של Fluent */
+.searchBoxStyled :global(.ms-SearchBox) {
+  border: none;
+  background: transparent;
+}
+
+.searchBoxStyled :global(.ms-SearchBox-field) {
+  background: transparent;
+  font-size: 14px;
+}
+
+.searchBoxStyled :global(.ms-SearchBox-icon) {
+  color: #5b9bff;
+}
+
+.actionsRow.centered {
+  justify-content: center;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+}
+
+.rowMain {
+  min-width: 0;
+}
+
+.rowTitle {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.rowDesc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.empty {
+  padding: 14px;
+  border: 1px dashed #ddd;
+  border-radius: 12px;
+  color: #666;
+}

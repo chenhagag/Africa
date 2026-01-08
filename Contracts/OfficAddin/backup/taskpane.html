@@ -1,0 +1,231 @@
+<!-- taskpane.html -->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>מערכת חוזים</title>
+
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
+  <link href="taskpane.css" rel="stylesheet" />
+
+  <!-- עיצוב טאבים ל-4: לא דחוס, עם wrap למסכים צרים -->
+  <style>
+    .tabs-container{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:8px;
+      padding:8px 0 12px;
+      border-bottom:1px solid #e1e1e1;
+      margin-bottom:12px;
+    }
+    @media (max-width: 420px){
+      .tabs-container{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .tab-button{
+      border:1px solid #e1e1e1;
+      background:#fafafa;
+      cursor:pointer;
+      padding:10px 8px;
+      border-radius:10px;
+      font-weight:600;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .tab-button:hover{ background:#f2f2f2; }
+    .tab-button.tab-active{
+      background:#ffffff;
+      border-color:#0078d4;
+      box-shadow: 0 0 0 2px rgba(0,120,212,.12);
+    }
+
+    .tab-panel{ display:none; }
+    .tab-panel.is-active{ display:block; }
+
+    .field-list{ list-style:none; padding:0; margin:0 0 12px; }
+    .field-item{ margin-bottom:10px; }
+    .field-item label{ display:block; }
+    .field-item input, .field-item select{ width:100%; margin-top:6px; }
+
+    .helper-box{
+      background:#f7f7f7;
+      border:1px dashed #d0d0d0;
+      border-radius:10px;
+      padding:10px 12px;
+      color:#444;
+    }
+  </style>
+</head>
+
+<body class="ms-font-m ms-Fabric">
+  <header class="ms-welcome__header ms-bgColor-neutralLighter">
+    <img width="200" height="36" src="../../assets/africa-logo.jpg" alt="Africa Contracts" />
+    <h1 class="ms-font-su">מערכת חוזים </h1>
+  </header>
+
+  <section id="sideload-msg" class="ms-welcome__main">
+    <h2 class="ms-font-xl">
+      Please
+      <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a>
+      your add-in to see app body.
+    </h2>
+  </section>
+
+  <main id="app-body" class="ms-welcome__main" style="display:none;">
+
+    <!-- טאבים -->
+    <div class="tabs-container" role="tablist" aria-label="טאבים">
+      <button type="button" class="tab-button tab-active" data-tab="generalTab" role="tab" aria-selected="true">
+        פרטים כלליים
+      </button>
+      <button type="button" class="tab-button" data-tab="partiesTab" role="tab" aria-selected="false">
+        צדדים בחוזה
+      </button>
+      <button type="button" class="tab-button" data-tab="costTab" role="tab" aria-selected="false">
+        נתוני עלות
+      </button>
+      <button type="button" class="tab-button" data-tab="readonlyTab" role="tab" aria-selected="false">
+        צפייה בלבד
+      </button>
+    </div>
+
+    <!-- טאב פרטים כלליים -->
+    <div id="generalTab" class="tab-panel is-active">
+      <ul class="ms-List ms-welcome__features field-list">
+
+        <!-- סטטוס -->
+        <li class="ms-ListItem field-item">
+          <label for="statusSelect" class="ms-font-m">בחר/י סטטוס מהרשימה</label>
+          <select id="statusSelect">
+            <option value="">— טוען סטטוס… —</option>
+          </select>
+        </li>
+
+        <!-- שם ספק -->
+        <li class="ms-ListItem field-item">
+          <label for="supplierSelect" class="ms-font-m">שם ספק</label>
+          <select id="supplierSelect">
+            <option value="">— טוען ספקים… —</option>
+          </select>
+        </li>
+
+        <!-- גרסת חוזה -->
+        <li class="ms-ListItem field-item">
+          <label for="contractVersionInput" class="ms-font-m">גרסת חוזה</label>
+          <input id="contractVersionInput" type="text" placeholder="הקלד/י גרסת חוזה…" />
+        </li>
+
+        <!-- תאריך חתימה חוזה (signDate) -->
+        <li class="ms-ListItem field-item">
+          <label for="signDateInput" class="ms-font-m">תאריך חתימה חוזה</label>
+          <input id="signDateInput" type="date" />
+        </li>
+
+        <!-- כתובת -->
+        <li class="ms-ListItem field-item">
+          <label for="addressInput" class="ms-font-m">כתובת</label>
+          <input id="addressInput" type="text" placeholder="הקלד/י כתובת…" />
+        </li>
+
+        <!-- שם פרויקט -->
+        <li class="ms-ListItem field-item">
+          <label for="projectSelect" class="ms-font-m">בחר/י פרויקט</label>
+          <select id="projectSelect">
+            <option value="">— טוען פרויקטים… —</option>
+          </select>
+        </li>
+
+        <!-- שם אתר -->
+        <li class="ms-ListItem field-item">
+          <label for="siteNameInput" class="ms-font-m">שם האתר</label>
+          <input id="siteNameInput" type="text" placeholder="הקלד/י שם אתר…" />
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- טאב צדדים בחוזה -->
+    <div id="partiesTab" class="tab-panel">
+      <ul class="ms-List ms-welcome__features field-list">
+
+        <!-- צד א' בחוזה (recipient) -->
+        <li class="ms-ListItem field-item">
+          <label for="recipientInput" class="ms-font-m">צד א' בחוזה</label>
+          <input id="recipientInput" type="text" placeholder="הקלד/י צד א' בחוזה…" />
+        </li>
+
+        <!-- צדדים נוספים (otherSides) -->
+        <li class="ms-ListItem field-item">
+          <label for="otherSidesInput" class="ms-font-m">צדדים נוספים</label>
+          <input id="otherSidesInput" type="text" placeholder="הקלד/י צדדים נוספים…" />
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- טאב נתוני עלות -->
+    <div id="costTab" class="tab-panel">
+      <div class="helper-box ms-font-m">
+        כרגע אין שדות עלות מוגדרים בקוד.<br/>
+        כשתרצי, נוסיף כאן שדות (למשל: סכום, מע״מ, מטבע, תאריך התחלה/סיום, הצמדה, תשלומים וכו׳) ונחבר ל־Word/Helper list.
+      </div>
+    </div>
+
+    <!-- טאב צפייה בלבד -->
+    <div id="readonlyTab" class="tab-panel">
+      <div class="helper-box ms-font-m">
+        טאב צפייה בלבד – כרגע תצוגת “בקרוב”.<br/>
+        אם תרצי, אוסיף כאן כרטיס שמציג את הערכים שנמצאים במסמך (content controls) לקריאה בלבד, בלי לערוך.
+      </div>
+    </div>
+
+    <p class="ms-font-l" style="margin:12px 0;">בחרי פעולה:</p>
+
+    <div role="button" id="runUpdateDoc" class="ms-welcome__action ms-Button ms-Button--hero ms-font-l" style="margin-bottom:10px;" tabindex="0" aria-label="עדכון מסמך">
+      <span class="ms-Button-label">עדכון מסמך</span>
+    </div>
+
+    <div role="button" id="runSaveSystem" class="ms-welcome__action ms-Button ms-Button--hero ms-font-l" tabindex="0" aria-label="שמור שינויים במערכת">
+      <span class="ms-Button-label">שמור שינויים במערכת</span>
+    </div>
+
+    <p style="margin-top:10px;">
+      <label id="item-subject" class="ms-font-m" aria-live="polite"></label>
+    </p>
+  </main>
+
+  <!-- סקריפט מעבר טאבים (נקי יותר, עובד עם 4) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var buttons = Array.prototype.slice.call(document.querySelectorAll(".tab-button"));
+      var panels  = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
+
+      function activate(tabId) {
+        panels.forEach(function(p){
+          p.classList.toggle("is-active", p.id === tabId);
+        });
+
+        buttons.forEach(function(b){
+          var isActive = b.getAttribute("data-tab") === tabId;
+          b.classList.toggle("tab-active", isActive);
+          b.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          activate(btn.getAttribute("data-tab"));
+        });
+      });
+
+      // ברירת מחדל
+      activate("generalTab");
+    });
+  </script>
+</body>
+</html>

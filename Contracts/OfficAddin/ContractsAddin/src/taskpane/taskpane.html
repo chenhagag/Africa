@@ -12,12 +12,34 @@
   <link href="taskpane.css" rel="stylesheet" />
 
   <style>
+    :root{
+      --brand-blue:#0b3a6a;
+      --brand-blue2:#0f5fae;
+      --brand-black:#111111;
+      --border:#e6e6e6;
+      --bg:#f7f9fc;
+      --card:#ffffff;
+      --muted:#5a6675;
+      --shadow: 0 6px 18px rgba(17,17,17,.06);
+    }
+
+    body{ background: var(--bg); }
+
+    header.ms-welcome__header{
+      background: linear-gradient(90deg, #ffffff 0%, #f3f7ff 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    header.ms-welcome__header h1{
+      color: var(--brand-black);
+      margin-top: 6px;
+    }
+
     .tabs-container{
       display:grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap:8px;
       padding:8px 0 12px;
-      border-bottom:1px solid #e1e1e1;
+      border-bottom:1px solid var(--border);
       margin-bottom:12px;
     }
     @media (max-width: 420px){
@@ -25,35 +47,64 @@
     }
 
     .tab-button{
-      border:1px solid #e1e1e1;
-      background:#fafafa;
+      border:1px solid var(--border);
+      background:#ffffff;
       cursor:pointer;
-      padding:10px 8px;
-      border-radius:10px;
-      font-weight:600;
+      padding:10px 10px;
+      border-radius:12px;
+      font-weight:700;
+      color: var(--brand-black);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
+      box-shadow: 0 2px 8px rgba(17,17,17,.04);
+      transition: transform .05s ease, box-shadow .15s ease, border-color .15s ease;
     }
+    .tab-button:hover{ box-shadow: 0 6px 14px rgba(17,17,17,.08); }
+    .tab-button:active{ transform: translateY(1px); }
+
     .tab-button.tab-active{
-      background:#ffffff;
-      border-color:#0078d4;
-      box-shadow: 0 0 0 2px rgba(0,120,212,.12);
+      border-color: rgba(11,58,106,.35);
+      box-shadow: 0 0 0 3px rgba(11,58,106,.10), 0 8px 18px rgba(17,17,17,.08);
+      position: relative;
+    }
+    .tab-button.tab-active::after{
+      content:"";
+      position:absolute;
+      right:10px;
+      left:10px;
+      bottom:-6px;
+      height:3px;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-blue2) 100%);
     }
 
     .tab-panel{ display:none; }
     .tab-panel.is-active{ display:block; }
 
     .section-card{
-      border:1px solid #e9e9e9;
-      border-radius:12px;
-      padding:12px;
-      background:#fff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:var(--card);
       margin-bottom:12px;
+      box-shadow: var(--shadow);
     }
     .section-title{
-      font-weight:700;
+      font-weight:800;
       margin:0 0 10px 0;
+      color: var(--brand-black);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .section-title::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:3px;
+      background: var(--brand-blue);
+      display:inline-block;
     }
 
     .grid-2{
@@ -66,15 +117,29 @@
     }
 
     .field-item{ margin-bottom:10px; }
-    .field-item label{ display:block; }
+    .field-item label{ display:block; font-weight:700; color: var(--brand-black); }
     .field-item input, .field-item select, .field-item textarea{
       width:100%;
       margin-top:6px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      padding:10px 10px;
+      background:#fff;
+      outline:none;
+    }
+    .field-item input:focus, .field-item select:focus, .field-item textarea:focus{
+      border-color: rgba(11,58,106,.45);
+      box-shadow: 0 0 0 3px rgba(11,58,106,.10);
+    }
+    .field-item input[disabled]{
+      background:#f3f4f6;
+      color:#333;
     }
 
     .muted{
-      color:#666;
+      color:var(--muted);
       font-size:.9rem;
+      margin-top:6px;
     }
 
     .btn-row{
@@ -84,35 +149,58 @@
       margin-top:8px;
     }
     .mini-btn{
-      border:1px solid #d0d0d0;
-      background:#fafafa;
-      padding:6px 10px;
-      border-radius:10px;
+      border:1px solid var(--border);
+      background:#ffffff;
+      padding:8px 12px;
+      border-radius:12px;
       cursor:pointer;
-      font-weight:600;
+      font-weight:800;
+      color: var(--brand-black);
+      box-shadow: 0 2px 8px rgba(17,17,17,.04);
     }
     .mini-btn.primary{
-      border-color:#0078d4;
-      background:#eef6ff;
+      border-color: rgba(11,58,106,.35);
+      background: linear-gradient(90deg, rgba(11,58,106,.08) 0%, rgba(15,95,174,.08) 100%);
     }
 
     .preview-box{
       margin-top:10px;
-      border:1px dashed #cfcfcf;
-      border-radius:12px;
-      padding:10px;
-      background:#fbfbfb;
+      border:1px dashed rgba(11,58,106,.25);
+      border-radius:14px;
+      padding:12px;
+      background:#fbfdff;
       min-height:54px;
       white-space:pre-line;
     }
 
+    .readonly-wrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
     .readonly-block{
-      border:1px solid #e9e9e9;
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-      margin-bottom:10px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      background:#ffffff;
       white-space:pre-line;
+      box-shadow: var(--shadow);
+      position:relative;
+    }
+    .readonly-block::before{
+      content:"";
+      position:absolute;
+      top:0;
+      right:0;
+      left:0;
+      height:4px;
+      border-radius:14px 14px 0 0;
+      background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-blue2) 100%);
+    }
+    .readonly-header{
+      font-weight:900;
+      margin:0 0 8px 0;
+      color: var(--brand-black);
     }
 
     .hidden{ display:none !important; }
@@ -215,13 +303,12 @@
 
           <div class="field-item">
             <label for="monthsInput">מספר חודשים</label>
-            <input id="monthsInput" type="number" min="0" step="1" placeholder="למשל 12" />
+            <input id="monthsInput" type="number" min="0" step="1"  />
           </div>
 
           <div class="field-item">
             <label for="expectedEndDateInput">מועד סיום צפוי</label>
             <input id="expectedEndDateInput" type="date" disabled />
-            <div class="muted">מחושב אוטומטית לפי מועד התחלה + מספר חודשים</div>
           </div>
         </div>
       </div>
@@ -265,7 +352,7 @@
 
           <div class="field-item">
             <label for="partyANamePercentInput">צד א' שם ואחוז</label>
-            <input id="partyANamePercentInput" type="text" placeholder="למשל: ישראל ישראלי – 50%" />
+            <input id="partyANamePercentInput" type="text"/>
           </div>
         </div>
 
@@ -283,7 +370,7 @@
 
         <div class="field-item">
           <label style="display:flex; gap:8px; align-items:center;">
-            <input id="showSuppliersCheckbox" type="checkbox" />
+            <input id="showSuppliersCheckbox" type="checkbox" style="width: 10%"/>
             <span>הצג רשימת ספקים</span>
           </label>
         </div>
@@ -326,7 +413,7 @@
             </div>
 
             <div class="field-item" style="grid-column:1/-1;">
-              <label for="supplierAddressInput">כתובת (נשתלת מהספק)</label>
+              <label for="supplierAddressInput">כתובת</label>
               <input id="supplierAddressInput" type="text" disabled />
             </div>
           </div>
@@ -342,21 +429,111 @@
 
     </div>
 
-    <!-- טאב נתוני עלות (נמשיך אחר כך) -->
+    <!-- טאב נתוני עלות -->
     <div id="costTab" class="tab-panel">
       <div class="section-card">
         <h3 class="section-title">נתוני עלות</h3>
-        <div class="muted">נמשיך אחר כך.</div>
+
+        <div class="grid-2">
+          <div class="field-item">
+            <label for="costCompMethodSelect">אופן התמורה</label>
+            <select id="costCompMethodSelect">
+              <option value="">— בחר/י —</option>
+              <option value="אופן 1">אופן 1</option>
+              <option value="אופן 2">אופן 2</option>
+              <option value="אופן 3">אופן 3</option>
+            </select>
+          </div>
+
+          <div class="field-item">
+            <label for="costContractScopeInput">היקף החוזה</label>
+            <input id="costContractScopeInput" type="text" />
+          </div>
+
+          <div class="field-item">
+            <label for="costCurrencySelect">שם מטבע</label>
+            <select id="costCurrencySelect">
+              <option value="">— בחר/י —</option>
+              <option value="₪">₪</option>
+              <option value="$">$</option>
+              <option value="€">€</option>
+            </select>
+          </div>
+
+          <div class="field-item">
+            <label for="costIndexTypeSelect">סוג מדד</label>
+            <select id="costIndexTypeSelect">
+              <option value="">— טוען סוגי מדדים… —</option>
+            </select>
+          </div>
+
+          <div class="field-item">
+            <label for="costBaseIndexDateInput">מדד בסיס (תאריך)</label>
+            <input id="costBaseIndexDateInput" type="date" />
+          </div>
+
+          <div class="field-item">
+            <label>שיטת מדד</label>
+            <div style="display:flex; gap:14px; align-items:center; margin-top:6px;">
+              <label style="display:flex; gap:8px; align-items:center; font-weight:700;">
+                <input type="radio" name="costIndexMode" id="costIndexModeFor" value="מדד בגין" />
+                <span>מדד בגין</span>
+              </label>
+              <label style="display:flex; gap:8px; align-items:center; font-weight:700;">
+                <input type="radio" name="costIndexMode" id="costIndexModeKnown" value="מדד ידוע" />
+                <span>מדד ידוע</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field-item">
+            <label for="costIndexPointsInput">נקודות מדד</label>
+            <input id="costIndexPointsInput" type="text"  />
+          </div>
+
+          <div class="field-item">
+            <label for="costPaymentTermsSelect">תנאי תשלום</label>
+            <select id="costPaymentTermsSelect">
+              <option value="">— בחר/י —</option>
+              <option value="30 יום">30 יום</option>
+              <option value="45 יום">45 יום</option>
+              <option value="60 יום">60 יום</option>
+              <option value="שוטף + 30">שוטף + 30</option>
+              <option value="שוטף + 60">שוטף + 60</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" id="costAddBtn" class="mini-btn primary">החל/עדכן</button>
+          <button type="button" id="costClearBtn" class="mini-btn">נקה</button>
+        </div>
+
+        <div id="costPreview" class="preview-box">לא הוזנו נתוני עלות עדיין.</div>
       </div>
     </div>
 
     <!-- טאב צפייה בלבד -->
     <div id="readonlyTab" class="tab-panel">
       <div class="section-card">
-        <h3 class="section-title">סיכום להזנה (צפייה בלבד)</h3>
+        <h3 class="section-title">צפייה בלבד</h3>
+      </div>
 
-        <div id="readonlyGeneral" class="readonly-block">—</div>
-        <div id="readonlyParties" class="readonly-block">—</div>
+      <div class="readonly-wrap">
+        <div class="readonly-block">
+          <div class="readonly-header">פרטים כלליים</div>
+          <div id="readonlyGeneral">—</div>
+        </div>
+
+        <div class="readonly-block">
+          <div class="readonly-header">צדדים בחוזה</div>
+          <div id="readonlyParties">—</div>
+        </div>
+
+        <div class="readonly-block">
+          <div class="readonly-header">נתוני עלות</div>
+          <div id="readonlyCost">—</div>
+        </div>
       </div>
     </div>
 

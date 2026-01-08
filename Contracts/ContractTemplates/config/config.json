@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "contracts-templates-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/contractsTemplates/ContractsTemplatesWebPart.js",
+          "manifest": "./src/webparts/contractsTemplates/ContractsTemplatesWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ContractsTemplatesWebPartStrings": "lib/webparts/contractsTemplates/loc/{locale}.js"
+  }
+}
