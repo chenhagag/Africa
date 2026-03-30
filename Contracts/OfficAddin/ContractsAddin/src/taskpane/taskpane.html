@@ -36,11 +36,16 @@
 
     .tabs-container{
       display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap:8px;
       padding:8px 0 12px;
       border-bottom:1px solid var(--border);
       margin-bottom:12px;
+      /* Task 6: keep tabs visible while content scrolls */
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
     }
     @media (max-width: 420px){
       .tabs-container{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -147,6 +152,7 @@
       gap:8px;
       align-items:center;
       margin-top:8px;
+      flex-wrap:wrap;
     }
     .mini-btn{
       border:1px solid var(--border);
@@ -204,6 +210,26 @@
     }
 
     .hidden{ display:none !important; }
+
+    /* שדות בטאב "הוספת שדות" */
+    .fields-list{
+      display:grid;
+      gap:8px;
+      margin-top:10px;
+    }
+    .field-pill{
+      width:100%;
+      text-align:right;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+    .field-pill code{
+      opacity:.75;
+      font-size:.85rem;
+      font-weight:700;
+    }
   </style>
 </head>
 
@@ -228,12 +254,13 @@
       <button type="button" class="tab-button tab-active" data-tab="generalTab" role="tab" aria-selected="true">פרטים כלליים</button>
       <button type="button" class="tab-button" data-tab="partiesTab" role="tab" aria-selected="false">צדדים בחוזה</button>
       <button type="button" class="tab-button" data-tab="costTab" role="tab" aria-selected="false">נתוני עלות</button>
+      <button type="button" class="tab-button" data-tab="extrasTab" role="tab" aria-selected="false">שדות נוספים</button>
       <button type="button" class="tab-button" data-tab="readonlyTab" role="tab" aria-selected="false">צפייה בלבד</button>
+      <button type="button" class="tab-button" data-tab="fieldsTab" role="tab" aria-selected="false">הוספת שדות</button>
     </div>
 
     <!-- טאב פרטים כלליים -->
     <div id="generalTab" class="tab-panel is-active">
-
       <div class="section-card">
         <h3 class="section-title">1) מידע על החוזה</h3>
         <div class="grid-2">
@@ -303,7 +330,7 @@
 
           <div class="field-item">
             <label for="monthsInput">מספר חודשים</label>
-            <input id="monthsInput" type="number" min="0" step="1"  />
+            <input id="monthsInput" type="number" min="0" step="1" />
           </div>
 
           <div class="field-item">
@@ -322,12 +349,10 @@
           </select>
         </div>
       </div>
-
     </div>
 
     <!-- טאב צדדים בחוזה -->
     <div id="partiesTab" class="tab-panel">
-
       <!-- צד א' -->
       <div class="section-card">
         <h3 class="section-title">צד א'</h3>
@@ -426,7 +451,6 @@
 
         <div id="partyBPreview" class="preview-box">לא הוזן צד ב' עדיין.</div>
       </div>
-
     </div>
 
     <!-- טאב נתוני עלות -->
@@ -488,7 +512,7 @@
 
           <div class="field-item">
             <label for="costIndexPointsInput">נקודות מדד</label>
-            <input id="costIndexPointsInput" type="text"  />
+            <input id="costIndexPointsInput" type="text" />
           </div>
 
           <div class="field-item">
@@ -513,6 +537,68 @@
       </div>
     </div>
 
+    <!--  טאב שדות נוספים -->
+<div id="extrasTab" class="tab-panel">
+  <div class="section-card">
+    <h3 class="section-title">שדות נוספים</h3>
+
+    <div class="muted" style="margin-bottom:10px;">
+      שדות אלו נשמרים בספרייה כ־customField1..customField8 ומתעדכנים גם במסמך (Content Controls).
+    </div>
+
+    <div class="grid-2">
+      <div class="field-item">
+        <label for="customField1Input">שדה נוסף 1</label>
+        <input id="customField1Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField2Input">שדה נוסף 2</label>
+        <input id="customField2Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField3Input">שדה נוסף 3</label>
+        <input id="customField3Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField4Input">שדה נוסף 4</label>
+        <input id="customField4Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField5Input">שדה נוסף 5</label>
+        <input id="customField5Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField6Input">שדה נוסף 6</label>
+        <input id="customField6Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField7Input">שדה נוסף 7</label>
+        <input id="customField7Input" type="text" />
+      </div>
+
+      <div class="field-item">
+        <label for="customField8Input">שדה נוסף 8</label>
+        <input id="customField8Input" type="text" />
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" id="extrasClearBtn" class="mini-btn">נקה</button>
+    </div>
+
+    <div class="muted" style="margin-top:8px;">
+      הערה: עדכון למסמך נעשה בלחיצה על "עדכון מסמך". שמירה לספרייה נעשית ב"שמור שינויים במערכת".
+    </div>
+  </div>
+</div>
+
+
     <!-- טאב צפייה בלבד -->
     <div id="readonlyTab" class="tab-panel">
       <div class="section-card">
@@ -533,6 +619,32 @@
         <div class="readonly-block">
           <div class="readonly-header">נתוני עלות</div>
           <div id="readonlyCost">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ טאב הוספת שדות -->
+    <div id="fieldsTab" class="tab-panel">
+      <div class="section-card">
+        <h3 class="section-title">הוספת שדות למסמך</h3>
+
+        <div class="field-item">
+          <label for="fieldSearchInput">חיפוש</label>
+          <input id="fieldSearchInput" type="text" placeholder="חפש/י לפי שם/תג…" />
+          <div class="muted">
+            לחיצה על שדה תוסיף Content Control במקום הסמן, עם Tag פנימי, Title בעברית, וערך התחלתי בסוגריים מרובעים.
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" id="insertAllFieldsBtn" class="mini-btn">הוסף את כל השדות (במיקום הסמן, אחד אחרי השני)</button>
+          <button type="button" id="debugCCBtn" class="mini-btn">דיבוג: הדפס Content Controls</button>
+        </div>
+
+        <div id="fieldsList" class="fields-list"></div>
+
+        <div class="muted" style="margin-top:10px;">
+          דוגמה: הוספת "מספר חוזה" תיצור CC עם tag <b>cntContractNumber</b> וטקסט <b>[מספר חוזה]</b>.
         </div>
       </div>
     </div>
