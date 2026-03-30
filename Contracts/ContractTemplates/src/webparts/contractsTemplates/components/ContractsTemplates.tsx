@@ -64,24 +64,16 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
     })();
   }, [service]);
 
-  const openCreateUrl = (url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
-
   const onSelectType = (t: ITemplateType) => {
     setSelectedType(t);
     setView("templates");
-    // לא מאפסים search בכוונה? אפשר לבחור:
-    // אם את רוצה שכשנכנסים לסוג החיפוש יתחיל ריק:
     setSearch("");
   };
 
   const scopedTemplates = React.useMemo(() => {
-    // בתוך סוג: רק התבניות של הסוג
     if (view === "templates" && selectedType) {
       return allTemplates.filter(t => t.TemplateTypeId === selectedType.Id);
     }
-    // במסך הראשי: כל התבניות
     return allTemplates;
   }, [allTemplates, view, selectedType]);
 
@@ -97,6 +89,49 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
   }, [scopedTemplates, search]);
 
   const hasSearch = !!(search || "").trim();
+
+
+  const buildNewFileName = (templateId: number) => {
+    const now = new Date();
+    const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+    const ts = `${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+  
+    return `CONT-${ts}-${templateId}.docx`;
+  };
+  
+  const openWebEdit = (serverRelativeUrl: string) => {
+    const path = serverRelativeUrl.startsWith("/") ? serverRelativeUrl : `/${serverRelativeUrl}`;
+    window.open(`${window.location.origin}${path}?web=1`, "_blank", "noopener,noreferrer");
+  };
+  
+  
+  const onCreateDocument = async (tpl: ITemplateLink) => {
+    if (!tpl.TemplateServerRelativeUrl) {
+      setError("לתבנית הזו חסר נתיב TemplateServerRelativeUrl.");
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      setError(undefined);
+  
+      const targetFolder = "/ContractsNEW/Shared Documents";
+      const newFileName = buildNewFileName(tpl.Id);
+  
+      const res = await service.createDocFromTemplateBlob({
+        templateServerRelativeUrl: tpl.TemplateServerRelativeUrl,
+        targetFolderServerRelativeUrl: targetFolder,
+        newFileName
+      });
+  
+      openWebEdit(res.newFileServerRelativeUrl);
+    } catch (e: any) {
+      setError(e?.message || "שגיאה ביצירת מסמך מהתבנית.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <div className={styles.templatePickerRoot}>
@@ -126,18 +161,17 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
       {!loading && view === "types" && (
         <div>
           <div className={`${styles.actionsRow} ${styles.centered}`}>
-          <div className={styles.searchBoxWrap}>
-          <div className={styles.searchBoxStyled}>
-            <SearchBox
-              placeholder="חיפוש תבנית..."
-              value={search}
-              onChange={(_, val) => setSearch(val || "")}
-            />
-          </div>
-        </div>
+            <div className={styles.searchBoxWrap}>
+              <div className={styles.searchBoxStyled}>
+                <SearchBox
+                  placeholder="חיפוש תבנית..."
+                  value={search}
+                  onChange={(_, val) => setSearch(val || "")}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* תוצאות חיפוש גלובלי (אם יש חיפוש) */}
           {hasSearch && (
             <div className={styles.list}>
               {filteredTemplates.map(tpl => (
@@ -151,7 +185,8 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
 
                   <PrimaryButton
                     text="צור מסמך"
-                    onClick={() => openCreateUrl(tpl.CreateUrl)}
+                    onClick={() => onCreateDocument(tpl)}
+                    disabled={!tpl.TemplateServerRelativeUrl}
                   />
                 </div>
               ))}
@@ -185,6 +220,7 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
         </div>
       )}
 
+      {/* ====== מסך סוג: חיפוש בתוך סוג ====== */}
       {!loading && view === "templates" && (
         <div className={styles.templatesArea}>
           <div className={styles.actionsRow}>
@@ -193,17 +229,18 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
               onClick={() => {
                 setView("types");
                 setSelectedType(undefined);
-                // אם את רוצה לשמר חיפוש גלובלי כשחוזרים – אל תאפסי
                 setSearch("");
               }}
             />
 
             <div className={styles.searchBoxWrap}>
-              <SearchBox
-                placeholder="חיפוש בתוך הסוג..."
-                value={search}
-                onChange={(_, val) => setSearch(val || "")}
-              />
+              <div className={styles.searchBoxStyled}>
+                <SearchBox
+                  placeholder="חיפוש בתוך הסוג..."
+                  value={search}
+                  onChange={(_, val) => setSearch(val || "")}
+                />
+              </div>
             </div>
           </div>
 
@@ -212,12 +249,15 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
               <div key={tpl.Id} className={styles.row}>
                 <div className={styles.rowMain}>
                   <div className={styles.rowTitle}>{tpl.Title}</div>
-                  {tpl.Description && <div className={styles.rowDesc}>{tpl.Description}</div>}
+                  {tpl.Description && (
+                    <div className={styles.rowDesc}>{tpl.Description}</div>
+                  )}
                 </div>
 
                 <PrimaryButton
                   text="צור מסמך"
-                  onClick={() => openCreateUrl(tpl.CreateUrl)}
+                  onClick={() => onCreateDocument(tpl)}
+                  disabled={!tpl.TemplateServerRelativeUrl}
                 />
               </div>
             ))}

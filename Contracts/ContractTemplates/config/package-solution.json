@@ -3,7 +3,7 @@
   "solution": {
     "name": "contracts-templates-client-side-solution",
     "id": "111becfe-9e9f-4bde-a969-f73d5d6d05e0",
-    "version": "1.0.0.1",
+    "version": "1.0.0.5",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

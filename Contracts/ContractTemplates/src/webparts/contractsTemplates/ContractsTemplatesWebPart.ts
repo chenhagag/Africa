@@ -24,7 +24,7 @@ export default class TemplatePickerWebPart extends BaseClientSideWebPart<ITempla
       {
         sp,
         templateTypesListTitle: this.properties.templateTypesListTitle || "TemplateTypes",
-        templateLinksListTitle: this.properties.templateLinksListTitle || "TemplateLinks",
+        templateLinksListTitle: this.properties.templateLinksListTitle || "ניהול תבניות",
       }
     );
 
