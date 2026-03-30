@@ -35,6 +35,8 @@ const COMPANIES_FIELDS = {
   hp: "hp"
 };
 
+const EXTRA_FIELDS_LIST_DISPLAY_NAME = "extraFields";
+
 const SUPPLIER_TYPES_LIST_DISPLAY_NAME = "סוגי ספקים";
 const SUPPLIER_TYPES_FIELD_NAME = "Title";
 
@@ -179,6 +181,7 @@ const INDEX_TYPES_LIST_SERVER_RELATIVE_URL = listUrl(INDEX_TYPES_LIST_DISPLAY_NA
 const COMPANIES_LIST_SERVER_RELATIVE_URL = listUrl(COMPANIES_LIST_DISPLAY_NAME);
 const SUPPLIER_TYPES_LIST_SERVER_RELATIVE_URL = listUrl(SUPPLIER_TYPES_LIST_DISPLAY_NAME);
 const SUPPLIERS_LIST_SERVER_RELATIVE_URL = listUrl(SUPPLIERS_LIST_DISPLAY_NAME);
+const EXTRA_FIELDS_LIST_SERVER_RELATIVE_URL = listUrl(EXTRA_FIELDS_LIST_DISPLAY_NAME);
 
 /* =========
    MSAL
@@ -729,7 +732,7 @@ function refreshReadonly() {
   const contractNumber = getInputValue("contractNumberInput");
   const contractVersion = getInputValue("contractVersionInput");
   const template = getSelectValue("templateSelect");
-  const project = getSelectValue("projectSelect");
+  const project = getInputValue("projectInput");
   const site = getSelectValue("siteSelect");
   const municipality = getSelectValue("municipalitySelect");
   const workDesc = getInputValue("workDescriptionInput");
@@ -968,11 +971,6 @@ async function loadLookups() {
     fillSelectById("statusSelect", statusValues, "— בחר/י סטטוס —");
     setSelectDisabled("statusSelect", false);
 
-    setSelectDisabled("projectSelect", true, "— טוען פרויקטים… —");
-    const projectsListId = await getListId(siteId, token, PROJECTS_LIST_DISPLAY_NAME, PROJECTS_LIST_SERVER_RELATIVE_URL);
-    const projectValues = await getListItemsByField(siteId, projectsListId, token, PROJECTS_FIELD_NAME);
-    fillSelectById("projectSelect", projectValues, "— בחר/י פרויקט —");
-    setSelectDisabled("projectSelect", false);
 
     setSelectDisabled("templateSelect", true, "— טוען תבניות… —");
     const templatesListId = await getListId(siteId, token, TEMPLATES_LIST_DISPLAY_NAME, TEMPLATES_LIST_SERVER_RELATIVE_URL);
@@ -1115,7 +1113,6 @@ function applyLoadedFieldsToUI(fields: Record<string, any>) {
   if (contractNumber) setInputValue("contractNumberInput", `${contractNumber}`);
   if (contractVersion) setInputValue("contractVersionInput", `${contractVersion}`);
 
-  const template = pickField(fields, "ContractTemplate");
   const project = pickField(fields, "project");
   const site = pickField(fields, "SiteName");
   const municipality = pickField(fields, "Municipality");
@@ -1126,8 +1123,7 @@ function applyLoadedFieldsToUI(fields: Record<string, any>) {
   const expectedEnd = pickField(fields, "ExpectedEndDate");
   const status = pickField(fields, "status"); // ✅ כפי שאמרת
 
-  if (template) setSelectValue("templateSelect", `${template}`);
-  if (project) setSelectValue("projectSelect", `${project}`);
+  if (project) setInputValue("projectInput", `${project}`);
   if (site) setSelectValue("siteSelect", `${site}`);
   if (municipality) setSelectValue("municipalitySelect", `${municipality}`);
   if (workDescription) setInputValue("workDescriptionInput", `${workDescription}`);
@@ -1311,64 +1307,106 @@ async function loadFromLibraryIntoUI() {
 }
 
 /* =========
+   Extract template ID from file name
+   File name format: CONT-MMDD-HHMMSS-{templateId}.docx
+   ========= */
+async function extractTemplateIdFromFileName(): Promise<string | null> {
+  try {
+    const url = await getCurrentDocumentUrl();
+    if (!url) return null;
+    const raw = url.split("/").pop() || "";
+    const decoded = decodeURIComponent(raw.split("?")[0]);
+    const m = decoded.match(/-(\d+)\.docx$/i);
+    return m ? m[1] : null;
+  } catch { return null; }
+}
+
+/* =========
    Tasks 2 / 3 / 4 – new-document defaults
    ========= */
 
-// Task 2: if templateSelect is still empty, read cntTemplateName CC from the document
-async function tryFillTemplateFromDocument(): Promise<void> {
+// Task 2: if templateSelect is still empty, extract template ID from file name
+async function tryFillTemplateFromFileName(): Promise<void> {
   if (getSelectValue("templateSelect")) return;
   try {
-    await Word.run(async (context) => {
-      const ccs = context.document.contentControls.getByTag(TAGS.template);
-      ccs.load("items/text");
-      await context.sync();
-      console.log("[tryFillTemplateFromDocument] CC count:", ccs.items.length);
-      if (ccs.items.length > 0) {
-        const raw = (ccs.items[0].text || "").trim();
-        console.log("[tryFillTemplateFromDocument] raw CC text:", JSON.stringify(raw));
+    const templateId = await extractTemplateIdFromFileName();
+    if (!templateId) return;
+    console.log("[tryFillTemplateFromFileName] extracted template ID:", templateId);
 
-        // skip placeholder values like [תבנית]
-        if (!raw || (raw.startsWith("[") && raw.endsWith("]"))) {
-          console.log("[tryFillTemplateFromDocument] skipping placeholder or empty value");
-          return;
-        }
+    const token = await getGraphToken();
+    const siteId = await getSiteId(token);
+    const templatesListId = await getListId(siteId, token, TEMPLATES_LIST_DISPLAY_NAME, TEMPLATES_LIST_SERVER_RELATIVE_URL);
+    const item = await graph<{ fields: Record<string, any> }>(
+      `/sites/${siteId}/lists/${templatesListId}/items/${templateId}?expand=fields($select=${TEMPLATES_FIELD_NAME})`, token
+    );
+    const title = (item.fields?.[TEMPLATES_FIELD_NAME] ?? "").toString().trim();
+    console.log("[tryFillTemplateFromFileName] resolved template title:", title);
 
-        const normalize = (s: string) =>
-          s.trim()
-           .toLowerCase()
-           .replace(/\u00a0/g, " ")   // non-breaking space → regular space
-           .replace(/[\r\n]+/g, " ")  // line breaks → space
-           .replace(/\s+/g, " ");     // multiple spaces → single space
-
-        const normalizedRaw = normalize(raw);
-        console.log("[tryFillTemplateFromDocument] normalized CC text:", JSON.stringify(normalizedRaw));
-
-        const sel = document.getElementById("templateSelect") as HTMLSelectElement | null;
-        if (!sel) { console.warn("[tryFillTemplateFromDocument] templateSelect not found"); return; }
-
-        const allOptions = Array.from(sel.options).filter(o => o.value);
-        console.log("[tryFillTemplateFromDocument] available options:",
-          allOptions.map(o => ({ value: o.value, text: o.text }))
-        );
-
-        const match = allOptions.find(o =>
-          normalize(o.value) === normalizedRaw ||
-          normalize(o.text)  === normalizedRaw
-        );
-
-        if (match) {
-          console.log("[tryFillTemplateFromDocument] matched option:", { value: match.value, text: match.text });
-          setSelectValue("templateSelect", match.value);
-          refreshReadonly();
-        } else {
-          console.warn("[tryFillTemplateFromDocument] no matching option found for:", JSON.stringify(normalizedRaw));
-        }
-      } else {
-        console.warn("[tryFillTemplateFromDocument] no CC with tag", TAGS.template, "found in document");
-      }
-    });
+    if (title) {
+      setSelectValue("templateSelect", title);
+      refreshReadonly();
+    }
   } catch (e) {
-    console.error("[tryFillTemplateFromDocument] error:", e);
+    console.error("[tryFillTemplateFromFileName] error:", e);
+  }
+}
+
+/* =========
+   Extra Fields – dynamic labels & visibility per template
+   ========= */
+async function loadAndApplyExtraFields(): Promise<void> {
+  try {
+    const templateId = await extractTemplateIdFromFileName();
+    if (!templateId) {
+      applyExtraFieldVisibility([]);
+      return;
+    }
+
+    const token = await getGraphToken();
+    const siteId = await getSiteId(token);
+    const listId = await getListId(siteId, token, EXTRA_FIELDS_LIST_DISPLAY_NAME, EXTRA_FIELDS_LIST_SERVER_RELATIVE_URL);
+
+    // Get all items with Title and Template (multi-lookup) fields
+    const res = await graph<{ value: Array<{ id: string; fields: Record<string, any> }> }>(
+      `/sites/${siteId}/lists/${listId}/items?expand=fields($select=Title,Template)`, token
+    );
+
+    // Filter items whose Template multi-lookup contains the current template ID
+    const matching = (res.value || []).filter(item => {
+      const tmpl = item.fields?.Template;
+      if (!tmpl) return false;
+      // Multi-lookup comes as an array of { LookupId, LookupValue }
+      if (Array.isArray(tmpl)) {
+        return tmpl.some((entry: any) => String(entry.LookupId) === templateId);
+      }
+      return false;
+    });
+
+    const labels = matching
+      .map(item => (item.fields?.Title ?? "").toString().trim())
+      .filter(Boolean);
+
+    console.log("[loadAndApplyExtraFields] template ID:", templateId, "matched labels:", labels);
+    applyExtraFieldVisibility(labels);
+  } catch (e) {
+    console.error("[loadAndApplyExtraFields] error:", e);
+    applyExtraFieldVisibility([]);
+  }
+}
+
+function applyExtraFieldVisibility(labels: string[]): void {
+  for (let i = 1; i <= 8; i++) {
+    const input = document.getElementById(`customField${i}Input`);
+    const fieldItem = input?.closest(".field-item") as HTMLElement | null;
+    if (!fieldItem) continue;
+
+    if (i <= labels.length) {
+      fieldItem.style.display = "";
+      const lbl = fieldItem.querySelector("label");
+      if (lbl) lbl.textContent = labels[i - 1];
+    } else {
+      fieldItem.style.display = "none";
+    }
   }
 }
 
@@ -1595,7 +1633,7 @@ export async function runUpdateDoc() {
   const contractVersion = getInputValue("contractVersionInput");
 
   const template = getSelectValue("templateSelect");
-  const project = getSelectValue("projectSelect");
+  const project = getInputValue("projectInput");
   const site = getSelectValue("siteSelect");
 
   const municipality = getSelectValue("municipalitySelect");
@@ -1698,7 +1736,7 @@ export async function runSaveSystem() {
   const contractNumber = getInputValue("contractNumberInput");
   const contractVersion = getInputValue("contractVersionInput");
   const template = getSelectValue("templateSelect");
-  const project = getSelectValue("projectSelect");
+  const project = getInputValue("projectInput");
   const site = getSelectValue("siteSelect");
   const municipality = getSelectValue("municipalitySelect");
   const workDescription = getInputValue("workDescriptionInput");
@@ -1876,7 +1914,7 @@ Office.onReady((info) => {
     wireFieldsTabUI();
 
     [
-      "contractNumberInput", "contractVersionInput", "templateSelect", "projectSelect", "siteSelect",
+      "contractNumberInput", "contractVersionInput", "templateSelect", "projectInput", "siteSelect",
       "municipalitySelect", "workDescriptionInput", "signDateInput", "startDateInput", "monthsInput",
       "statusSelect",
 
@@ -1900,7 +1938,8 @@ Office.onReady((info) => {
       await loadFromLibraryIntoUI();
 
       // Tasks 2 / 3 / 4: fill defaults only if the above left them empty (= new document)
-      await tryFillTemplateFromDocument();
+      await tryFillTemplateFromFileName();
+      await loadAndApplyExtraFields();
       await tryFillContractNumberFromFileName();
       tryFillDefaultStatus();
 
