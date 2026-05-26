@@ -1,0 +1,19 @@
+Migration started: 25/05/2026 13:39:27
+Files to process: 4
+------------------------------------------------------------
+
+[1/4] יועץ אקוסטיקה.docx
+  OK: 0 converted, 48 skipped
+
+[2/4] יועץ בטיחות.docx
+  OK: 0 converted, 49 skipped
+
+[3/4] יועץ בידוד תרמי.docx
+  ERROR opening: This file is already open in Protected View. (C:\SPFX\Africa\...\יועץ בידוד תרמי.docx)
+
+[4/4] יועץ ביסוס קרקע.docx
+  OK: 0 converted, 48 skipped
+
+------------------------------------------------------------
+Done: 3 succeeded, 1 failed
+Finished: 25/05/2026 13:39:32

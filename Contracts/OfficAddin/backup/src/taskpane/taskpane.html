@@ -36,7 +36,7 @@
 
     .tabs-container{
       display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap:8px;
       padding:8px 0 12px;
       border-bottom:1px solid var(--border);
@@ -230,31 +230,6 @@
       font-size:.85rem;
       font-weight:700;
     }
-
-    .annex-list{ display:grid; gap:6px; margin-top:10px; }
-    .annex-item{
-      width:100%;
-      text-align:right;
-      padding:10px 14px;
-      border:1px solid var(--border);
-      border-radius:10px;
-      background:#fff;
-      cursor:pointer;
-      font-weight:600;
-      transition: background .1s ease, border-color .15s ease;
-    }
-    .annex-item:hover{ background:rgba(11,58,106,.04); border-color:rgba(11,58,106,.25); }
-    .annex-item.annex-busy{
-      opacity:.6; pointer-events:none; cursor:wait;
-    }
-    .annex-status{
-      margin-top:8px;
-      padding:8px 12px;
-      border-radius:8px;
-      font-size:.9rem;
-    }
-    .annex-status.annex-error{ background:#fdecea; color:#b71c1c; }
-    .annex-status.annex-ok{ background:#e8f5e9; color:#2e7d32; }
   </style>
 </head>
 
@@ -282,7 +257,6 @@
       <button type="button" class="tab-button" data-tab="extrasTab" role="tab" aria-selected="false">שדות נוספים</button>
       <button type="button" class="tab-button" data-tab="readonlyTab" role="tab" aria-selected="false">צפייה בלבד</button>
       <button type="button" class="tab-button" data-tab="fieldsTab" role="tab" aria-selected="false">הוספת שדות</button>
-      <!-- <button type="button" class="tab-button" data-tab="annexTab" role="tab" aria-selected="false">הוסף נספחים</button> -->
     </div>
 
     <!-- טאב פרטים כלליים -->
@@ -322,6 +296,7 @@
             <select id="siteSelect">
               <option value="">— טוען אתרים… —</option>
             </select>
+            <div class="muted">הנתונים נשלפים מרשימת אתרים באתר</div>
           </div>
 
           <div class="field-item">
@@ -565,6 +540,10 @@
   <div class="section-card">
     <h3 class="section-title">שדות נוספים</h3>
 
+    <div class="muted" style="margin-bottom:10px;">
+      שדות אלו נשמרים בספרייה כ־customField1..customField8 ומתעדכנים גם במסמך (Content Controls).
+    </div>
+
     <div class="grid-2">
       <div class="field-item">
         <label for="customField1Input">שדה נוסף 1</label>
@@ -650,35 +629,20 @@
         <div class="field-item">
           <label for="fieldSearchInput">חיפוש</label>
           <input id="fieldSearchInput" type="text" placeholder="חפש/י לפי שם/תג…" />
+          <div class="muted">
+            לחיצה על שדה תוסיף Content Control במקום הסמן, עם Tag פנימי, Title בעברית, וערך התחלתי בסוגריים מרובעים.
+          </div>
         </div>
 
+        <div class="btn-row">
+          <button type="button" id="insertAllFieldsBtn" class="mini-btn">הוסף את כל השדות (במיקום הסמן, אחד אחרי השני)</button>
+          <button type="button" id="debugCCBtn" class="mini-btn">דיבוג: הדפס Content Controls</button>
+        </div>
 
         <div id="fieldsList" class="fields-list"></div>
 
-        <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
-          <h4 style="margin:0 0 8px;">המרת תבנית ישנה</h4>
-          <p class="muted" style="margin:0 0 8px; font-size:0.85rem;">
-            מחליף את כל ה-Content Controls הישנים (SharePoint) ב-controls חדשים תואמי אדאין.
-          </p>
-          <button id="migrateBtn" class="ms-Button ms-Button--primary" style="width:100%;">
-            <span class="ms-Button-label">המר controls ישנים</span>
-          </button>
-          <div id="migrateStatus" class="muted" style="margin-top:6px; font-size:0.85rem;"></div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- טאב הוסף נספחים -->
-    <div id="annexTab" class="tab-panel">
-      <div class="section-card">
-        <h3 class="section-title">הוספת נספח למסמך</h3>
-        <div class="muted" style="margin-bottom:10px;">
-          לחצ/י על נספח כדי להוסיף אותו לסוף המסמך הנוכחי (עם מעבר עמוד).
-        </div>
-        <div id="annexStatus"></div>
-        <div id="annexList" class="annex-list">
-          <div class="muted">טוען נספחים…</div>
+        <div class="muted" style="margin-top:10px;">
+          דוגמה: הוספת "מספר חוזה" תיצור CC עם tag <b>cntContractNumber</b> וטקסט <b>[מספר חוזה]</b>.
         </div>
       </div>
     </div>

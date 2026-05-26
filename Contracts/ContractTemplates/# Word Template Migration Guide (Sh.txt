@@ -1,0 +1,148 @@
+# Word Template Migration Guide (SharePoint → Add-in Content Controls)
+
+## Overview
+
+This project uses Word templates with content controls (SDTs) that are managed by a custom Word add-in.
+
+Older templates were originally built with **SharePoint-bound content controls** (using `<w:dataBinding>` and customXml).
+New templates use **clean content controls** that are managed only by the add-in (via tag-based logic).
+
+The goal of this migration is:
+➡️ Convert old templates into clean, add-in-compatible templates
+➡️ Remove SharePoint binding behavior
+➡️ Align all content control tags with the new template structure
+
+---
+
+## Key Differences (Old vs New Templates)
+
+### Old Templates
+
+* Content controls (SDT) exist
+* Bound to SharePoint via `<w:dataBinding>`
+* Include:
+
+  * `<w:showingPlcHdr/>`
+  * `<w:text/>`
+* Use SharePoint Document ID (`_dlc_DocId`)
+* Contain heavy `customXml` metadata
+* Some tags differ from the add-in expectations
+
+### New Templates (Source of Truth)
+
+* Use clean content controls (SDT)
+* No `<w:dataBinding>`
+* No `<w:showingPlcHdr/>`
+* No `<w:text/>`
+* Managed only via add-in (`getByTag`)
+* Use correct tag names
+* Include `cntContractNumber` instead of `_dlc_DocId`
+
+---
+
+## Migration Strategy (CRITICAL)
+
+⚠️ Do NOT edit Word XML manually
+⚠️ Do NOT remove XML nodes directly
+⚠️ Do NOT modify customXml parts
+
+### Correct Approach:
+
+For each relevant content control:
+
+1. Locate the existing control
+2. Read its visible content
+3. Remove the entire control safely
+4. Insert a NEW clean content control in the same location
+5. Assign the correct tag (based on New Templates)
+6. Reinsert the original visible content
+7. Preserve layout, formatting, tables, headers, and footers
+
+➡️ Do this for ALL controls — even if they look correct
+➡️ Do NOT reuse old SharePoint-bound controls
+
+---
+
+## Required Tag Mappings
+
+| Old Tag                                              | New Tag            |
+| ---------------------------------------------------- | ------------------ |
+| cntTzadB_x002C__x0020_cntTzadC_x002C__x0020_cntTzadD | cntTzadB           |
+| cmtTzadAName                                         | cntPartyAName      |
+| cntLocalAuth                                         | cntMunicipality    |
+| cntContractType                                      | cntTemplateName    |
+| _dlc_DocId                                           | cntContractNumber  |
+| cntJobDesc                                           | cntWorkDescription |
+
+---
+
+## Special Cases
+
+### `_dlc_DocId`
+
+* SharePoint-generated Document ID
+* Must NOT be reused
+* Replace completely with:
+  ➡️ new content control: `cntContractNumber`
+* Remove any locking or binding behavior
+
+---
+
+## What Must Be Preserved
+
+✔ All visible document text
+✔ Formatting (fonts, spacing, colors)
+✔ Tables and layout
+✔ Header and footer structure
+✔ Placeholder text appearance (e.g., blue text)
+
+---
+
+## What Must NOT Remain
+
+❌ `<w:dataBinding>`
+❌ SharePoint-bound behavior
+❌ Old tag names
+❌ `_dlc_DocId`
+❌ Partially edited SDTs
+
+---
+
+## Validation Checklist
+
+After migration, each file must:
+
+1. Open in Word WITHOUT "unreadable content" or repair prompt
+2. Contain valid content controls
+3. Use correct tags (aligned with new templates)
+4. Have no SharePoint binding behavior
+5. Preserve formatting and layout
+6. Have no broken XML structure
+
+---
+
+## Workflow for Future Use
+
+When new templates need migration:
+
+1. Place files in:
+
+   * `Old Templates`
+2. Keep reference files in:
+
+   * `New Templates`
+3. Instruct the tool/AI:
+
+   * Use New Templates as source of truth
+   * Apply full replacement strategy (not partial edits)
+4. Test on ONE file first
+5. Only then apply to all files
+
+---
+
+## Notes
+
+* This is a structural migration, not a content rewrite
+* The add-in relies ONLY on content control tags
+* Clean SDT structure is required for stable behavior
+* Always prefer safe replacement over in-place modification

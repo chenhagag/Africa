@@ -1,0 +1,25 @@
+1. להוריד תבנית ישנה מאתר חוזים הישן ולשים בתיקיית Old Templates
+2. לתת לקלוד את הפרומפט: Read the Word Template Migration Guide and apply the same process to the files in Old Templates.
+3. לתת לקלוד את הפרומפט:
+One more fix is needed.
+
+All the templates are currently in "Track Changes" mode.
+
+Please update all files in the "Old Templates" folder so that:
+
+1. Accept all tracked changes in each document
+2. Turn OFF Track Changes mode (disable revision tracking)
+3. Ensure no pending revisions remain
+4. Save the documents in a clean state (no markup, no tracking)
+
+Important:
+The final documents should open with Track Changes disabled and no visible revision history.
+
+Do not modify any content or content controls — only fix the revision tracking state.
+
+4. להעביר את כל התבניות לתיקיית תבניות מתוקנות. ומשם להעלות לספריית חוזים כתבנית + לעדכן רשימת ניהול תבניות + להעלות לספריית נכסים של אתר לתיקיית תבניות חדשות
+
+
+כמה דגשים:
+1. לא למחוק את התיקיה של New Templates - היא משמשת את קלוד כמקור אמת.
+2. כרגע הוא משאיר את מספר החוזה הישן בפרופרטי ומעדכן אותו רק בשמירת השינויים בפאנל.  אולי למחוק אותו. 

@@ -1,5 +1,4 @@
 import { PublicClientApplication, type AccountInfo } from "@azure/msal-browser";
-console.log("=== TASKPANE BUILD 2026-05-18 v2 ===");
 
 /* =========
    Config
@@ -37,7 +36,6 @@ const COMPANIES_FIELDS = {
 };
 
 const EXTRA_FIELDS_LIST_DISPLAY_NAME = "extraFields";
-const ANNEXES_LIBRARY_DISPLAY_NAME = "נספחים";
 
 const SUPPLIER_TYPES_LIST_DISPLAY_NAME = "סוגי ספקים";
 const SUPPLIER_TYPES_FIELD_NAME = "Title";
@@ -1550,9 +1548,6 @@ function wireFieldsTabUI() {
   const dbgBtn = document.getElementById("debugCCBtn") as HTMLButtonElement | null;
   if (dbgBtn) dbgBtn.addEventListener("click", () => debugListContentControls());
 
-  const migrateBtn = document.getElementById("migrateBtn") as HTMLButtonElement | null;
-  if (migrateBtn) migrateBtn.addEventListener("click", () => migrateContentControls());
-
   renderFieldsList("");
 }
 
@@ -1868,246 +1863,6 @@ export async function debugListContentControls() {
 }
 
 
-/* =========
-   Migrate old SharePoint-bound content controls to clean add-in controls
-   ========= */
-
-// Old tag → new tag mapping
-const TAG_MIGRATION_MAP: Record<string, string> = {
-  "cntTzadB_x002C__x0020_cntTzadC_x002C__x0020_cntTzadD": "cntTzadB",
-  "cmtTzadAName": "cntPartyAName",
-  "cntLocalAuth": "cntMunicipality",
-  "cntContractType": "cntTemplateName",
-  "_dlc_DocId": "cntContractNumber",
-  "cntJobDesc": "cntWorkDescription",
-};
-
-// Build a tag→label lookup from FIELD_CATALOG
-function getTagLabelMap(): Record<string, string> {
-  const map: Record<string, string> = {};
-  for (const f of FIELD_CATALOG) {
-    map[f.tag] = f.label;
-  }
-  return map;
-}
-
-export async function migrateContentControls() {
-  const statusEl = document.getElementById("migrateStatus");
-  const setStatus = (msg: string) => { if (statusEl) statusEl.textContent = msg; };
-
-  try {
-    setStatus("מתחיל מיגרציה...");
-
-    const tagLabels = getTagLabelMap();
-    let migrated = 0;
-    let skipped = 0;
-    const skippedTags: string[] = [];
-
-    await Word.run(async (context) => {
-      const body = context.document.body;
-      const ccs = body.contentControls;
-      ccs.load("items/tag,title,text,type");
-      await context.sync();
-
-      const total = ccs.items.length;
-
-      // Diagnostic: log every control found
-      const diag = ccs.items.map((cc, idx) => `#${idx}: tag="${cc.tag}" title="${cc.title}" type=${cc.type}`);
-      console.log(`[migrate] Found ${total} controls in body:`, diag);
-
-      // Also check headers/footers
-      const sections = context.document.sections;
-      sections.load("items");
-      await context.sync();
-      let headerFooterCount = 0;
-      for (const section of sections.items) {
-        for (const hfType of [Word.HeaderFooterType.primary, Word.HeaderFooterType.firstPage, Word.HeaderFooterType.evenPages] as const) {
-          try {
-            const header = section.getHeader(hfType);
-            const hCcs = header.contentControls;
-            hCcs.load("items/tag,title");
-            const footer = section.getFooter(hfType);
-            const fCcs = footer.contentControls;
-            fCcs.load("items/tag,title");
-            await context.sync();
-            headerFooterCount += hCcs.items.length + fCcs.items.length;
-            for (const hcc of hCcs.items) console.log(`[migrate] Header CC: tag="${hcc.tag}" title="${hcc.title}"`);
-            for (const fcc of fCcs.items) console.log(`[migrate] Footer CC: tag="${fcc.tag}" title="${fcc.title}"`);
-          } catch (_) { /* header/footer type may not exist */ }
-        }
-      }
-
-      setStatus(`נמצאו ${total} controls בגוף + ${headerFooterCount} בכותרות/תחתונות...`);
-
-      // Process in reverse so indices don't shift
-      for (let i = total - 1; i >= 0; i--) {
-        const cc = ccs.items[i];
-        const oldTag = (cc.tag || "").trim();
-        const currentText = (cc.text || "").trim();
-        const oldTitle = (cc.title || "").trim();
-
-        if (!oldTag) {
-          skipped++;
-          continue;
-        }
-
-        // Map old tag to new tag (or keep as-is if already correct)
-        const newTag = TAG_MIGRATION_MAP[oldTag] || oldTag;
-
-        // Get label from catalog, fall back to existing title
-        const newLabel = tagLabels[newTag] || oldTitle || newTag;
-
-        // Step 1: get the range of this control
-        const range = cc.getRange();
-        range.load("text");
-
-        // Step 2: delete the old control but keep its content
-        cc.delete(false); // false = keep content
-        await context.sync();
-
-        // Step 3: select the range where the old content was and wrap it in a new CC
-        const newCC = range.insertContentControl();
-        newCC.tag = newTag;
-        newCC.title = newLabel;
-
-        // @ts-ignore
-        newCC.appearance = "BoundingBox";
-
-        // Set placeholder text (the add-in will fill real values later)
-        newCC.insertText(`[${newLabel}]`, Word.InsertLocation.replace);
-        newCC.font.color = "#00B0F0";
-
-        await context.sync();
-        migrated++;
-      }
-    });
-
-    let msg = `מיגרציה הושלמה: ${migrated} controls הומרו.`;
-    if (skipped > 0) msg += ` ${skipped} דולגו (ללא tag).`;
-    if (skippedTags.length > 0) msg += ` לא הומרו: ${skippedTags.join(", ")}`;
-    setStatus(msg);
-    console.log(msg);
-
-  } catch (e: any) {
-    console.error("migrateContentControls error:", e);
-    const msg = "שגיאה במיגרציה: " + (e?.message || "לא ידועה");
-    setStatus(msg);
-    alert(msg);
-  }
-}
-
-/* =========
-   Annexes tab – load, display, and insert annex documents
-   ========= */
-interface AnnexFile { name: string; downloadUrl: string; }
-
-async function loadAnnexFiles(): Promise<AnnexFile[]> {
-  const token = await getGraphToken();
-  const siteId = await getSiteId(token);
-
-  // Get the drive (document library) by name
-  const drives = await graph<{ value: Array<{ id: string; name: string }> }>(
-    `/sites/${siteId}/drives`, token
-  );
-  const drive = drives.value.find(d => d.name === ANNEXES_LIBRARY_DISPLAY_NAME);
-  if (!drive) throw new Error(`ספריית "${ANNEXES_LIBRARY_DISPLAY_NAME}" לא נמצאה באתר`);
-
-  // List all files in the root of the library
-  const items = await graph<{ value: Array<{ name: string; file?: object; "@microsoft.graph.downloadUrl"?: string; id: string }> }>(
-    `/drives/${drive.id}/root/children?$select=name,file,id&$top=200`, token
-  );
-
-  return items.value
-    .filter(it => it.file && it.name.toLowerCase().endsWith(".docx"))
-    .map(it => ({
-      name: it.name,
-      // We'll fetch the download URL per-file when needed, using driveItem content endpoint
-      downloadUrl: `/drives/${drive.id}/items/${it.id}/content`
-    }));
-}
-
-function showAnnexStatus(msg: string, isError: boolean) {
-  const el = document.getElementById("annexStatus");
-  if (!el) return;
-  el.className = `annex-status ${isError ? "annex-error" : "annex-ok"}`;
-  el.textContent = msg;
-  if (!isError) setTimeout(() => { el.textContent = ""; el.className = ""; }, 4000);
-}
-
-function clearAnnexStatus() {
-  const el = document.getElementById("annexStatus");
-  if (el) { el.textContent = ""; el.className = ""; }
-}
-
-async function insertAnnexIntoDocument(graphContentPath: string) {
-  const token = await getGraphToken();
-
-  // Download the file as ArrayBuffer
-  const resp = await fetch(`https://graph.microsoft.com/v1.0${graphContentPath}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  if (!resp.ok) throw new Error(`שגיאה בהורדת הקובץ (${resp.status})`);
-
-  const buf = await resp.arrayBuffer();
-  const bytes = new Uint8Array(buf);
-  let binary = "";
-  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-  const base64 = btoa(binary);
-
-  // Insert into Word: page break + full document content at end
-  await Word.run(async (context) => {
-    const body = context.document.body;
-    // Add a page break before the annex
-    body.insertBreak(Word.BreakType.page, Word.InsertLocation.end);
-    // Insert the full .docx preserving formatting and content controls
-    body.insertFileFromBase64(base64, Word.InsertLocation.end);
-    await context.sync();
-  });
-}
-
-async function renderAnnexList() {
-  const root = document.getElementById("annexList");
-  if (!root) return;
-
-  root.innerHTML = `<div class="muted">טוען נספחים…</div>`;
-  clearAnnexStatus();
-
-  let files: AnnexFile[];
-  try {
-    files = await loadAnnexFiles();
-  } catch (e: any) {
-    root.innerHTML = "";
-    showAnnexStatus(e.message || "שגיאה בטעינת נספחים", true);
-    return;
-  }
-
-  if (files.length === 0) {
-    root.innerHTML = `<div class="muted">לא נמצאו נספחים בספרייה.</div>`;
-    return;
-  }
-
-  root.innerHTML = "";
-  files.forEach(file => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "annex-item";
-    btn.textContent = file.name.replace(/\.docx$/i, "");
-    btn.addEventListener("click", async () => {
-      btn.classList.add("annex-busy");
-      clearAnnexStatus();
-      try {
-        await insertAnnexIntoDocument(file.downloadUrl);
-        showAnnexStatus(`הנספח "${file.name.replace(/\.docx$/i, "")}" הוסף בהצלחה`, false);
-      } catch (e: any) {
-        showAnnexStatus(e.message || "שגיאה בהוספת הנספח למסמך", true);
-      } finally {
-        btn.classList.remove("annex-busy");
-      }
-    });
-    root.appendChild(btn);
-  });
-}
-
 function wireExtrasUI() {
   const clearBtn = document.getElementById("extrasClearBtn") as HTMLButtonElement | null;
   if (clearBtn) {
@@ -2189,9 +1944,6 @@ Office.onReady((info) => {
       tryFillDefaultStatus();
 
       debugListContentControls();
-
-      // Load annexes list (independent, fire-and-forget)
-      renderAnnexList();
     });
   } else {
     (document.getElementById("sideload-msg") as HTMLElement).style.display = "block";
