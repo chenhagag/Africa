@@ -1,19 +1,64 @@
-Migration started: 25/05/2026 13:39:27
-Files to process: 4
+Migration started: 21/06/2026 14:47:38
+Files to process: 19
 ------------------------------------------------------------
 
-[1/4] יועץ אקוסטיקה.docx
+[1/19] הזמנת עבודה ניהול מבנים.docx
+  OK: 0 converted, 16 skipped
+
+[2/19] חוזה אגרונום.docx
   OK: 0 converted, 48 skipped
 
-[2/4] יועץ בטיחות.docx
-  OK: 0 converted, 49 skipped
+[3/19] חוזה אדריכל ג גור למגרש.docx
+  OK: 44 converted, 0 skipped
 
-[3/4] יועץ בידוד תרמי.docx
-  ERROR opening: This file is already open in Protected View. (C:\SPFX\Africa\...\יועץ בידוד תרמי.docx)
-
-[4/4] יועץ ביסוס קרקע.docx
+[4/19] חוזה חשב כמויות.DOCX
   OK: 0 converted, 48 skipped
+
+[5/19] חוזה יועץ בידוד תרמי.docx
+  OK: 0 converted, 48 skipped
+
+[6/19] חוזה יועץ קרינה אלקטרו.docx
+  OK: 46 converted, 0 skipped
+
+[7/19] יועץ אקוסטיקה.docx
+  OK: 48 converted, 0 skipped
+
+[8/19] יועץ בטיחות.docx
+  OK: 49 converted, 0 skipped
+
+[9/19] יועץ בידוד תרמי.docx
+  OK: 48 converted, 0 skipped
+
+[10/19] יועץ ביסוס קרקע.docx
+  OK: 48 converted, 0 skipped
+
+[11/19] יועץ בניה ירוקה.docx
+  OK: 48 converted, 0 skipped
+
+[12/19] יועץ מיגון ומיקלוט.docx
+  OK: 48 converted, 0 skipped
+
+[13/19] יועץ נגישות.docx
+  OK: 48 converted, 0 skipped
+
+[14/19] מיזוג אויר.docx
+  OK: 48 converted, 0 skipped
+
+[15/19] מעצב פנים.docx
+  OK: 48 converted, 0 skipped
+
+[16/19] מתכנן תנועה.docx
+  OK: 48 converted, 0 skipped
+
+[17/19] סקר תשתיות.docx
+  OK: 48 converted, 0 skipped
+
+[18/19] קבלן חפירה ודיפון.docx
+  OK: 50 converted, 14 skipped
+
+[19/19] תבנית מודד.docx
+  OK: 48 converted, 0 skipped
 
 ------------------------------------------------------------
-Done: 3 succeeded, 1 failed
-Finished: 25/05/2026 13:39:32
+Done: 19 succeeded, 0 failed
+Finished: 21/06/2026 14:48:10

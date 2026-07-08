@@ -45,6 +45,7 @@ export interface IInventoryFormState {
   subscriptionNumber: string;
   linkedAccessories: { name: string; imageFile?: File; imageUrl?: string; isSelected?: boolean }[];
   isUnlicensed?: boolean;
+  inactiveUserMessage?: string;
 
 }
 
@@ -71,7 +72,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
       printUserName: '',
       subscriptionNumber: '',
       linkedAccessories: [],
-      isUnlicensed: false
+      isUnlicensed: false,
+      inactiveUserMessage: ''
     };
   }
 
@@ -147,18 +149,20 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
         "Item/Title","ItemType",
         "ItemID",
         "Available",
-        "CurrOwner/ID","CurrOwner/Title" 
+        "ItemStatus",
+        "CurrOwner/ID","CurrOwner/Title",
+        "ContentType/Name"
       )
-      .expand("Item","CurrOwner").top(4999)
+      .expand("Item","CurrOwner","ContentType").top(4999)
       .get();
   
       const formattedItems: IInventoryItem[] = items.map((item: any) => ({
         id: item.ID,
         title: item.Title,
-        type: item.ItemType || '',
+        type: item.ContentType?.Name || item.ItemType || '',
         assignedTo: item["CurrOwner"]?.Title || '',
         serialNumber: item["ItemID"] || '',
-        available: !item["CurrOwner"]?.Title,
+        available: !item["CurrOwner"]?.Title && item["ItemStatus"] === "פנוי להשאלה",
         isNew: false
       }));
 
@@ -204,7 +208,8 @@ export default class InventoryForm extends React.Component<IInventoryFormProps, 
   this.setState({
     selectedUser: null,
     searchText: '',
-    suggestedUsers: []
+    suggestedUsers: [],
+    inactiveUserMessage: ''
   });
 };
 
@@ -563,22 +568,59 @@ private _handleRemoveItem(item: IInventoryItem): void {
   
   private _handleUserSelect = async (user: any) => {
     try {
-      const ensuredUser = await sp.web.ensureUser(user.userPrincipalName); 
-      const spUserId = ensuredUser.data.Id; 
-  
+      const ensuredUser = await sp.web.ensureUser(user.userPrincipalName);
+      const spUserId = ensuredUser.data.Id;
+
       this.setState({
         selectedUser: { id: spUserId, text: user.displayName },
         searchText: user.displayName,
         suggestedUsers: [],
-        printUserName: ''
+        printUserName: '',
+        inactiveUserMessage: ''
       });
 
       const filteredItems = this.state.allItems.filter(item => item.assignedTo === user.displayName);
       this.setState({ userItems: filteredItems });
 
-
     } catch (error) {
       console.error('שגיאה בהבאת מזהה SharePoint:', error);
+
+      // Fallback: check if user has active loans by display name
+      const filteredItems = this.state.allItems.filter(item => item.assignedTo === user.displayName);
+
+      if (filteredItems.length > 0) {
+        // User is inactive but has active loans - try to get SP ID from User Information List
+        try {
+          const userInfoItems = await sp.web.siteUsers.filter(`Email eq '${user.userPrincipalName}' or UserPrincipalName eq '${user.userPrincipalName}'`).get();
+          const spUserId = userInfoItems.length > 0 ? userInfoItems[0].Id : null;
+
+          this.setState({
+            selectedUser: spUserId ? { id: spUserId, text: user.displayName } : null,
+            searchText: user.displayName,
+            suggestedUsers: [],
+            userItems: filteredItems,
+            printUserName: '',
+            inactiveUserMessage: 'שים לב - משתמש זה אינו פעיל במערכת אך יש עליו השאלות פעילות'
+          });
+        } catch (innerError) {
+          console.error('שגיאה בשליפת משתמש מ-User Information List:', innerError);
+          this.setState({
+            searchText: user.displayName,
+            suggestedUsers: [],
+            userItems: filteredItems,
+            inactiveUserMessage: 'שים לב - משתמש זה אינו פעיל במערכת אך יש עליו השאלות פעילות'
+          });
+        }
+      } else {
+        // User is inactive and has no loans
+        this.setState({
+          selectedUser: null,
+          searchText: '',
+          suggestedUsers: [],
+          userItems: [],
+          inactiveUserMessage: 'משתמש זה אינו פעיל במערכת ואין עליו השאלות'
+        });
+      }
     }
 
   };
@@ -637,6 +679,12 @@ private _handleRemoveItem(item: IInventoryItem): void {
       
 
 
+
+          {this.state.inactiveUserMessage && (
+            <div style={{ color: '#856404', backgroundColor: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px', padding: '8px 12px', marginBottom: '10px', fontSize: '13px' }}>
+              {this.state.inactiveUserMessage}
+            </div>
+          )}
 
           {this.state.selectedUser ? <div>
     {/* טבלת פריטים */}
@@ -746,6 +794,7 @@ private _handleRemoveItem(item: IInventoryItem): void {
                 <option>מחשב נייד</option>
                 <option>מחשב נייח</option>
                 <option>סלולרי</option>
+                <option>מדפסת</option>
               </select>
             </div>
 

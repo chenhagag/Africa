@@ -1,0 +1,15 @@
+sites/Contracts/ProjectContractLibrary/נס ציונה מחיר למשתכן/חוזים סרוקים  =>  folder: נס ציונה מחיר למשתכן  |  name: 1חוזה מתכנן אינסטלציה.msg
+sites/Contracts/ProjectContractLibrary/נצר סירני  =>  folder: נצר סירני  |  name: cbhhi 31 - חוזה מתכנן אינסטלציה.docx
+sites/Contracts/ProjectContractLibrary/בית מפאי/חוזים סרוקים  =>  folder: בית מפאי  |  name: FW חוזה קוסט חתום בית מפאי.msg
+sites/Contracts/ProjectContractLibrary/בית מפאי/חוזים סרוקים  =>  folder: בית מפאי  |  name: FWחוזה פאושלי חתום בית מפאי דניה.msg
+sites/Contracts/ProjectContractLibrary/קומבינציה רמגור הרצליה/חוזים סרוקים  =>  folder: קומבינציה רמגור הרצליה  |  name: SKM_654e22081512520.pdf
+sites/Contracts/ProjectContractLibrary/קומבינציה רמגור הרצליה/חוזים סרוקים  =>  folder: קומבינציה רמגור הרצליה  |  name: SKM_654e22081513580.pdf
+sites/Contracts/ProjectContractLibrary/גבעת הכלניות - קרית אתא  =>  folder: גבעת הכלניות - קרית אתא  |  name: spcommon[1].png
+sites/Contracts/ProjectContractLibrary/אולפני הרצליה  =>  folder: אולפני הרצליה  |  name: אדריכל השימור.docx
+sites/Contracts/ProjectContractLibrary/נתניה - מגרש 1409/חוזים סרוקים  =>  folder: נתניה - מגרש 1409  |  name: אדריכל נוף.pdf
+sites/Contracts/ProjectContractLibrary/אולפני הרצליה  =>  folder: אולפני הרצליה  |  name: אדריכלות נוף.docx
+sites/Contracts/ProjectContractLibrary/אנדריוס/חוזים סרוקים  =>  folder: אנדריוס  |  name: אדריכלות נוף.msg
+sites/Contracts/ProjectContractLibrary/אולפני הרצליה  =>  folder: אולפני הרצליה  |  name: אולפני הרצליה חוזה יועץ בטיחות   אלי כחלון.docx
+sites/Contracts/ProjectContractLibrary/רוטשילד חיפה/חוזים סרוקים  =>  folder: רוטשילד חיפה  |  name: אופק קידוחי קרקע.pdf
+sites/Contracts/ProjectContractLibrary/סביוני גבעת שמואל/חוזים סרוקים  =>  folder: סביוני גבעת שמואל  |  name: אלי כחלון בטיחות.pdf
+sites/Contracts/ProjectContractLibrary/אופיס - אזור  =>  folder: אופיס - אזור  |  name: בדיקה רונן.docx

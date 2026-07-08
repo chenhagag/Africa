@@ -130,26 +130,36 @@ Private Function ConvertControl(cc As ContentControl) As Boolean
         Set newCC = targetRange.ContentControls.Add(wdContentControlText)
     End If
 
-    ' If still failing, check for parent CC (nested controls) and remove it
-    If newCC Is Nothing Then
+    ' If still failing, remove all parent CCs up the chain (multi-level nesting)
+    Dim retryCount As Long
+    retryCount = 0
+    Do While newCC Is Nothing And retryCount < 10
         Dim parentCC As ContentControl
+        Set parentCC = Nothing
+        On Error Resume Next
         Set parentCC = targetRange.ParentContentControl
-        If Not parentCC Is Nothing Then
+        On Error GoTo 0
+        If parentCC Is Nothing Then Exit Do
+
+        Err.Clear
+        stp = "6b-removeparent-" & retryCount
+        On Error Resume Next
+        parentCC.LockContentControl = False
+        parentCC.LockContents = False
+        If parentCC.XMLMapping.IsMapped Then parentCC.XMLMapping.Delete
+        parentCC.Delete False
+        Err.Clear
+
+        stp = "6c-retry-" & retryCount
+        Set newCC = targetRange.ContentControls.Add(wdContentControlRichText)
+        If Err.Number <> 0 Or newCC Is Nothing Then
             Err.Clear
-            stp = "6b-removeparent"
-            parentCC.LockContentControl = False
-            parentCC.LockContents = False
-            If parentCC.XMLMapping.IsMapped Then parentCC.XMLMapping.Delete
-            parentCC.Delete False  ' delete parent, keep content
-            ' Now try again — range is free
-            stp = "6c-retry"
-            Set newCC = targetRange.ContentControls.Add(wdContentControlRichText)
-            If Err.Number <> 0 Then
-                Err.Clear
-                Set newCC = targetRange.ContentControls.Add(wdContentControlText)
-            End If
+            Set newCC = targetRange.ContentControls.Add(wdContentControlText)
+            If Err.Number <> 0 Then Err.Clear
         End If
-    End If
+
+        retryCount = retryCount + 1
+    Loop
     On Error GoTo ErrHandler
 
     If newCC Is Nothing Then
@@ -253,6 +263,231 @@ End Sub
 ' ============================================================
 ' PUBLIC: Migrate all contracts in Old Contracts folder
 ' ============================================================
+' ============================================================
+' CSV Export helper functions (integrated from ExportContractData)
+' ============================================================
+Private Function GetAllExportTags() As Variant
+    Dim t(0 To 32) As String
+    t(0) = "cntContractNumber"
+    t(1) = "cntContractVersion"
+    t(2) = "cntTemplateName"
+    t(3) = "cntProjectName"
+    t(4) = "cntSite"
+    t(5) = "cntSupllierName"
+    t(6) = "cntMunicipality"
+    t(7) = "cntWorkDescription"
+    t(8) = "cntSignDate"
+    t(9) = "cntStartDate"
+    t(10) = "cntDurationMonths"
+    t(11) = "cntExpectedEndDate"
+    t(12) = "cntStatus"
+    t(13) = "cntTzadA"
+    t(14) = "cntTzadB"
+    t(15) = "cntPartyAName"
+    t(16) = "cmtTzadAPercent"
+    t(17) = "cntCostCompMethod"
+    t(18) = "cntCostContractScope"
+    t(19) = "cntCostCurrency"
+    t(20) = "cntCostIndexType"
+    t(21) = "cntCostBaseIndexDate"
+    t(22) = "cntCostIndexMode"
+    t(23) = "cntCostIndexPoints"
+    t(24) = "cntCostPaymentTerms"
+    t(25) = "cntCustomField1"
+    t(26) = "cntCustomField2"
+    t(27) = "cntCustomField3"
+    t(28) = "cntCustomField4"
+    t(29) = "cntCustomField5"
+    t(30) = "cntCustomField6"
+    t(31) = "cntCustomField7"
+    t(32) = "cntCustomField8"
+    GetAllExportTags = t
+End Function
+
+Private Function TagToSPColumn(tag As String) As String
+    Select Case tag
+        Case "cntContractNumber": TagToSPColumn = "ContractNumber"
+        Case "cntContractVersion": TagToSPColumn = "contractVersion"
+        Case "cntTemplateName": TagToSPColumn = "ContractTemplate"
+        Case "cntProjectName": TagToSPColumn = "project"
+        Case "cntSite": TagToSPColumn = "SiteName"
+        Case "cntSupllierName": TagToSPColumn = "supplierName"
+        Case "cntMunicipality": TagToSPColumn = "Municipality"
+        Case "cntWorkDescription": TagToSPColumn = "WorkDescription"
+        Case "cntSignDate": TagToSPColumn = "signDate"
+        Case "cntStartDate": TagToSPColumn = "StartDate"
+        Case "cntDurationMonths": TagToSPColumn = "DurationMonths"
+        Case "cntExpectedEndDate": TagToSPColumn = "ExpectedEndDate"
+        Case "cntStatus": TagToSPColumn = "status"
+        Case "cntTzadA": TagToSPColumn = "recipient"
+        Case "cntTzadB": TagToSPColumn = "otherSides"
+        Case "cntPartyAName": TagToSPColumn = "partyAName"
+        Case "cmtTzadAPercent": TagToSPColumn = "PartyAContactNamePercent"
+        Case "cntCostCompMethod": TagToSPColumn = "CostCompMethod"
+        Case "cntCostContractScope": TagToSPColumn = "CostContractScope"
+        Case "cntCostCurrency": TagToSPColumn = "CostCurrency"
+        Case "cntCostIndexType": TagToSPColumn = "CostIndexType"
+        Case "cntCostBaseIndexDate": TagToSPColumn = "CostBaseIndexDate"
+        Case "cntCostIndexMode": TagToSPColumn = "CostIndexMode"
+        Case "cntCostIndexPoints": TagToSPColumn = "CostIndexPoints"
+        Case "cntCostPaymentTerms": TagToSPColumn = "CostPaymentTerms"
+        Case "cntCustomField1": TagToSPColumn = "customField1"
+        Case "cntCustomField2": TagToSPColumn = "customField2"
+        Case "cntCustomField3": TagToSPColumn = "customField3"
+        Case "cntCustomField4": TagToSPColumn = "customField4"
+        Case "cntCustomField5": TagToSPColumn = "customField5"
+        Case "cntCustomField6": TagToSPColumn = "customField6"
+        Case "cntCustomField7": TagToSPColumn = "customField7"
+        Case "cntCustomField8": TagToSPColumn = "customField8"
+        Case Else: TagToSPColumn = tag
+    End Select
+End Function
+
+Private Function IsMultiLineTag(tag As String) As Boolean
+    Select Case tag
+        Case "cntTzadA", "cntTzadB"
+            IsMultiLineTag = True
+        Case Else
+            IsMultiLineTag = False
+    End Select
+End Function
+
+Private Function GetCCValue(doc As Document, tag As String) As String
+    Dim cc As ContentControl
+    Dim multiLine As Boolean
+    multiLine = IsMultiLineTag(tag)
+
+    For Each cc In doc.ContentControls
+        If cc.tag = tag Then
+            GetCCValue = CleanExportText(cc.Range.Text, multiLine)
+            Exit Function
+        End If
+    Next cc
+
+    Dim sec As Section
+    Dim hf As HeaderFooter
+    For Each sec In doc.Sections
+        For Each hf In sec.Headers
+            For Each cc In hf.Range.ContentControls
+                If cc.tag = tag Then
+                    GetCCValue = CleanExportText(cc.Range.Text, multiLine)
+                    Exit Function
+                End If
+            Next cc
+        Next hf
+        For Each hf In sec.Footers
+            For Each cc In hf.Range.ContentControls
+                If cc.tag = tag Then
+                    GetCCValue = CleanExportText(cc.Range.Text, multiLine)
+                    Exit Function
+                End If
+            Next cc
+        Next hf
+    Next sec
+
+    GetCCValue = ""
+End Function
+
+Private Function CleanExportText(txt As String, Optional keepLineBreaks As Boolean = False) As String
+    Dim result As String
+    result = txt
+    result = Replace(result, Chr(7), "")
+
+    If keepLineBreaks Then
+        result = Replace(result, vbCr & vbLf, vbLf)
+        result = Replace(result, vbCr, vbLf)
+        result = Replace(result, Chr(11), vbLf)
+        result = Replace(result, Chr(13), vbLf)
+    Else
+        result = Replace(result, vbCr, " ")
+        result = Replace(result, vbLf, " ")
+        result = Replace(result, Chr(11), " ")
+        result = Replace(result, Chr(13), " ")
+        Do While InStr(result, "  ") > 0
+            result = Replace(result, "  ", " ")
+        Loop
+    End If
+
+    result = Trim(result)
+
+    If LCase(result) = "click or tap here to enter text." Or _
+       LCase(result) = "click or tap here to enter text" Or _
+       LCase(result) Like "[[]*[]]" Then
+        CleanExportText = ""
+        Exit Function
+    End If
+
+    CleanExportText = result
+End Function
+
+' ============================================================
+' Fix duplicated contract numbers like "CONT-5-668CONT-10-2195" -> "CONT-10-2195"
+' Takes the last CONT-xx-xxxx occurrence
+' ============================================================
+Private Function FixContractNumber(val As String) As String
+    Dim pos As Long
+    Dim lastPos As Long
+    lastPos = 0
+    pos = InStr(1, val, "CONT-")
+    Do While pos > 0
+        lastPos = pos
+        pos = InStr(pos + 1, val, "CONT-")
+    Loop
+    If lastPos > 1 Then
+        ' There were multiple CONT- occurrences, take the last one
+        FixContractNumber = Mid(val, lastPos)
+    Else
+        FixContractNumber = val
+    End If
+End Function
+
+Private Function CsvEscape(val As String) As String
+    CsvEscape = """" & Replace(val, """", """""") & """"
+End Function
+
+Private Function BuildCsvRowWithName(doc As Document, fileName As String, folderSiteName As String) As String
+    Dim tags As Variant
+    tags = GetAllExportTags()
+    Dim row As String
+    row = CsvEscape(fileName)
+    Dim i As Long
+    Dim val As String
+    For i = LBound(tags) To UBound(tags)
+        val = GetCCValue(doc, CStr(tags(i)))
+        ' Fallback to old tags if new tag not found
+        If val = "" Then
+            Select Case CStr(tags(i))
+                Case "cntContractNumber": val = GetCCValue(doc, "_dlc_DocId")
+                Case "cntTemplateName": val = GetCCValue(doc, "cntContractType")
+                Case "cntPartyAName": val = GetCCValue(doc, "cmtTzadAName")
+                Case "cntMunicipality": val = GetCCValue(doc, "cntLocalAuth")
+                Case "cntWorkDescription": val = GetCCValue(doc, "cntJobDesc")
+                Case "cntTzadB": val = GetCCValue(doc, "cntTzadB_x002C__x0020_cntTzadC_x002C__x0020_cntTzadD")
+            End Select
+        End If
+        If CStr(tags(i)) = "cntContractNumber" Then val = FixContractNumber(val)
+        ' Override site name with folder name (always more reliable)
+        If CStr(tags(i)) = "cntSite" And folderSiteName <> "" Then val = folderSiteName
+        row = row & "," & CsvEscape(val)
+    Next i
+    BuildCsvRowWithName = row
+End Function
+
+Private Function BuildCsvHeader() As String
+    Dim tags As Variant
+    tags = GetAllExportTags()
+    Dim header As String
+    header = CsvEscape("FileName")
+    Dim i As Long
+    For i = LBound(tags) To UBound(tags)
+        header = header & "," & CsvEscape(TagToSPColumn(CStr(tags(i))))
+    Next i
+    BuildCsvHeader = header
+End Function
+
+' ============================================================
+' PUBLIC: Migrate all contracts AND export data to CSV
+' ============================================================
 Sub MigrateAllContracts()
     Dim newDir As String
     newDir = BASE_PATH & "New Contracts\"
@@ -298,18 +533,31 @@ Sub MigrateAllContracts()
         Exit Sub
     End If
 
+    ' Prepare CSV
+    Dim csvData As String
+    csvData = BuildCsvHeader() & vbCrLf
+
     Dim doc As Document
     Dim result As String
     Dim summary As String
     Dim outputPath As String
+    Dim contractNum As String
+    Dim baseName As String
+    Dim newFileName As String
+    Dim folderSiteName As String
+    Dim parts() As String
     Dim i As Long
     Dim succeeded As Long
     Dim failed As Long
+
+    Application.DisplayAlerts = False
+    Application.ScreenUpdating = False
 
     For i = 1 To fileCount
         Debug.Print "[" & i & "/" & fileCount & "] " & docNames(i)
 
         On Error Resume Next
+        Set doc = Nothing
         Set doc = Application.Documents(docNames(i))
         If Err.Number <> 0 Or doc Is Nothing Then
             summary = summary & "ERROR: " & docNames(i) & " - not found" & vbCrLf
@@ -317,33 +565,83 @@ Sub MigrateAllContracts()
             Err.Clear
             GoTo NextContract
         End If
+        On Error GoTo 0
 
         doc.Activate
         DoEvents
 
+        ' Process contract with error handling - continue even if one doc fails
+        On Error Resume Next
         result = ProcessContract(doc)
         If Err.Number <> 0 Then
-            summary = summary & "ERROR: " & docNames(i) & " - " & Err.Description & vbCrLf
+            summary = summary & "ERROR migrating: " & docNames(i) & " - " & Err.Description & vbCrLf
+            Debug.Print "ERROR migrating: " & docNames(i) & " - " & Err.Description
             failed = failed + 1
             Err.Clear
+            On Error Resume Next
+            doc.Close SaveChanges:=False
+            If Err.Number <> 0 Then Err.Clear
+            On Error GoTo 0
+            Set doc = Nothing
             GoTo NextContract
         End If
+        On Error GoTo 0
 
-        outputPath = newDir & docNames(i)
+        ' Build output filename: append contract number to avoid duplicates
+        ' Try new tag first, fall back to old tag
+        contractNum = GetCCValue(doc, "cntContractNumber")
+        If contractNum = "" Then contractNum = GetCCValue(doc, "_dlc_DocId")
+        contractNum = FixContractNumber(contractNum)
+        baseName = Left(docNames(i), Len(docNames(i)) - 5) ' remove .docx
+
+        ' Build new filename with contract number
+        If contractNum <> "" Then
+            newFileName = baseName & " - " & contractNum & ".docx"
+        Else
+            newFileName = docNames(i)
+        End If
+
+        ' Extract site name from parent folder of original file path
+        ' e.g. "...\Old Contracts\נרקיסים\חוזה.docx" -> "נרקיסים"
+        folderSiteName = ""
+        If InStr(docPaths(i), "\") > 0 Then
+            parts = Split(docPaths(i), "\")
+            If UBound(parts) >= 1 Then
+                folderSiteName = parts(UBound(parts) - 1)
+                ' Don't use folder name if it's a known non-site folder
+                If LCase(folderSiteName) = "old contracts" Or _
+                   LCase(folderSiteName) = "new contracts" Or _
+                   LCase(folderSiteName) = "desktop" Then
+                    folderSiteName = ""
+                End If
+            End If
+        End If
+
+        ' Export data to CSV row with the NEW filename (matching what goes to SP)
+        csvData = csvData & BuildCsvRowWithName(doc, newFileName, folderSiteName) & vbCrLf
+
+        outputPath = newDir & newFileName
+
+        On Error Resume Next
         doc.SaveAs2 outputPath, wdFormatDocumentDefault
         If Err.Number <> 0 Then
             summary = summary & "ERROR saving: " & docNames(i) & " - " & Err.Description & vbCrLf
             failed = failed + 1
             Err.Clear
+            doc.Close SaveChanges:=False
+            If Err.Number <> 0 Then Err.Clear
+            On Error GoTo 0
+            Set doc = Nothing
             GoTo NextContract
         End If
 
         doc.Close SaveChanges:=False
         If Err.Number <> 0 Then Err.Clear
+        On Error GoTo 0
 
         DoEvents
 
-        summary = summary & docNames(i) & " - " & result & vbCrLf
+        summary = summary & docNames(i) & " -> " & newFileName & " - " & result & vbCrLf
         succeeded = succeeded + 1
 
         Set doc = Nothing
@@ -351,9 +649,25 @@ NextContract:
         On Error GoTo 0
     Next i
 
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+
+    ' Write CSV file (UTF-8)
+    Dim csvPath As String
+    csvPath = BASE_PATH & "ExportedData.csv"
+    Dim stream As Object
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 2
+    stream.Charset = "UTF-8"
+    stream.Open
+    stream.WriteText csvData
+    stream.SaveToFile csvPath, 2
+    stream.Close
+    Set stream = Nothing
+
     MsgBox "Contract migration complete!" & vbCrLf & vbCrLf & _
            "Succeeded: " & succeeded & vbCrLf & _
            "Failed: " & failed & vbCrLf & vbCrLf & _
-           "Full log: " & logPath & vbCrLf & vbCrLf & _
+           "CSV exported to: " & csvPath & vbCrLf & vbCrLf & _
            summary, vbInformation, "Migrate All Contracts"
 End Sub

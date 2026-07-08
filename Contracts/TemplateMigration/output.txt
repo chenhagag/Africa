@@ -1,0 +1,2117 @@
+PS C:\SPFX\Africa\GIT-Africa\Africa\Contracts\TemplateMigration> .\FillMissingData.ps1 -SiteUrl "https://africaisrael.sharepoint.com/ContractsNEW" -LibraryName "ContractsDocs" -WhatIf
+Connecting to https://africaisrael.sharepoint.com/ContractsNEW ...
+Connected.
+Loaded 295 rows from old data.
+Checking library columns...
+Columns NOT found in library (will be skipped):
+  - partyAName
+Valid columns: 32/33
+Loading all items from new library...
+Found 400 items in new library.
+Indexed 166 unique CONT numbers in new library.
+Indexed 394 unique site+name combinations in new library.
+
+[WhatIf] CONT-10-2335 -> אדריכלות נוף - CONT-10-2335.docx (item #226) - 10 fields:
+    CostIndexPoints = 225.5724
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = 148
+    CostPaymentTerms = 45 יום
+    CostBaseIndexDate = 2021-04-30 00:00:00
+    StartDate = 2021-05-01 00:00:00
+    docCreator = germank
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2052 -> בניין 31 - חוזה אדריכל נוף - CONT-10-2052.docx (item #319) - 13 fields:
+    CostBaseIndexDate = 2020-11-01 00:00:00
+    StartDate = 2020-11-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 225.5724
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-02-27 22:00:00
+    CostContractScope = 130000
+
+[WhatIf] CONT-10-2005 -> בניין 31 - חוזה אדריכל - CONT-10-2005.docx (item #318) - 13 fields:
+    CostBaseIndexDate = 2020-12-01 00:00:00
+    StartDate = 2020-12-02 00:00:00
+    CostCompMethod = למדידה
+    CostIndexPoints = 223.1145
+    CostIndexType = מדד המחירים לצרכן בגין
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 8
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2024-11-09 22:00:00
+    CostContractScope = 856350
+
+[WhatIf] CONT-10-2062 -> בניין 31 - חוזה חברת ניהול ופיקוח - CONT-10-2062.docx (item #320) - 14 fields:
+    CostBaseIndexDate = 2021-05-04 00:00:00
+    StartDate = 2021-05-05 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 225.5724
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = ידוע
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-04-12 21:00:00
+    otherSides = פי.סי.אר ניהול פרויקטים בבניה בע"מ
+רח' איה 3, עכו 2423727
+    CostContractScope = 905000
+
+[WhatIf] CONT-10-2154 -> בניין 31 - חוזה יועץ איטום - CONT-10-2154.docx (item #302) - 13 fields:
+    CostBaseIndexDate = 2021-02-01 00:00:00
+    StartDate = 2021-02-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.5603
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-07-18 21:00:00
+    CostContractScope = 23000
+
+[WhatIf] CONT-10-2065 -> בניין 31 - חוזה יועץ אקוסטיקה - CONT-10-2065.docx (item #300) - 13 fields:
+    CostBaseIndexDate = 2020-12-01 00:00:00
+    StartDate = 2020-12-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.1145
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-02-27 22:00:00
+    CostContractScope = 27500
+
+[WhatIf] CONT-10-2051 -> בניין 31 - חוזה יועץ בטיחות - CONT-10-2051.docx (item #301) - 14 fields:
+    CostBaseIndexDate = 2020-11-01 00:00:00
+    StartDate = 2020-11-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-01-20 22:00:00
+    status = טיוטה
+    CostContractScope = 28000
+
+[WhatIf] CONT-10-2053 -> בניין 31 - חוזה יועץ ביסוס קרקע - CONT-10-2053.docx (item #303) - 13 fields:
+    CostBaseIndexDate = 2021-01-01 00:00:00
+    StartDate = 2021-01-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 222.8896
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-03-20 20:00:00
+    CostContractScope = 14000
+
+[WhatIf] CONT-10-2153 -> בניין 31 - חוזה יועץ בניה ירוקה ותרמי - CONT-10-2153.docx (item #304) - 13 fields:
+    CostBaseIndexDate = 2021-07-01 00:00:00
+    StartDate = 2021-07-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 227.5844
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-06-20 21:00:00
+    CostContractScope = 27500
+
+[WhatIf] CONT-10-2066 -> בניין 31 - חוזה יועץ נגישות - CONT-10-2066.docx (item #305) - 13 fields:
+    CostBaseIndexDate = 2020-10-01 00:00:00
+    StartDate = 2020-10-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.7832
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-01-20 22:00:00
+    CostContractScope = 13850
+
+[WhatIf] CONT-10-2075 -> בניין 31 - חוזה יועץ סופרפוזיציה - CONT-10-2075.docx (item #306) - 13 fields:
+    CostBaseIndexDate = 2021-01-01 00:00:00
+    StartDate = 2021-01-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 222.8896
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-04-17 21:00:00
+    CostContractScope = 70000
+
+[WhatIf] CONT-10-2068 -> בניין 31 - חוזה מנהל מודל - CONT-10-2068.docx (item #307) - 13 fields:
+    CostBaseIndexDate = 2021-01-01 00:00:00
+    StartDate = 2021-01-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 222.8896
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-04-17 21:00:00
+    CostContractScope = 70000
+
+[WhatIf] CONT-10-2182 -> בניין 31 - חוזה מעצב פנים - CONT-10-2182.docx (item #308) - 13 fields:
+    CostBaseIndexDate = 2022-03-01 00:00:00
+    StartDate = 2022-03-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 232.7263
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2026-03-12 20:00:00
+    CostContractScope = 68000
+
+[WhatIf] CONT-10-2057 -> בניין 31 - חוזה מתכנן אינסטלציה - CONT-10-2057.docx (item #309) - 13 fields:
+    CostBaseIndexDate = 2020-11-01 00:00:00
+    StartDate = 2020-11-02 00:00:00
+    CostCompMethod = למדידה
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-01-20 22:00:00
+    CostContractScope = 149550
+
+[WhatIf] CONT-10-2110 -> בניין 31 - חוזה מתכנן אלומיניום - CONT-10-2110.docx (item #310) - 13 fields:
+    CostBaseIndexDate = 2021-01-01 00:00:00
+    StartDate = 2021-01-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 222.8896
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2025-05-18 21:00:00
+    CostContractScope = 58000
+
+[WhatIf] CONT-10-2063 -> בניין 31 - חוזה מתכנן חשמל ותקשורת - CONT-10-2063.docx (item #311) - 14 fields:
+    CostBaseIndexDate = 2020-12-01 00:00:00
+    StartDate = 2020-12-02 00:00:00
+    CostCompMethod = למדידה
+    CostIndexPoints = 223.1145
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-03-02 22:00:00
+    status = טיוטה
+    CostContractScope = 90860
+
+[WhatIf] CONT-10-2067 -> בניין 31 - חוזה מתכנן מיגון ומקלוט - CONT-10-2067.docx (item #312) - 13 fields:
+    CostBaseIndexDate = 2020-11-01 00:00:00
+    StartDate = 2020-11-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-01-20 22:00:00
+    CostContractScope = 9000
+
+[WhatIf] CONT-10-2058 -> בניין 31 - חוזה מתכנן מיזוג אוויר - CONT-10-2058.docx (item #313) - 13 fields:
+    CostBaseIndexDate = 2020-11-01 00:00:00
+    StartDate = 2020-11-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-01-20 22:00:00
+    CostContractScope = 88000
+
+[WhatIf] CONT-10-2011 -> בניין 31 - חוזה מתכנן קונסטרוקציה - CONT-10-2011.docx (item #315) - 14 fields:
+    CostBaseIndexDate = 2020-12-01 00:00:00
+    StartDate = 2020-12-02 00:00:00
+    CostCompMethod = למדידה
+    CostIndexPoints = 223.1145
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    supplierName = טומי עברון - הנדסת בניין בע"מ
+    ExpectedEndDate = 2025-01-20 22:00:00
+    CostContractScope = 296250
+
+[WhatIf] CONT-10-2054 -> בניין 31 - חוזה מתכנן תנועה - CONT-10-2054.docx (item #316) - 13 fields:
+    CostBaseIndexDate = 2020-11-01 00:00:00
+    StartDate = 2020-11-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-01-20 22:00:00
+    CostContractScope = 80000
+
+[WhatIf] CONT-10-1814 -> הוראות למוזמנים להגיש הצעת מחיר - CONT-10-1814.docx (item #407) - 7 fields:
+    CostCurrency = ש"ח
+    customField6 = מיכה קליין
+    contractVersion = 0.3
+    customField3 = שי מרגולין
+    docCreator = Rinath
+    CostIndexType = מדד תשומות הבניה
+    ContractTemplate = קבלן חפירה ודיפון
+
+[WhatIf] CONT-10-1846 -> הסכם מתכנן- אינסטלציה וספרינקלרים - 2 4 19 - CONT-10-1846.docx (item #234) - 6 fields:
+    CostCurrency = ש"ח
+    ExpectedEndDate = 2020-05-10 21:00:00
+    StartDate = 2013-10-15 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-2353 -> הרצליה חוזה מתכנן אינסטלציה זיו גלמור 06.02.2024 - CONT-10-2353.docx (item #219) - 11 fields:
+    CostIndexPoints = 225.5724
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = germank
+    CostPaymentTerms = 45 יום
+    CostBaseIndexDate = 2021-05-15 00:00:00
+    StartDate = 2021-05-16 00:00:00
+    CostContractScope = 548340
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 148
+
+[WhatIf] CONT-10-2352 -> הרצליה חוזה מתכנן חשמל ותקשורת 06.02.2024 - CONT-10-1943.docx (item #220) - 11 fields:
+    CostIndexPoints = 223.7832
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 234000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-2354 -> הרצליה חוזה מתכנן מיזוג אוויר זיו גלמור 06.02.2024 - CONT-10-2354.docx (item #223) - 11 fields:
+    CostIndexPoints = 225.5724
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = germank
+    CostPaymentTerms = 45 יום
+    CostBaseIndexDate = 2021-05-15 00:00:00
+    StartDate = 2021-05-16 00:00:00
+    CostContractScope = 396605
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 148
+
+[WhatIf] CONT-10-1859 -> חוזה אגרונום - CONT-10-1859.docx (item #406) - 3 fields:
+    docCreator = Rinath
+    CostCurrency = ש"ח
+    CostIndexType = מדד תשומות הבניה
+
+[WhatIf] CONT-10-1867 -> חוזה אגרונום - CONT-10-1867.docx (item #404) - 1 fields:
+    docCreator = Rinath
+
+[WhatIf] CONT-10-2343 -> חוזה אדריכל בית הכנסת - CONT-10-2343.docx (item #270) - 12 fields:
+    customField7 = 420, מגרש 201
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-09-24 21:00:00
+    CostBaseIndexDate = 2023-10-16 00:00:00
+    StartDate = 2023-10-17 00:00:00
+    CostContractScope = 175000
+    CostIndexType = מדד נומינלי
+    DurationMonths = 48
+
+[WhatIf] CONT-10-1845 -> חוזה אדריכל מגורים ושטחי מסחר - CONT-10-1845.docx (item #298) - 12 fields:
+    CostIndexPoints = 223.9951
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = avibe
+    CostPaymentTerms = שוטף + 30
+    ExpectedEndDate = 2022-01-21 20:00:00
+    CostBaseIndexDate = 2018-10-10 00:00:00
+    StartDate = 2018-10-11 00:00:00
+    CostContractScope = 1686000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 40
+
+[WhatIf] CONT-10-2332 -> חוזה אדריכל מגורים ושטחי מסחר - CONT-10-2332.docx (item #271) - 13 fields:
+    CostBaseIndexDate = 2022-03-13 00:00:00
+    StartDate = 2022-03-14 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 1
+    CostIndexType = מדד נומינלי
+    docCreator = meryle
+    CostIndexMode = ידוע
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 420-423
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-02-14 22:00:00
+    CostContractScope = 1086500
+
+[WhatIf] CONT-10-1879 -> חוזה נגישות - CONT-10-1879.docx (item #297) - 8 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2022-09-06 23:00:00
+    StartDate = 2018-12-27 00:00:00
+    CostContractScope = 118800
+    DurationMonths = 45
+
+[WhatIf] CONT-10-1879 -> חוזה אדריכל נוף - CONT-10-1879.docx (item #299) - 8 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2022-09-06 23:00:00
+    StartDate = 2018-12-27 00:00:00
+    CostContractScope = 118800
+    DurationMonths = 45
+
+[WhatIf] CONT-10-1899 -> חוזה אדריכל נוף - CONT-10-1899.docx (item #390) - 9 fields:
+    CostIndexPoints = 100.8
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = 12.2019
+    docCreator = germank
+    CostBaseIndexDate = 2019-12-30 23:00:00
+    StartDate = 2020-02-01 00:00:00
+    CostContractScope = 157000
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2000 -> חוזה אדריכל נוף - CONT-10-2000.docx (item #282) - 2 fields:
+    project = א.מ. ישראל מגורים פיתוח בע"מ
+    status = טיוטה
+
+[WhatIf] CONT-10-2096 -> חוזה אדריכל נוף - CONT-10-2096.docx (item #251) - 12 fields:
+    CostIndexPoints = 226.4666
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2028-02-07 20:00:00
+    CostBaseIndexDate = 2021-04-21 00:00:00
+    StartDate = 2021-04-22 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-2234 -> חוזה אדריכל נוף - CONT-5-563.docx (item #211) - 7 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = 45 יום
+    status = טיוטה
+    CostContractScope = 88000
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2365 -> חוזה אדריכל ראש1 - CONT-10-2365.docx (item #210) - 9 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 140, 142, 115
+    CostPaymentTerms = שוטף + 45
+    customField8 = מגרשים 201 ו202
+    status = טיוטה
+    docCreator = kooksec
+    CostIndexType = מדד המחירים לצרכן
+    contractVersion = 0.1
+
+[WhatIf] CONT-10-1872 -> חוזה אדריכל ראשי - CONT-10-1872.docx (item #289) - 10 fields:
+    CostIndexPoints = 223.9951
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 30
+    CostBaseIndexDate = 2018-10-08 00:00:00
+    StartDate = 2018-10-09 00:00:00
+    CostContractScope = 1686000
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-1897 -> חוזה אדריכל ראשי - CONT-10-1897.docx (item #389) - 10 fields:
+    CostIndexPoints = 100.8
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    StartDate = 2020-01-01 00:00:00
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    CostContractScope = 1280300
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-1924 -> חוזה אדריכל ראשי - CONT-10-1924.docx (item #236) - 11 fields:
+    CostIndexPoints = 225.5663
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 60
+    ExpectedEndDate = 2039-06-04 21:00:00
+    CostBaseIndexDate = 2019-09-18 00:00:00
+    StartDate = 2019-09-19 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 240
+
+[WhatIf] CONT-10-1927 -> חוזה אדריכל ג גור למגרש - CONT-5-565CONT-10-1927.docx (item #212) - 14 fields:
+    CostBaseIndexDate = 2019-07-10 00:00:00
+    CostPaymentTerms = שוטף + 60
+    CostCompMethod = מחיר קבוע/פאושלי
+    PartyAContactNamePercent = כלל נכסי נדלן נשר מרכז ( נ.נ.נ.מ )   - 50%  .   אפריקה ישראל...
+    CostIndexPoints = 225.1206
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    CostIndexMode = בגין
+    DurationMonths = 240
+    CostCurrency = ש"ח
+    customField7 = מתחם קרקע המצוי בעיר נשר והידוע כחלקה 1 בגוש 11165, חלקות 2,...
+    ExpectedEndDate = 2039-06-04 21:00:00
+    StartDate = 2019-07-11 00:00:00
+    customField1 = 11170 חל' 1  וגוש 11168 חלק מחל' 1
+
+[WhatIf] CONT-10-1927 -> חוזה אדריכל ג גור למגרשים סופי - CONT-10-1927.docx (item #347) - 14 fields:
+    CostBaseIndexDate = 2019-07-10 00:00:00
+    CostPaymentTerms = שוטף + 60
+    CostCompMethod = מחיר קבוע/פאושלי
+    PartyAContactNamePercent = כלל נכסי נדלן נשר מרכז ( נ.נ.נ.מ )   - 50%  .   אפריקה ישראל...
+    CostIndexPoints = 225.1206
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    CostIndexMode = בגין
+    DurationMonths = 240
+    CostCurrency = ש"ח
+    customField7 = מתחם קרקע המצוי בעיר נשר והידוע כחלקה 1 בגוש 11165, חלקות 2,...
+    ExpectedEndDate = 2039-06-04 21:00:00
+    StartDate = 2019-07-11 00:00:00
+    customField1 = 11170 חל' 1  וגוש 11168 חלק מחל' 1
+
+[WhatIf] CONT-10-1927 -> חוזה אדריכל ראשי - CONT-10-1927.docx (item #348) - 15 fields:
+    CostBaseIndexDate = 2019-07-10 00:00:00
+    CostPaymentTerms = שוטף + 60
+    CostCompMethod = מחיר קבוע/פאושלי
+    PartyAContactNamePercent = כלל נכסי נדלן נשר מרכז ( נ.נ.נ.מ )   - 50%  .   אפריקה ישראל...
+    CostIndexPoints = 225.1206
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    CostIndexMode = בגין
+    DurationMonths = 240
+    CostCurrency = ש"ח
+    customField7 = מתחם קרקע המצוי בעיר נשר והידוע כחלקה 1 בגוש 11165, חלקות 2,...
+    supplierName = גיורא גור ושות' אדריכלים בע"מ
+    ExpectedEndDate = 2039-06-04 21:00:00
+    StartDate = 2019-07-11 00:00:00
+    customField1 = 11170 חל' 1  וגוש 11168 חלק מחל' 1
+
+[WhatIf] CONT-10-1996 -> חוזה אדריכל ראשי - CONT-10-1996.docx (item #355) - 14 fields:
+    CostBaseIndexDate = 2020-10-21 00:00:00
+    StartDate = 2020-10-22 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = dekelr
+    CostIndexMode = בגין
+    DurationMonths = 36
+    CostCurrency = ש"ח
+    customField7 = 115
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2023-10-07 00:00:00
+    customField8 = מגרש 1409
+    CostContractScope = 1128000
+
+[WhatIf] CONT-10-2372 -> חוזה איתור תשתיות - CONT-5-673.docx (item #208) - 9 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 140, 142, 115
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    customField8 = מגרשים 201 ו-202
+    status = טיוטה
+    CostContractScope = 37300
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-1998 -> חוזה ג גור מחוץ למגרשים בינוי נשר.docx (item #349) - 8 fields:
+    supplierName = גיורא גור ושות' אדריכלים בע"מ
+    otherSides = גיורא גור ושות' אדריכלים בע"מ
+הגפן 1 ת.ד 9436 חיפה
+    project = נשר  ( טרם ניתן שם לפרויקט )
+    docCreator = avic
+    Municipality = נשר
+    CostBaseIndexDate = 2021-01-03 14:05:40
+    status = טיוטה
+    signDate = 2021-01-03 14:05:40
+
+[WhatIf] CONT-10-2111 -> חוזה הידרולוג - CONT-10-2111.docx (item #285) - 2 fields:
+    project = א.מ. ישראל מגורים פיתוח בע"מ
+    status = טיוטה
+
+[WhatIf] CONT-10-2163 -> חוזה הידרולוג - CONT-10-2163.docx (item #253) - 9 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2022-02-10 00:00:00
+    StartDate = 2022-05-24 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2190 -> חוזה הידרולוג - CONT-10-2190.docx (item #350) - 10 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-01-19 00:00:00
+    StartDate = 2022-01-20 00:00:00
+    status = טיוטה
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    contractVersion = 0.2
+
+[WhatIf] CONT-10-2368 -> חוזה חברת ניהול ופיקוח פרויקטים חדש - CONT-10-1981.docx (item #286) - 1 fields:
+    docCreator = kooksec
+
+[WhatIf] CONT-10-2164 -> חוזה חברת ניהול ופיקוח פרויקטים - CONT-10-2164.docx (item #351) - 8 fields:
+    CostCurrency = ש"ח
+    otherSides = פאי הנדסה א.מ בעמ
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2021-09-15 00:00:00
+    StartDate = 2021-09-16 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2329 -> חוזה חברת ניהול ופיקוח פרויקטים - CONT-10-2329.docx (item #274) - 14 fields:
+    CostBaseIndexDate = 2022-02-14 00:00:00
+    StartDate = 2022-02-15 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 229.82
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = ידוע
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 420-423
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-01-18 22:00:00
+    otherSides = אפרתי מדפיס ניהול פרויקטים בע"מ
+דרך ירושלים 34, רעננה
+    CostContractScope = 2650000
+
+[WhatIf] CONT-10-2100 -> חוזה יועץ איטום - CONT-10-2100.docx (item #254) - 11 fields:
+    customField7 = מגרשים 57-65
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    StartDate = 2021-07-15 00:00:00
+    docCreator = avic
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2028-04-11 21:00:00
+    CostBaseIndexDate = 2021-07-14 00:00:00
+    CostContractScope = 55000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-1933 -> חוזה יועץ אקוסטיקה - CONT-10-1933.docx (item #237) - 8 fields:
+    CostCurrency = ש"ח
+    CostIndexMode = חודש פברואר 2014
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2023-05-08 21:00:00
+    StartDate = 2016-10-12 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-1999 -> חוזה יועץ אקוסטיקה - CONT-10-1999.docx (item #391) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 151
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostContractScope = 28000
+
+[WhatIf] CONT-10-2004 -> חוזה יועץ אקוסטיקה - CONT-10-2004.docx (item #287) - 3 fields:
+    status = טיוטה
+    CostIndexPoints = 114.7
+    CostIndexType = מדד תשומות הבנייה לחודש 9/2020
+
+[WhatIf] CONT-10-2102 -> חוזה יועץ אקוסטיקה - CONT-10-2102.docx (item #255) - 13 fields:
+    CostBaseIndexDate = 2021-07-14 00:00:00
+    StartDate = 2021-07-15 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 227.5844
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    CostIndexMode = בגין
+    DurationMonths = 80
+    CostCurrency = ש"ח
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2028-05-09 21:00:00
+    CostContractScope = 63000
+
+[WhatIf] CONT-10-2185 -> חוזה יועץ אקוסטיקה - CONT-10-2185.docx (item #327) - 9 fields:
+    CostIndexPoints = 227.5844
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2021-07-14 00:00:00
+    StartDate = 2021-07-15 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2362 -> חוזה יועץ אקוסטיקה - CONT-10-2362.docx (item #258) - 14 fields:
+    CostBaseIndexDate = 2022-01-01 00:00:00
+    StartDate = 2022-01-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 229.82
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 420-423
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-02-16 22:00:00
+    status = טיוטה
+    CostContractScope = 34000
+
+[WhatIf] CONT-10-1900 -> חוזה יועץ בטיחות.docx (item #393) - 11 fields:
+    CostIndexPoints = 224.6748
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = germank
+    CostPaymentTerms = שוטף + 30
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 65000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-2101 -> חוזה יועץ בטיחות - CONT-10-2101.docx (item #256) - 13 fields:
+    CostBaseIndexDate = 2021-06-17 00:00:00
+    CostPaymentTerms = שוטף + 45
+    CostCompMethod = מחיר קבוע/פאושלי
+    PartyAContactNamePercent = 100%
+    CostIndexPoints = 227.5844
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    CostIndexMode = בגין
+    DurationMonths = 80
+    CostCurrency = ש"ח
+    customField7 = מגרשים 57-65
+    ExpectedEndDate = 2028-03-14 20:00:00
+    StartDate = 2021-06-18 00:00:00
+
+[WhatIf] CONT-10-2171 -> חוזה יועץ בטיחות - CONT-10-2171.docx (item #328) - 10 fields:
+    CostIndexPoints = 229.82
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = חלקה 1 בגוש 11170 וחלק מחל' 1 בגוש 11118
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-02-04 00:00:00
+    StartDate = 2022-03-14 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2356 -> חוזה יועץ בטיחות - CONT-10-2356.docx (item #257) - 13 fields:
+    CostBaseIndexDate = 2022-01-15 00:00:00
+    StartDate = 2022-01-16 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 229.82
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 420-423
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-02-16 22:00:00
+    CostContractScope = 75400
+
+[WhatIf] CONT-10-2198 -> חוזה יועץ בידוד תרמי - CONT-5-692.docx (item #207) - 2 fields:
+    docCreator = avic
+    status = טיוטה
+
+[WhatIf] CONT-10-1869 -> חוזה יועץ ביסוס וקרקע - CONT-10-1869.docx (item #290) - 4 fields:
+    docCreator = kooksec
+    status = טיוטה
+    customField3 = גבריאל מגנזי
+    project = א.מ ישראל מגורים יזמות בע"מ
+
+[WhatIf] CONT-10-1898 -> חוזה יועץ ביסוס וקרקע - CONT-10-1898.docx (item #392) - 4 fields:
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = germank
+    CostContractScope = 22500
+    CostCurrency = ש"ח
+
+[WhatIf] CONT-10-2098 -> חוזה יועץ ביסוס קרקע - CONT-10-2098.docx (item #240) - 12 fields:
+    CostIndexPoints = 223.5603
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2029-01-01 20:00:00
+    CostBaseIndexDate = 2020-02-12 00:00:00
+    StartDate = 2020-02-13 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 90
+
+[WhatIf] CONT-10-2373 -> חוזה יועץ ביסוס קרקע - CONT-10-2373.docx (item #260) - 12 fields:
+    customField7 = 420-423
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-02-28 20:00:00
+    CostBaseIndexDate = 2022-03-27 00:00:00
+    StartDate = 2022-03-28 01:00:00
+    CostContractScope = 41020
+    CostIndexType = מדד נומינלי
+    DurationMonths = 60
+
+[WhatIf] CONT-10-2157 -> חוזה יועץ בניה ירוקה ויעוץ תרמי - CONT-10-2157.docx (item #241) - 12 fields:
+    customField7 = מגרשים 57-65
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = avic
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2026-06-18 21:00:00
+    CostBaseIndexDate = 2021-10-13 00:00:00
+    StartDate = 2021-10-14 00:00:00
+    CostContractScope = 144000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 60
+
+[WhatIf] CONT-10-2197 -> חוזה יועץ בניה ירוקה ותרמי - CONT-10-2197.docx (item #329) - 10 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = חלקה 1 בגוש 11170 וחלק מחל' 1 בגוש 11118
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-01-19 00:00:00
+    StartDate = 2022-01-20 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-1964 -> חוזה יועץ בניה ירוקה - CONT-10-1964.docx (item #374) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 151
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostContractScope = 100000
+
+[WhatIf] CONT-10-1939 -> חוזה יועץ מיגון ומקלוט - CONT-5-583.docx (item #291) - 11 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    StartDate = 2019-02-20 00:00:00
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2021-02-02 22:00:00
+    CostBaseIndexDate = 2019-02-19 00:00:00
+    status = טיוטה
+    CostContractScope = 19440
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 24
+
+[WhatIf] CONT-10-2173 -> חוזה יועץ נגישות - CONT-10-2173.docx (item #331) - 10 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = חלקה 1 בגוש 11170 וחלק מחל' 1 בגוש 11118
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2022-02-16 00:00:00
+    StartDate = 2022-02-17 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2199 -> חוזה יועץ פינוי אשפה טיוטא מופיע בירוקה - CONT-5-670.docx (item #330) - 2 fields:
+    docCreator = avic
+    status = טיוטה
+
+[WhatIf] CONT-10-2195 -> חוזה יועץ קרינה אלקטרו.docx (item #201) - 10 fields:
+    CostIndexPoints = 234.5148
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = חלקה 1 בגוש 11170 וחלק מחל' 1 בגוש 11118
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-03-17 00:00:00
+    StartDate = 2022-07-20 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2195 -> חוזה יועץ קרינה אלקטרו - CONT-5-668CONT-10-2195.docx (item #214) - 10 fields:
+    CostIndexPoints = 234.5148
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = חלקה 1 בגוש 11170 וחלק מחל' 1 בגוש 11118
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-03-17 00:00:00
+    StartDate = 2022-07-20 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2195 -> חוזה יועץ קרינה אלקטרו - CONT-10-2195.docx (item #333) - 10 fields:
+    CostIndexPoints = 234.5148
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = חלקה 1 בגוש 11170 וחלק מחל' 1 בגוש 11118
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-03-17 00:00:00
+    StartDate = 2022-07-20 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2261 -> חוזה יועץ קרינה אלקטרו - CONT-5-668.docx (item #261) - 7 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = 45 יום
+    status = טיוטה
+    CostContractScope = 111583
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-1940 -> חוזה מודד - CONT-5-693.docx (item #292) - 11 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    StartDate = 2019-01-18 00:00:00
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2021-01-05 22:00:00
+    CostBaseIndexDate = 2019-01-17 00:00:00
+    status = טיוטה
+    CostContractScope = 18800
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 24
+
+[WhatIf] CONT-10-2402 -> חוזה מנהל מודל בים ותיאום מערכות - CONT-10-2402.docx (item #262) - 11 fields:
+    customField7 = 420-423
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2024-08-18 00:00:00
+    StartDate = 2024-08-19 01:00:00
+    CostContractScope = 288409
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 48
+
+[WhatIf] CONT-10-2183 -> חוזה מנהל מודל - CONT-10-2183.docx (item #332) - 9 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-01-19 00:00:00
+    StartDate = 2022-06-22 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2196 -> חוזה מנהל מודל - CONT-5-713.docx (item #276) - 3 fields:
+    DurationMonths = 36
+    status = טיוטה
+    docCreator = kooksec
+
+[WhatIf] CONT-10-1919 -> חוזה מעצב פנים - CONT-10-1919.docx (item #293) - 8 fields:
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2021-02-07 22:00:00
+    StartDate = 2019-02-19 00:00:00
+    CostContractScope = 76000
+    CostIndexType = שקל חדש
+    DurationMonths = 24
+
+[WhatIf] CONT-10-1967 -> חוזה מעצב פנים.docx (item #200) - 9 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2021-12-03 22:00:00
+    StartDate = 2020-12-09 00:00:00
+    customField8 = מגרשים 4,5,6,7,8,29,30
+    CostContractScope = 262000
+    DurationMonths = 12
+
+[WhatIf] CONT-10-1967 -> חוזה מעצב פנים - CONT-10-1967.docx (item #334) - 9 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2021-12-03 22:00:00
+    StartDate = 2020-12-09 00:00:00
+    customField8 = מגרשים 4,5,6,7,8,29,30
+    CostContractScope = 262000
+    DurationMonths = 12
+
+[WhatIf] CONT-10-2181 -> חוזה מתכנן איוורור ו  מיזוג אוויר - CONT-10-2181.docx (item #335) - 9 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-01-19 00:00:00
+    StartDate = 2022-05-03 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2104 -> חוזה מתכנן איוורור ומיזוג אוויר - CONT-10-2104.docx (item #243) - 12 fields:
+    CostIndexPoints = 227.5844
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2028-03-07 20:00:00
+    CostBaseIndexDate = 2021-07-14 00:00:00
+    StartDate = 2021-07-15 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-1937 -> חוזה מתכנן אינסטלציה 26.08.2020.docx (item #378) - 10 fields:
+    CostIndexPoints = 310.2382
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 252400
+    CostIndexType = מדד תשומות הבניה
+
+[WhatIf] CONT-10-1404 -> חוזה מתכנן אינסטלציה - CONT-10-1404.docx (item #238) - 8 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2020-05-10 21:00:00
+    StartDate = 2013-10-15 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-1912 -> חוזה מתכנן אינסטלציה - CONT-10-1912.docx (item #376) - 10 fields:
+    CostIndexPoints = 310.2382
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 252400
+    CostIndexType = מדד תשומות הבניה
+
+[WhatIf] CONT-10-2082 -> חוזה מתכנן אינסטלציה - CONT-10-2082.docx (item #244) - 11 fields:
+    CostIndexPoints = 223.1145
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2021-01-20 00:00:00
+    StartDate = 2021-01-21 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 60
+
+[WhatIf] CONT-10-2175 -> חוזה מתכנן אינסטלציה - CONT-10-2175.docx (item #337) - 9 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2022-01-19 00:00:00
+    StartDate = 2022-04-25 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2187 -> חוזה מתכנן אינסטלציה - CONT-5-564.docx (item #215) - 7 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = 45 יום
+    status = טיוטה
+    CostContractScope = 503700
+    DurationMonths = 36
+
+[WhatIf] CONT-10-2309 -> חוזה מתכנן אינסטלציה - CONT-10-2309.docx (item #411) - 1 fields:
+    docCreator = kooksec
+
+[WhatIf] CONT-10-392 -> חוזה מתכנן אלומיניום - CONT-10-392.docx (item #263) - 11 fields:
+    CostIndexPoints = 222.2296
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = michak
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2018-04-11 00:00:00
+    StartDate = 2018-04-12 00:00:00
+    status = טיוטה
+    CostContractScope = 171400
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-1883 -> חוזה מתכנן אלומיניום - CONT-10-1883.docx (item #294) - 9 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 30
+    ExpectedEndDate = 2022-10-23 23:00:00
+    StartDate = 2019-02-12 00:00:00
+    status = טיוטה
+    CostContractScope = 89700
+    DurationMonths = 45
+
+[WhatIf] CONT-10-1969 -> חוזה מתכנן אלומיניום.docx (item #199) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = מגרשים 4.5.6.7.8.9.29.30
+    docCreator = germank
+    CostPaymentTerms = שוטף + 45
+    CostContractScope = 155120
+
+[WhatIf] CONT-10-1969 -> חוזה מתכנן אלומיניום - CONT-10-1969.docx (item #336) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = מגרשים 4.5.6.7.8.9.29.30
+    docCreator = germank
+    CostPaymentTerms = שוטף + 45
+    CostContractScope = 155120
+
+[WhatIf] CONT-10-2193 -> חוזה מתכנן אלומיניום - CONT-10-2193.docx (item #246) - 10 fields:
+    CostIndexPoints = 235.8561
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2022-06-15 00:00:00
+    StartDate = 2022-08-21 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2194 -> חוזה מתכנן אלומיניום - CONT-10-2194.docx (item #340) - 10 fields:
+    CostIndexPoints = 239.4331
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = 1 בגוש 11168  וחל' 4 בגוש 11169  וח' 1,3 בגוש 11170
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-07-20 00:00:00
+    StartDate = 2022-09-14 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2436 -> חוזה מתכנן אלומיניום - CONT-10-2436.docx (item #264) - 12 fields:
+    customField7 = 420-423
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2029-02-04 22:00:00
+    CostBaseIndexDate = 2024-08-19 00:00:00
+    StartDate = 2024-08-20 01:00:00
+    CostContractScope = 80000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 48
+
+[WhatIf] CONT-10-1968 -> חוזה מתכנן חשמל ותקשורת -29.10.2020 - ID1v1 - CONT-10-1938.docx (item #339) - 12 fields:
+    CostIndexPoints = 224.6748
+    CostCurrency = ש"ח
+    CostIndexMode = ידוע
+    customField7 = מתחם קרקע המצוי בעיר נשר והידוע כחלקה 1 בגוש 11165, חלקות 2,...
+    CostPaymentTerms = שוטף + 60
+    ExpectedEndDate = 2036-11-11 20:00:00
+    CostBaseIndexDate = 2019-12-11 00:00:00
+    StartDate = 2019-12-12 00:00:00
+    customField1 = 11170 חל' 1 וגוש 11168 חלק מחל' 1
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 200
+
+[WhatIf] CONT-10-1938 -> חוזה מתכנן חשמל ותקשורת - CONT-10-1938.docx (item #338) - 12 fields:
+    CostIndexPoints = 224.6748
+    CostCurrency = ש"ח
+    CostIndexMode = ידוע
+    customField7 = מתחם קרקע המצוי בעיר נשר והידוע כחלקה 1 בגוש 11165, חלקות 2,...
+    CostPaymentTerms = שוטף + 60
+    ExpectedEndDate = 2036-11-11 20:00:00
+    CostBaseIndexDate = 2019-12-11 00:00:00
+    StartDate = 2019-12-12 00:00:00
+    customField1 = 11170 חל' 1 וגוש 11168 חלק מחל' 1
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 200
+
+[WhatIf] CONT-10-1938 -> חוזה מתכנן חשמל ותקשורת -29.10.2020 - ID1v1 - CONT-10-1938.docx (item #339) - 12 fields:
+    CostIndexPoints = 224.6748
+    CostCurrency = ש"ח
+    CostIndexMode = ידוע
+    customField7 = מתחם קרקע המצוי בעיר נשר והידוע כחלקה 1 בגוש 11165, חלקות 2,...
+    CostPaymentTerms = שוטף + 60
+    ExpectedEndDate = 2036-11-11 20:00:00
+    CostBaseIndexDate = 2019-12-11 00:00:00
+    StartDate = 2019-12-12 00:00:00
+    customField1 = 11170 חל' 1 וגוש 11168 חלק מחל' 1
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 200
+
+[WhatIf] CONT-10-1943 -> הרצליה חוזה מתכנן חשמל ותקשורת 06.02.2024 - CONT-10-1943.docx (item #220) - 11 fields:
+    CostIndexPoints = 223.7832
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 234000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-1943 -> חוזה מתכנן חשמל ותקשורת - CONT-10-1943.docx (item #377) - 11 fields:
+    CostIndexPoints = 223.7832
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 234000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-2083 -> חוזה מתכנן חשמל ותקשורת - CONT-10-2083.docx (item #245) - 13 fields:
+    CostBaseIndexDate = 2021-05-12 00:00:00
+    CostPaymentTerms = שוטף + 45
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 226.4666
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    contractVersion = 0.2
+    CostIndexMode = בגין
+    DurationMonths = 70
+    CostCurrency = ש"ח
+    status = אושר
+    StartDate = 2021-05-13 00:00:00
+    ExpectedEndDate = 2027-03-31 21:00:00
+
+[WhatIf] CONT-10-2162 -> חוזה מתכנן חשמל ותקשורת - CONT-5-658.docx (item #278) - 1 fields:
+    status = טיוטה
+
+[WhatIf] CONT-10-2360 -> חוזה מתכנן חשמל ותקשורת - CONT-10-2360.docx (item #266) - 13 fields:
+    CostBaseIndexDate = 2022-02-15 00:00:00
+    StartDate = 2022-02-16 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 229.82
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = ידוע
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 420-423
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-05-02 21:00:00
+    CostContractScope = 280900
+
+[WhatIf] CONT-10-1866 -> חוזה מתכנן מיגון ומקלוט - CONT-10-1866.docx (item #405) - 2 fields:
+    docCreator = Rinath
+    project = סמל צפון מגרש 123
+
+[WhatIf] CONT-10-1911 -> חוזה מתכנן מיגון ומקלוט - CONT-10-1911.docx (item #379) - 5 fields:
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = germank
+    CostContractScope = 33900
+    CostCurrency = ש"ח
+    CostPaymentTerms = שוטף + 60
+
+[WhatIf] CONT-10-2176 -> חוזה מתכנן מיגון ומקלוט - CONT-10-2176.docx (item #342) - 9 fields:
+    CostIndexPoints = 231.3849
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 45
+    CostBaseIndexDate = 2022-02-09 00:00:00
+    StartDate = 2022-04-27 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2361 -> חוזה מתכנן מיגון ומקלוט - CONT-10-2361.docx (item #265) - 10 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 420-423
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2028-11-09 22:00:00
+    StartDate = 2023-12-07 00:00:00
+    CostContractScope = 25500
+    CostIndexType = מדד נומינלי
+    DurationMonths = 60
+
+[WhatIf] CONT-10-1399 -> חוזה מתכנן מיזוג אוויר - CONT-10-1399.docx (item #233) - 12 fields:
+    CostIndexPoints = 222.483
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = avic
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2027-03-01 00:00:00
+    CostBaseIndexDate = 2014-01-07 00:00:00
+    StartDate = 2014-01-08 00:00:00
+    CostContractScope = 563000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 160
+
+[WhatIf] CONT-10-1934 -> חוזה מתכנן מיזוג אוויר - CONT-10-1934.docx (item #381) - 11 fields:
+    CostIndexPoints = 223.7832
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 198000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-2235 -> חוזה מתכנן מיזוג אוויר - CONT-5-617.docx (item #279) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostPaymentTerms = 45 יום
+    status = טיוטה
+    docCreator = kooksec
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2029 -> חוזה מתכנן מעליות - CONT-10-2029.docx (item #382) - 11 fields:
+    CostIndexPoints = 224.4519
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 45 יום
+    CostBaseIndexDate = 2020-02-29 00:00:00
+    StartDate = 2020-03-01 00:00:00
+    CostContractScope = 33000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-2097 -> חוזה מתכנן מעליות - CONT-10-2097.docx (item #249) - 12 fields:
+    CostIndexPoints = 222.8896
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2028-04-04 21:00:00
+    CostBaseIndexDate = 2020-12-16 00:00:00
+    StartDate = 2020-12-17 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-2170 -> חוזה מתכנן מעליות - CONT-10-2170.docx (item #341) - 9 fields:
+    CostIndexPoints = 229.82
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    CostPaymentTerms = שוטף + 60
+    CostBaseIndexDate = 2022-01-20 00:00:00
+    StartDate = 2022-01-21 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2355 -> חוזה מתכנן מעליות - CONT-10-2355.docx (item #268) - 13 fields:
+    CostBaseIndexDate = 2022-03-11 00:00:00
+    StartDate = 2022-03-12 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 232.7263
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 420-423
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-02-12 22:00:00
+    CostContractScope = 58500
+
+[WhatIf] CONT-10-1922 -> חוזה מתכנן קונסטרוקצי1 - CONT-10-1922.docx (item #235) - 11 fields:
+    customField7 = 133-13000132
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    StartDate = 2014-01-16 00:00:00
+    docCreator = avic
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2025-05-03 23:00:00
+    CostBaseIndexDate = 2014-01-15 00:00:00
+    CostContractScope = 1500000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 90
+
+[WhatIf] CONT-10-1821 -> חוזה מתכנן קונסטרוקציה קרבן - CONT-10-1821.docx (item #248) - 11 fields:
+    CostIndexPoints = 223.3
+    CostCurrency = ש"ח
+    PartyAContactNamePercent = 100
+    CostIndexMode = בגין
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2026-04-05 21:00:00
+    CostBaseIndexDate = 2019-01-01 00:00:00
+    StartDate = 2019-01-01 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 80
+
+[WhatIf] CONT-10-1892 -> חוזה מתכנן קונסטרוקציה - CONT-10-1892.docx (item #380) - 5 fields:
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = germank
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 591250
+    CostCurrency = ש"ח
+
+[WhatIf] CONT-10-1982 -> חוזה מתכנן קונסטרוקציה - CONT-10-1982.docx (item #280) - 1 fields:
+    status = טיוטה
+
+[WhatIf] CONT-10-1992 -> חוזה מתכנן קונסטרוקציה - CONT-10-1992.docx (item #343) - 12 fields:
+    CostIndexPoints = 223.3374
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    customField7 = 1
+    CostPaymentTerms = שוטף + 60
+    ExpectedEndDate = 2033-04-05 23:00:00
+    CostBaseIndexDate = 2020-11-25 00:00:00
+    StartDate = 2020-11-26 00:00:00
+    docCreator = avic
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 150
+
+[WhatIf] CONT-10-2107 -> חוזה מתכנן קונסטרוקציה - CONT-10-2107.docx (item #296) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 14
+    CostPaymentTerms = 45 יום
+    docCreator = kooksec
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2186 -> חוזה מתכנן קונסטרוקציה - CONT-5-662.docx (item #354) - 7 fields:
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    StartDate = 2023-01-01 00:00:00
+    status = טיוטה
+    CostContractScope = 668750
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 36
+
+[WhatIf] CONT-10-2344 -> חוזה מתכנן קונסטרוקציה - CONT-10-2344.docx (item #269) - 12 fields:
+    customField7 = 420-423
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-12-02 22:00:00
+    CostBaseIndexDate = 2023-12-24 00:00:00
+    StartDate = 2023-12-25 00:00:00
+    CostContractScope = 865560
+    CostIndexType = מדד נומינלי
+    DurationMonths = 48
+
+[WhatIf] CONT-10-1970 -> חוזה מתכנן קונסטרוקציה1 - CONT-10-1970.docx (item #345) - 6 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = מגרשים 4.5.6.8.9.29.30
+    docCreator = germank
+    CostPaymentTerms = שוטף + 30
+    CostContractScope = 1384987
+
+[WhatIf] CONT-10-2334 -> חוזה מתכנן תנועה רקאוז חן הנדסת כבישים טיוטה 1 - CONT-10-2334.docx (item #221) - 11 fields:
+    CostIndexPoints = 103.2
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 45 יום
+    CostBaseIndexDate = 2023-02-15 00:00:00
+    StartDate = 2023-08-16 00:00:00
+    CostContractScope = 311000
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 148
+
+[WhatIf] CONT-10-1874 -> חוזה מתכנן תנועה - CONT-10-1874.docx (item #295) - 12 fields:
+    CostIndexPoints = 223.333
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    otherSides = אייל קראוס הנדסת
+    CostIndexMode = הידוע ב 30/12/18
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 30
+    ExpectedEndDate = 2022-09-09 23:00:00
+    StartDate = 2018-12-30 00:00:00
+    CostContractScope = 129000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 45
+
+[WhatIf] CONT-10-1910 -> חוזה מתכנן תנועה - CONT-10-1910.docx (item #383) - 11 fields:
+    CostIndexPoints = 223.7832
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = germank
+    CostPaymentTerms = 60 יום
+    CostBaseIndexDate = 2019-12-31 00:00:00
+    StartDate = 2020-01-01 00:00:00
+    CostContractScope = 205444
+    CostIndexType = מדד המחירים לצרכן
+    customField7 = 151
+
+[WhatIf] CONT-10-2099 -> חוזה מתכנן תנועה - CONT-10-2099.docx (item #250) - 13 fields:
+    CostBaseIndexDate = 2020-06-17 00:00:00
+    StartDate = 2020-06-18 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = avic
+    CostIndexMode = בגין
+    DurationMonths = 80
+    CostCurrency = ש"ח
+    customField7 = מגרשים 57-65
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2028-04-03 21:00:00
+    CostContractScope = 230000
+
+[WhatIf] CONT-10-2161 -> חוזה מתכנן תנועה - CONT-5-663.docx (item #205) - 1 fields:
+    status = טיוטה
+
+[WhatIf] CONT-10-2092 -> חוזה נגישות - CONT-10-1879.docx (item #297) - 8 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = kooksec
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2022-09-06 23:00:00
+    StartDate = 2018-12-27 00:00:00
+    CostContractScope = 118800
+    DurationMonths = 45
+
+[WhatIf] CONT-10-2297 -> יועץ בטיחות  הסכם - CONT-5-582.docx (item #344) - 8 fields:
+    CostCompMethod = מחיר קבוע/פאושלי
+    status = טיוטה
+    CostPaymentTerms = שוטף + 60
+    ExpectedEndDate = 2030-01-18 20:00:00
+    StartDate = 2022-01-20 00:00:00
+    CostBaseIndexDate = 2022-01-19 00:00:00
+    docCreator = avic
+    DurationMonths = 80
+
+[WhatIf] CONT-10-2480 -> יועץ ביסוס קרקע - CONT-5-664.docx (item #222) - 2 fields:
+    docCreator = germank
+    status = טיוטה
+
+[WhatIf] CONT-5-716 -> מכרז קבלן ראשי מגורים נשר שלב 1 2026 - CONT-5-716.docx (item #346) - 7 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    customField7 = 30-35
+    CostPaymentTerms = שוטף + 60
+    docCreator = avic
+    CostIndexType = מדד הבניה בעיקור שעות קיץ
+    WorkDescription = קבלן ראשי למג' 29-34 כולל פיתוח צמוד
+
+[WhatIf] CONT-5-716 -> עינב - CONT-5-716.docx (item #408) - 16 fields:
+    project = אגמי בראשית
+    CostPaymentTerms = שוטף + 60
+    CostCompMethod = מחיר קבוע/פאושלי
+    WorkDescription = קבלן ראשי למג' 29-34 כולל פיתוח צמוד
+    CostCurrency = ש"ח
+    CostIndexType = מדד הבניה בעיקור שעות קיץ
+    docCreator = avic
+    contractVersion = 0.4
+    PartyAContactNamePercent = חב' כלל נדלן 50%   , חברת שיכון ובינוי נדל"ן בע"מ 25%  , חבר...
+    Municipality = נשר
+    customField7 = 30-35
+    recipient = אפריקה ישראל מגורים בע"מ
+יוני נתניהו 1 ג' אור יהודה
+מ.ז 52-0...
+    customField2 = מכ/866  מתחם כלל מגורים נשר
+    status = טיוטה
+    customField3 = אבי כהן מחברת אפריקה ישראל מגורים בע"מ
+    customField1 = 11170
+
+[WhatIf] CONT-5-716 -> תכולת מכרז קבלן ראשי - CONT-5-716.docx (item #415) - 12 fields:
+    customField1 = 11170
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    PartyAContactNamePercent = חב' כלל נדלן 50%   , חברת שיכון ובינוי נדל"ן בע"מ 25%  , חבר...
+    customField7 = 30-35
+    CostPaymentTerms = שוטף + 60
+    contractVersion = 0.4
+    status = טיוטה
+    customField2 = מכ/866  מתחם כלל מגורים נשר
+    docCreator = avic
+    CostIndexType = מדד הבניה בעיקור שעות קיץ
+    WorkDescription = קבלן ראשי למג' 29-34 כולל פיתוח צמוד
+
+[WhatIf] CONT-10-2158 -> ניהול תיאום ופיקוח אחים מרגולין רעננה - CONT-5-671.docx (item #385) - 9 fields:
+    CostIndexPoints = 226.4666
+    StartDate = 2021-06-01 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    otherSides = אחים מרגולין הנדסה וייעוץ בע"מ
+גוש עציון 7 ב.דוידוב קומה 5 ג...
+    CostIndexMode = ידוע
+    CostBaseIndexDate = 2021-05-31 00:00:00
+    status = טיוטה
+    docCreator = germank
+    CostIndexType = מדד המחירים לצרכן
+
+[WhatIf] CONT-10-2108 -> סביוני גבעת שמואל - 1001 1005 - חוזה קבלן - CONT-10-2108.docx (item #369) - 5 fields:
+    docCreator = meryle
+    status = טיוטה
+    customField3 = מרול אטמן
+    customField7 = 81, 83, מגרשים 1001, 1005
+    WorkDescription = הקמת 2 בנייני מגורים מעל חניון משותף כולל עבודות פיתוח צמוד
+
+[WhatIf] CONT-10-2191 -> סביוני גבעת שמואל - 1004-1005 - חוזה מעצב פנים - CONT-10-2191.docx (item #368) - 13 fields:
+    CostBaseIndexDate = 2022-02-01 00:00:00
+    StartDate = 2022-02-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 231.3849
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 82, 83
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2026-04-23 21:00:00
+    CostContractScope = 100000
+
+[WhatIf] CONT-10-2177 -> סביוני גבעת שמואל  1006-1007 - חוזה אדריכל - CONT-10-2177.docx (item #370) - 13 fields:
+    CostBaseIndexDate = 2022-03-10 00:00:00
+    StartDate = 2022-03-11 00:00:00
+    CostCompMethod = למדידה
+    CostIndexPoints = 232.7263
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 60
+    CostCurrency = ש"ח
+    customField7 = 84-85
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-02-11 22:00:00
+    CostContractScope = 2398000
+
+[WhatIf] CONT-10-2393 -> סביוני גבעת שמואל - 1006-1007 - חוזה קבלן ראשי - CONT-10-2393.docx (item #372) - 4 fields:
+    docCreator = meryle
+    status = טיוטה
+    customField7 = 84-85
+    WorkDescription = הקמת 2 מגדלי מגורים מעל 2 קומות מסחר וחניון תת"ק כולל פיתוח ...
+
+[WhatIf] CONT-10-2276 -> סביוני גבעת שמואל - גמרשים 1006-1007 -חוזה יועץ בניה ירוקה ותרמי - CONT-10-2276.docx (item #371) - 13 fields:
+    CostBaseIndexDate = 2023-02-01 00:00:00
+    StartDate = 2023-02-02 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 243.3794
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 84,85
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2027-01-10 22:00:00
+    CostContractScope = 101000
+
+[WhatIf] CONT-10-1403 -> סביוני גבעת שמואל - חוזה אדריכל מגורים ומסחרי - CONT-10-1403.docx (item #373) - 10 fields:
+    CostIndexPoints = 218.972
+    CostCurrency = ש"ח
+    CostIndexMode = בגין
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2023-03-22 20:00:00
+    CostBaseIndexDate = 2012-04-01 00:00:00
+    StartDate = 2012-04-02 00:00:00
+    docCreator = meryle
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 120
+
+[WhatIf] CONT-10-2167 -> סביוני גבעת שמואל - חוזה אחראי לביקורת - CONT-10-2167.docx (item #357) - 13 fields:
+    CostBaseIndexDate = 2022-01-11 00:00:00
+    StartDate = 2022-01-12 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 229.82
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 81, 83 , מגרשים 1001, 1005
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2026-01-23 22:00:00
+    CostContractScope = 49600
+
+[WhatIf] CONT-10-1889 -> סביוני גבעת שמואל - חוזה הידרולוג - CONT-10-1889.docx (item #359) - 10 fields:
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = meryle
+    CostPaymentTerms = שוטף + 30
+    Municipality = גבעת שמואל
+    StartDate = 2020-02-02 00:00:00
+    ExpectedEndDate = 2023-01-16 22:00:00
+    CostContractScope = 18800
+    CostIndexType = מדד נומינלי
+    DurationMonths = 36
+
+[WhatIf] CONT-10-1944 -> סביוני גבעת שמואל - חוזה יועץ בידוד תרמי - CONT-10-1944.docx (item #358) - 14 fields:
+    CostBaseIndexDate = 2020-08-06 00:00:00
+    StartDate = 2020-08-07 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.3374
+    CostCurrency = ש"ח
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    Municipality = גבעת שמואל
+    customField7 = מגרשים 1001, 1004, 1005
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2024-08-10 21:00:00
+    CostContractScope = 33000
+
+[WhatIf] CONT-10-2172 -> סביוני גבעת שמואל - חוזה יועץ נגישות - משה מנו - CONT-10-2172.docx (item #361) - 13 fields:
+    CostBaseIndexDate = 2022-01-24 00:00:00
+    StartDate = 2022-01-25 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostCurrency = ש"ח
+    CostIndexType = מדד נומינלי
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    Municipality = גבעת שמואל
+    customField7 = 81-83
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2026-01-02 22:00:00
+    CostContractScope = 22000
+
+[WhatIf] CONT-10-1929 -> סביוני גבעת שמואל - חוזה יועץ נגישות - CONT-10-1929.docx (item #360) - 13 fields:
+    CostBaseIndexDate = 2020-07-07 00:00:00
+    StartDate = 2020-07-08 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostCurrency = ש"ח
+    CostIndexType = מדד נומינלי
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 60
+    Municipality = גבעת שמואל
+    customField7 = מגרשים 1001, 1004, 1005
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-06-04 21:00:00
+    CostContractScope = 17100
+
+[WhatIf] CONT-10-1962 -> סביוני גבעת שמואל - חוזה יועץ פינוי אשפה - CONT-10-1962.docx (item #362) - 15 fields:
+    CostBaseIndexDate = 2020-08-19 00:00:00
+    StartDate = 2020-08-20 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 1
+    CostCurrency = ש"ח
+    CostIndexType = מדד נומינלי
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 60
+    Municipality = גבעת שמואל
+    customField7 = מגרשים 1001, 1004, 1005
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-07-23 21:00:00
+    status = טיוטה
+    CostContractScope = 54000
+
+[WhatIf] CONT-10-2192 -> סביוני גבעת שמואל - מגרש 1004 - תאום מערכות - CONT-10-2192.docx (item #363) - 15 fields:
+    CostBaseIndexDate = 2022-05-30 00:00:00
+    StartDate = 2022-05-31 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    PartyAContactNamePercent = 100%
+    CostIndexPoints = 236.7504
+    CostCurrency = ש"ח
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    Municipality = גבעת שמואל
+    customField7 = 82, מגרש 1004
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2025-09-07 21:00:00
+    CostContractScope = 65600
+
+[WhatIf] CONT-10-2245 -> סביוני גבעת שמואל - מגרשים 1006-1007 - חוזה אדריכל נוף - CONT-10-2245.docx (item #364) - 13 fields:
+    CostBaseIndexDate = 2022-11-22 00:00:00
+    StartDate = 2022-11-23 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 241.4451
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = חלקות 84-85, מגרשים 1006-1007
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2026-11-01 22:00:00
+    CostContractScope = 220000
+
+[WhatIf] CONT-10-2271 -> סביוני גבעת שמואל - מגרשים 1006-1007 - חוזה הידרולוג - CONT-10-2271.docx (item #365) - 13 fields:
+    CostBaseIndexDate = 2022-07-07 00:00:00
+    StartDate = 2022-07-08 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 239.4331
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    DurationMonths = 48
+    CostCurrency = ש"ח
+    customField7 = 84-85
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2026-06-15 21:00:00
+    CostContractScope = 13343
+
+[WhatIf] CONT-10-2376 -> סביוני גבעת שמואל - מגרשים 1006-1007 - חוזה מעצב פנים - CONT-10-2376.docx (item #367) - 12 fields:
+    customField7 = 84-85
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    StartDate = 2024-03-16 00:00:00
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2029-06-07 21:00:00
+    CostBaseIndexDate = 2024-03-15 00:00:00
+    status = טיוטה
+    CostContractScope = 150000
+    CostIndexType = מדד המחירים לצרכן
+    DurationMonths = 60
+
+[WhatIf] CONT-10-1873 -> שהם - דיור להשכרה - חוזה חברת פיקוח - CONT-10-1873.docx (item #402) - 16 fields:
+    CostBaseIndexDate = 2020-01-02 00:00:00
+    StartDate = 2020-01-03 00:00:00
+    project = סביוני שהם דיור להשכרה
+    WorkDescription = פיקוח על עבודות הבניה
+    CostIndexPoints = 224.6748
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = ידוע
+    CostCompMethod = מחיר קבוע/פאושלי
+    DurationMonths = 30
+    CostCurrency = ש"ח
+    customField7 = 4,6,7
+    CostPaymentTerms = שוטף + 45
+    ExpectedEndDate = 2022-06-18 23:00:00
+    otherSides = ע. יפה ניהול פרוייקטים בע"מ
+אבן גבירול 56 תל אביב
+    CostContractScope = 2262850
+
+[WhatIf] CONT-10-1070 -> שהם מחיר למשתכן - חוזה הידרולוג - CONT-10-1070.docx (item #401) - 10 fields:
+    CostIndexPoints = 0
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    docCreator = meryle
+    CostPaymentTerms = שוטף + 30
+    ExpectedEndDate = 2021-07-15 21:00:00
+    StartDate = 2018-04-03 00:00:00
+    CostContractScope = 16920
+    CostIndexType = מדד נומינלי
+    DurationMonths = 40
+
+[WhatIf] CONT-10-1066 -> שהם מחיר למשתכן - חוזה חברת ניהול ופיקוח - CONT-10-1066.docx (item #403) - 16 fields:
+    ContractTemplate = ניהול תיאום ופיקוח
+    StartDate = 2018-10-08 00:00:00
+    project = סביוני שהם - מחיר למשתכן
+    PartyAContactNamePercent = 100
+    CostCurrency = ש"ח
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostBaseIndexDate = 2018-10-07 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    DurationMonths = 56
+    Municipality = שוהם
+    CostPaymentTerms = 60 יום
+    recipient = א.מ.ד.ס מחיר למשתכן
+יהונתן נתניהו 1ג', אור יהודה
+ש.ר 5402748...
+    ExpectedEndDate = 2022-06-07 23:00:00
+    otherSides = אחים מרגולין הנדסה וייעוץ בע"מ
+גוש עציון 7 ב.דוידוב קומה 5 ג...
+    CostContractScope = 2592000
+
+[WhatIf] CONT-10-1394 -> שהם מחיר למשתכן - חוזה יועץ איטום - CONT-10-1394.docx (item #396) - 14 fields:
+    CostBaseIndexDate = 2018-07-01 00:00:00
+    StartDate = 2018-07-02 00:00:00
+    project = סביוני שהם - מחיר למשתכן
+    CostIndexPoints = 1
+    CostIndexType = מדד נומינלי
+    docCreator = meryle
+    CostIndexMode = בגין
+    CostCompMethod = מחיר קבוע/פאושלי
+    DurationMonths = 40
+    CostCurrency = ש"ח
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2022-03-24 22:00:00
+    status = אושר
+    CostContractScope = 27280
+
+[WhatIf] CONT-10-1069 -> שהם מחיר למשתכן - חוזה יועץ נגישות - CONT-10-1069.docx (item #394) - 18 fields:
+    ContractTemplate = יועץ נגישות
+    CostPaymentTerms = 60 יום
+    project = סביוני שהם - מחיר למשתכן
+    PartyAContactNamePercent = 100
+    CostIndexPoints = 221.3468
+    StartDate = 2018-03-02 00:00:00
+    CostCurrency = ש"ח
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostBaseIndexDate = 2018-03-01 00:00:00
+    CostIndexMode = בגין
+    CostCompMethod = מחיר קבוע/פאושלי
+    DurationMonths = 40
+    Municipality = שוהם
+    recipient = א.מ.ד.ס מחיר למשתכן
+יהונתן נתניהו 1ג', אור יהודה
+ש.ר 5402748...
+    ExpectedEndDate = 2021-06-25 23:00:00
+    otherSides = ליבנד יצחק אדריכל
+ת.ד. 18243, תל אביב
+    CostContractScope = 12600
+
+[WhatIf] CONT-10-1401 -> שהם מחיר למשתכן - חוזה יועץ תאום מערכות - CONT-10-1401.docx (item #395) - 16 fields:
+    ContractTemplate = יועץ סופרפוזיציה
+    StartDate = 2019-03-03 00:00:00
+    project = סביוני שהם - מחיר למשתכן
+    PartyAContactNamePercent = 100
+    CostCurrency = ש"ח
+    CostIndexType = מדד נומינלי
+    docCreator = meryle
+    CostCompMethod = מחיר קבוע/פאושלי
+    signDate = 2019-06-23 00:00:00
+    Municipality = שוהם
+    CostPaymentTerms = 60 יום
+    recipient = א.מ.ד.ס מחיר למשתכן
+יהונתן נתניהו 1ג', אור יהודה
+ש.ר 5402748...
+    ExpectedEndDate = 2022-02-14 22:00:00
+    otherSides = בים לידרס בע"מ
+הדוגית 15, יבנה
+515813889
+    DurationMonths = 36
+    CostContractScope = 100000
+
+[WhatIf] CONT-10-1067 -> שהם מחיר למשתכן - חוזה מעצב פנים - CONT-10-1067.docx (item #397) - 16 fields:
+    ContractTemplate = מעצב פנים
+    StartDate = 2018-09-15 00:00:00
+    project = סביוני שהם - מחיר למשתכן
+    PartyAContactNamePercent = 100
+    CostCurrency = ש"ח
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostBaseIndexDate = 2018-09-14 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    DurationMonths = 36
+    Municipality = שוהם
+    CostPaymentTerms = 60 יום
+    recipient = א.מ.ד.ס מחיר למשתכן
+יהונתן נתניהו 1ג', אור יהודה
+ש.ר 5402748...
+    ExpectedEndDate = 2021-08-26 21:00:00
+    otherSides = ליאורה ניב אדריכלות ועיצוב פנים בע"מ
+הדרום 11 סביון 56532
+    CostContractScope = 95000
+
+[WhatIf] CONT-10-1396 -> שהם מחיר למשתכן - חוזה מתכנן מיגון - CONT-10-1396.docx (item #398) - 12 fields:
+    CostIndexPoints = 1
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = בגין
+    docCreator = meryle
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2021-07-27 21:00:00
+    CostBaseIndexDate = 2018-03-22 00:00:00
+    StartDate = 2018-03-23 00:00:00
+    CostContractScope = 25000
+    CostIndexType = מדד נומינלי
+    DurationMonths = 40
+
+[WhatIf] CONT-10-1065 -> שהם מחיר למשתכן - חוזה מתכנן קונסטרוקציה - CONT-10-1065.docx (item #399) - 13 fields:
+    ContractTemplate = מתכנן קונסטרוקציה
+    StartDate = 2018-04-11 00:00:00
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexPoints = 223.333
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostBaseIndexDate = 2018-04-10 00:00:00
+    CostIndexMode = בגין
+    DurationMonths = 40
+    CostCurrency = ש"ח
+    CostPaymentTerms = 60 יום
+    ExpectedEndDate = 2021-07-28 21:00:00
+    CostContractScope = 578016
+
+[WhatIf] CONT-10-1068 -> שהם מחיר משתכן - חוזה מתכנן אלומיניום - CONT-10-1068.docx (item #400) - 13 fields:
+    CostBaseIndexDate = 2018-02-01 00:00:00
+    StartDate = 2018-02-02 00:00:00
+    project = סביוני שהם - מחיר למשתכן
+    CostIndexPoints = 220.6848
+    CostIndexType = מדד המחירים לצרכן
+    docCreator = meryle
+    CostIndexMode = בגין
+    CostCompMethod = מחיר קבוע/פאושלי
+    DurationMonths = 40
+    CostCurrency = ש"ח
+    CostPaymentTerms = שוטף + 30
+    ExpectedEndDate = 2021-08-11 21:00:00
+    CostContractScope = 83592
+
+[WhatIf] CONT-10-1909 -> תבנית מודד - CONT-5-661.docx (item #386) - 2 fields:
+    docCreator = germank
+    status = טיוטה
+
+[WhatIf] CONT-10-1928 -> תכולת מכרז קבלן ראשי - CONT-10-1928.docx (item #409) - 8 fields:
+    CostIndexPoints = 310.7801
+    CostCurrency = ש"ח
+    CostCompMethod = מחיר קבוע/פאושלי
+    CostIndexMode = ידוע
+    CostBaseIndexDate = 2020-06-01 00:00:00
+    StartDate = 2020-06-02 00:00:00
+    docCreator = einave
+    CostIndexType = מדד תשומות הבניה
+
+[WhatIf] CONT-10-2112 -> תכולת מכרז קבלן ראשי - CONT-10-2112.docx (item #388) - 13 fields:
+    CostBaseIndexDate = 2021-10-31 00:00:00
+    CostPaymentTerms = שוטף + 45
+    CostCompMethod = מחיר קבוע/פאושלי
+    WorkDescription = הקמת 150 יח''ד ומסחר על גבי חניון תת קרקעי
+    StartDate = 2022-02-13 00:00:00
+    CostIndexType = מדד תשומות הבניה
+    docCreator = germank
+    DurationMonths = 25
+    CostCurrency = ש"ח
+    customField7 = 151
+    customField6 = יוגב מרקוביץ - משרד אחים מרגולין
+    CostContractScope = 145538000
+    ExpectedEndDate = 2024-03-03 22:00:00
+
+[WhatIf] CONT-10-2383 -> תכולת מכרז קבלן ראשי - CONT-5-716.docx (item #415) - 2 fields:
+    docCreator = kooksec
+    status = טיוטה
+
+========================================
+Done!
+  Matched by CONT:     136
+  Matched by name:     25
+  Succeeded:           0
+  Failed:              0
+  Skipped:             1 (no missing data)
+  No match:            134
+
+  First unmatched CONT numbers:
+    CONT-10-2056 (cbhhi 31 - חוזה מתכנן אינסטלציה.docx)
+    CONT-10-2166 (אדריכל השימור.docx)
+    CONT-10-2387 (אולפני הרצליה חוזה יועץ בטיחות   אלי כחלון.docx)
+    CONT-10-2495 (בדיקה רונן.docx)
+    CONT-10-2064 (בניין 31 - חוזה מתכנן מעליות.docx)
+    CONT-10-2325 (חוזה אגרונום.docx)
+    CONT-10-2467 (חוזה אגרונום.docx)
+    CONT-10-2307 (חוזה אדריכל - ראשי.docx)
+    CONT-10-1997 (חוזה אדריכל ג גור למגרשים סופי.docx)
+    CONT-10-2445 (חוזה אדריכל מגורים ושטחי מסחר.docx)
+    CONT-10-367 (חוזה אדריכל מסחירי 1.docx)
+    CONT-10-2141 (חוזה אדריכל נוף.docx)
+    CONT-10-2308 (חוזה אדריכל נוף.docx)
+    CONT-10-2367 (חוזה אדריכל נוף.docx)
+    CONT-10-1914 (חוזה אדריכל ראשי.docx)
+    CONT-10-1923 (חוזה אדריכל ראשי.docx)
+    CONT-10-2305 (חוזה אדריכל ראשי.docx)
+    CONT-10-2306 (חוזה אדריכל ראשי.docx)
+    CONT-10-2249 (חוזה אחראי לביקורת פרויקטים.docx)
+    CONT-10-2255 (חוזה אחראי לביקורת פרויקטים.docx)
+========================================
+PS C:\SPFX\Africa\GIT-Africa\Africa\Contracts\TemplateMigration>

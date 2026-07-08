@@ -1,0 +1,30 @@
+=== New Templates: 22 files ===
+=== Old Templates: 19 files ===
+
+--- In BOTH (migrated, 19): ---
+  הזמנת עבודה ניהול מבנים.docx
+  חוזה אגרונום.docx
+  חוזה אדריכל ג גור למגרש.docx
+  חוזה חשב כמויות.DOCX
+  חוזה יועץ בידוד תרמי.docx
+  חוזה יועץ קרינה אלקטרו.docx
+  יועץ אקוסטיקה.docx
+  יועץ בטיחות.docx
+  יועץ בידוד תרמי.docx
+  יועץ ביסוס קרקע.docx
+  יועץ בניה ירוקה.docx
+  יועץ מיגון ומיקלוט.docx
+  יועץ נגישות.docx
+  מיזוג אויר.docx
+  מעצב פנים.docx
+  מתכנן תנועה.docx
+  סקר תשתיות.docx
+  קבלן חפירה ודיפון.docx
+  תבנית מודד.docx
+
+--- Only in New (no old source, 3): ---
+  אדריכל ראשי.docx
+  יועץ סופרפוזיציה.docx
+  יועץ פינוי אשפה.docx
+
+--- Only in Old (NOT migrated yet, 0): ---

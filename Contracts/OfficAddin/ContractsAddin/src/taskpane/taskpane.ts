@@ -1,5 +1,5 @@
 import { PublicClientApplication, type AccountInfo } from "@azure/msal-browser";
-console.log("=== TASKPANE BUILD 2026-05-18 v2 ===");
+console.log("=== TASKPANE BUILD 2026-07-06 v18 ===");
 
 /* =========
    Config
@@ -36,7 +36,7 @@ const COMPANIES_FIELDS = {
   hp: "hp"
 };
 
-const EXTRA_FIELDS_LIST_DISPLAY_NAME = "extraFields";
+const EXTRA_FIELDS_LIST_DISPLAY_NAME = "ניהול שדות נוספים";
 const ANNEXES_LIBRARY_DISPLAY_NAME = "נספחים";
 
 const SUPPLIER_TYPES_LIST_DISPLAY_NAME = "סוגי ספקים";
@@ -192,7 +192,7 @@ const MSAL_CONFIG = {
   auth: {
     clientId: "d8f0fc93-7736-43c1-8e12-8e193f543cd4",
     authority: "https://login.microsoftonline.com/b4d149d3-3aef-42b5-a6f1-b5018284caf9",
-    redirectUri: "https://knowedge.co.il/matrix/downloads/taskpane.html"
+    redirectUri: "https://m.res.afi-g.com/contracts/taskpane.html"
   },
   cache: { cacheLocation: "localStorage", storeAuthStateInCookie: true }
 };
@@ -462,7 +462,12 @@ function getSelectValue(id: string): string {
 function setSelectValue(id: string, value: string) {
   const el = document.getElementById(id) as HTMLSelectElement | null;
   if (!el) return;
-  el.value = (value ?? "").toString();
+  const v = (value ?? "").toString();
+  // If the value doesn't exist in the options, add it so it can be selected
+  if (v && !Array.from(el.options).some(o => o.value === v)) {
+    el.append(new Option(v, v));
+  }
+  el.value = v;
 }
 
 function setText(id: string, text: string) {
@@ -1109,11 +1114,16 @@ function toDateInputValue(val: any): string {
 function applyLoadedFieldsToUI(fields: Record<string, any>) {
   // ===== General =====
   const contractNumber = pickField(fields, "ContractNumber");
-  // Task 1: prefer the actual SP file version label over the manually-saved value
+  // Use SP file version only if it's higher than the saved contractVersion
   const spVersion = pickField(fields, "_UIVersionString", "OData__UIVersionString");
-  const contractVersion = spVersion || pickField(fields, "contractVersion");
+  const savedVersion = pickField(fields, "contractVersion");
+  const spNum = parseFloat(`${spVersion ?? ""}`) || 0;
+  const savedNum = parseFloat(`${savedVersion ?? ""}`) || 0;
+  const contractVersion = (savedNum > spNum) ? savedVersion : (spVersion || savedVersion);
+  const template = pickField(fields, "ContractTemplate");
   if (contractNumber) setInputValue("contractNumberInput", `${contractNumber}`);
   if (contractVersion) setInputValue("contractVersionInput", `${contractVersion}`);
+  if (template) setSelectValue("templateSelect", `${template}`);
 
   const project = pickField(fields, "project");
   const site = pickField(fields, "SiteName");
@@ -1358,8 +1368,8 @@ async function tryFillTemplateFromFileName(): Promise<void> {
    ========= */
 async function loadAndApplyExtraFields(): Promise<void> {
   try {
-    const templateId = await extractTemplateIdFromFileName();
-    if (!templateId) {
+    const templateName = getSelectValue("templateSelect");
+    if (!templateName) {
       applyExtraFieldVisibility([]);
       return;
     }
@@ -1368,19 +1378,16 @@ async function loadAndApplyExtraFields(): Promise<void> {
     const siteId = await getSiteId(token);
     const listId = await getListId(siteId, token, EXTRA_FIELDS_LIST_DISPLAY_NAME, EXTRA_FIELDS_LIST_SERVER_RELATIVE_URL);
 
-    // Get all items with Title and Template (multi-lookup) fields
     const res = await graph<{ value: Array<{ id: string; fields: Record<string, any> }> }>(
       `/sites/${siteId}/lists/${listId}/items?expand=fields($select=Title,Template)`, token
     );
 
-    // Filter items whose Template multi-lookup contains the current template ID
+    // Match by template name (Template field can be a string or a lookup array)
     const matching = (res.value || []).filter(item => {
       const tmpl = item.fields?.Template;
       if (!tmpl) return false;
-      // Multi-lookup comes as an array of { LookupId, LookupValue }
-      if (Array.isArray(tmpl)) {
-        return tmpl.some((entry: any) => String(entry.LookupId) === templateId);
-      }
+      if (typeof tmpl === "string") return tmpl === templateName;
+      if (Array.isArray(tmpl)) return tmpl.some((entry: any) => entry.LookupValue === templateName);
       return false;
     });
 
@@ -1388,7 +1395,7 @@ async function loadAndApplyExtraFields(): Promise<void> {
       .map(item => (item.fields?.Title ?? "").toString().trim())
       .filter(Boolean);
 
-    console.log("[loadAndApplyExtraFields] template ID:", templateId, "matched labels:", labels);
+    console.log("[loadAndApplyExtraFields] template:", templateName, "matched labels:", labels);
     applyExtraFieldVisibility(labels);
   } catch (e) {
     console.error("[loadAndApplyExtraFields] error:", e);
@@ -1397,15 +1404,50 @@ async function loadAndApplyExtraFields(): Promise<void> {
 }
 
 function applyExtraFieldVisibility(labels: string[]): void {
+  // Check for values beyond label range (orphaned migrated data)
+  const orphanIndices: number[] = [];
   for (let i = 1; i <= 8; i++) {
-    const input = document.getElementById(`customField${i}Input`);
+    if (i > labels.length && ((uiState.custom as any)[`customField${i}`] || "").trim() !== "") {
+      orphanIndices.push(i);
+    }
+  }
+
+  // Show/hide the migration notice for orphaned fields
+  let notice = document.getElementById("extrasFieldsMigrationNotice");
+  if (orphanIndices.length > 0) {
+    if (!notice) {
+      const tab = document.getElementById("extrasTab");
+      const sectionCard = tab?.querySelector(".section-card");
+      if (sectionCard) {
+        const div = document.createElement("div");
+        div.id = "extrasFieldsMigrationNotice";
+        div.className = "muted";
+        div.style.cssText = "margin-bottom:12px; padding:8px; background:#fff3cd; border-radius:4px; font-size:12px;";
+        div.textContent = "חלק מהשדות הנוספים אינם מוגדרים ברשימת הניהול עבור תבנית זו ומוצגים לקריאה בלבד.";
+        sectionCard.insertBefore(div, sectionCard.querySelector(".grid-2"));
+      }
+    }
+  } else if (notice) {
+    notice.remove();
+  }
+
+  for (let i = 1; i <= 8; i++) {
+    const input = document.getElementById(`customField${i}Input`) as HTMLInputElement | null;
     const fieldItem = input?.closest(".field-item") as HTMLElement | null;
     if (!fieldItem) continue;
 
     if (i <= labels.length) {
+      // Normal mode: label from management list, editable
       fieldItem.style.display = "";
       const lbl = fieldItem.querySelector("label");
       if (lbl) lbl.textContent = labels[i - 1];
+      if (input) input.readOnly = false;
+    } else if (orphanIndices.includes(i)) {
+      // Orphaned migrated field: has value but no label — read-only
+      fieldItem.style.display = "";
+      const lbl = fieldItem.querySelector("label");
+      if (lbl) lbl.textContent = `שדה נוסף ${i}`;
+      if (input) input.readOnly = true;
     } else {
       fieldItem.style.display = "none";
     }
@@ -1731,6 +1773,122 @@ export async function runUpdateDoc() {
   } catch (e: any) {
     console.error("runUpdateDoc error:", e);
     alert("שגיאה בעדכון המסמך: " + (e?.message || "לא ידועה"));
+  }
+}
+
+// ============================================================
+// Load data FROM document content controls INTO the UI panel
+// (reverse of runUpdateDoc — useful after contract migration)
+// ============================================================
+export async function loadFromDocumentIntoUI() {
+  try {
+    const lbl = document.getElementById("item-subject");
+
+    await Word.run(async (context) => {
+      const ccs = context.document.contentControls;
+      ccs.load("items/tag,items/text");
+      await context.sync();
+
+      // Build a map of tag -> text value from the document
+      const docValues: Record<string, string> = {};
+      for (const cc of ccs.items) {
+        const tag = (cc.tag || "").trim();
+        if (tag) {
+          docValues[tag] = (cc.text || "").trim();
+        }
+      }
+
+      // --- General fields ---
+      if (docValues[TAGS.contractNumber]) setInputValue("contractNumberInput", docValues[TAGS.contractNumber]);
+      if (docValues[TAGS.contractVersion]) setInputValue("contractVersionInput", docValues[TAGS.contractVersion]);
+      if (docValues[TAGS.template]) setSelectValue("templateSelect", docValues[TAGS.template]);
+      if (docValues[TAGS.project]) setInputValue("projectInput", docValues[TAGS.project]);
+      if (docValues[TAGS.site]) setSelectValue("siteSelect", docValues[TAGS.site]);
+      if (docValues[TAGS.municipality]) setSelectValue("municipalitySelect", docValues[TAGS.municipality]);
+      if (docValues[TAGS.workDescription]) setInputValue("workDescriptionInput", docValues[TAGS.workDescription]);
+      if (docValues[TAGS.signDate]) setInputValue("signDateInput", docValues[TAGS.signDate]);
+      if (docValues[TAGS.startDate]) setInputValue("startDateInput", docValues[TAGS.startDate]);
+      if (docValues[TAGS.months]) setInputValue("monthsInput", docValues[TAGS.months]);
+      if (docValues[TAGS.expectedEndDate]) setInputValue("expectedEndDateInput", docValues[TAGS.expectedEndDate]);
+      if (docValues[TAGS.status]) setSelectValue("statusSelect", docValues[TAGS.status]);
+
+      // --- Party A ---
+      if (docValues[TAGS.partyAName]) {
+        uiState.partyA.contactName = docValues[TAGS.partyAName];
+        setInputValue("partyANameInput", docValues[TAGS.partyAName]);
+      }
+      if (docValues[TAGS.tzadAPercent]) {
+        uiState.partyA.namePercent = docValues[TAGS.tzadAPercent];
+        setInputValue("partyANamePercentInput", docValues[TAGS.tzadAPercent]);
+      }
+      if (docValues[TAGS.recipient]) {
+        uiState.partyA.summary = docValues[TAGS.recipient];
+      }
+
+      // --- Party B ---
+      if (docValues[TAGS.otherSides]) {
+        uiState.partyB.summary = docValues[TAGS.otherSides];
+      }
+      if (docValues[TAGS.supplier]) {
+        uiState.partyB.supplierName = docValues[TAGS.supplier];
+        setSelectValue("supplierSelect", docValues[TAGS.supplier]);
+      }
+
+      // --- Cost ---
+      if (docValues[TAGS.costCompMethod]) {
+        uiState.cost.compMethod = docValues[TAGS.costCompMethod];
+        setSelectValue("costCompMethodSelect", docValues[TAGS.costCompMethod]);
+      }
+      if (docValues[TAGS.costContractScope]) {
+        uiState.cost.contractScope = docValues[TAGS.costContractScope];
+        setInputValue("costContractScopeInput", docValues[TAGS.costContractScope]);
+      }
+      if (docValues[TAGS.costCurrency]) {
+        uiState.cost.currency = docValues[TAGS.costCurrency];
+        setSelectValue("costCurrencySelect", docValues[TAGS.costCurrency]);
+      }
+      if (docValues[TAGS.costIndexType]) {
+        uiState.cost.indexType = docValues[TAGS.costIndexType];
+        setSelectValue("costIndexTypeSelect", docValues[TAGS.costIndexType]);
+      }
+      if (docValues[TAGS.costBaseIndexDate]) {
+        uiState.cost.baseIndexDate = docValues[TAGS.costBaseIndexDate];
+        setInputValue("costBaseIndexDateInput", docValues[TAGS.costBaseIndexDate]);
+      }
+      if (docValues[TAGS.costIndexMode]) {
+        uiState.cost.indexMode = docValues[TAGS.costIndexMode];
+        setCostIndexMode(docValues[TAGS.costIndexMode]);
+      }
+      if (docValues[TAGS.costIndexPoints]) {
+        uiState.cost.indexPoints = docValues[TAGS.costIndexPoints];
+        setInputValue("costIndexPointsInput", docValues[TAGS.costIndexPoints]);
+      }
+      if (docValues[TAGS.costPaymentTerms]) {
+        uiState.cost.paymentTerms = docValues[TAGS.costPaymentTerms];
+        setSelectValue("costPaymentTermsSelect", docValues[TAGS.costPaymentTerms]);
+      }
+
+      // --- Custom fields ---
+      for (const n of ["1","2","3","4","5","6","7","8"]) {
+        const tag = (TAGS as any)[`customField${n}`];
+        if (docValues[tag]) {
+          (uiState.custom as any)[`customField${n}`] = docValues[tag];
+          setInputValue(`customField${n}Input`, docValues[tag]);
+        }
+      }
+
+      // Refresh previews
+      uiState.cost.summary = buildCostSummary();
+      refreshPartyPreviews();
+      refreshCostPreview();
+      refreshReadonly();
+
+      const count = Object.keys(docValues).length;
+      if (lbl) lbl.textContent = `נטענו ${count} שדות מהמסמך. בדקי את הנתונים ולחצי "שמור שינויים במערכת".`;
+    });
+  } catch (e: any) {
+    console.error("loadFromDocumentIntoUI error:", e);
+    alert("שגיאה בטעינה מהמסמך: " + (e?.message || "לא ידועה"));
   }
 }
 
@@ -2151,6 +2309,9 @@ Office.onReady((info) => {
 
     const btnSave = document.getElementById("runSaveSystem");
     if (btnSave) (btnSave as HTMLDivElement).onclick = runSaveSystem;
+
+    const btnLoadFromDoc = document.getElementById("loadFromDoc");
+    if (btnLoadFromDoc) (btnLoadFromDoc as HTMLDivElement).onclick = loadFromDocumentIntoUI;
 
     wireDates();
     wirePartiesUI();
