@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.14.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "handover-managment",
+    "libraryId": "02352d59-7106-4ed9-aa72-68b2d21a534f",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "handoverManagment",
+    "solutionShortDescription": "handoverManagment description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

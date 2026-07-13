@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "handover-managment-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/handoverManagment/HandoverManagmentWebPart.js",
+          "manifest": "./src/webparts/handoverManagment/HandoverManagmentWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "HandoverManagmentWebPartStrings": "lib/webparts/handoverManagment/loc/{locale}.js"
+  }
+}

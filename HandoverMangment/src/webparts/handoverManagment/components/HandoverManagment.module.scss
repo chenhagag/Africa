@@ -1,0 +1,227 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.handoverManagment {
+  padding: 20px;
+  font-family: $ms-font-family-fallbacks;
+  direction: rtl;
+}
+
+.headerCard {
+  background: linear-gradient(135deg, #1a365d 0%, #2a5298 100%);
+  border-radius: 10px;
+  padding: 20px 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  color: white;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.headerIcon {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.headerControls {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.comboWrapper {
+  flex: 1;
+  min-width: 260px;
+  max-width: 400px;
+}
+
+.comboLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 6px;
+}
+
+.combo {
+  :global {
+    .ms-ComboBox {
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+
+      &::after {
+        border-radius: 6px;
+      }
+    }
+    .ms-ComboBox:hover {
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+    .ms-ComboBox input {
+      font-size: 14px;
+    }
+  }
+}
+
+.headerStats {
+  display: flex;
+  gap: 20px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px 18px;
+  min-width: 60px;
+}
+
+.statValue {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 2px;
+}
+
+.buildingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 550px;
+  margin: 0 auto;
+}
+
+.roof {
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 40px solid #795548;
+  margin-bottom: 0;
+}
+
+.floor {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:first-of-type {
+    border-top: 1px solid #e0e0e0;
+  }
+}
+
+.floorLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  min-width: 55px;
+  text-align: center;
+  writing-mode: horizontal-tb;
+}
+
+.floorApartments {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 4px;
+  flex: 1;
+}
+
+.apartment {
+  flex: 1;
+  min-width: 50px;
+  height: 55px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+}
+
+.apartmentNumber {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.apartmentStatus {
+  font-size: 9px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #d32f2f;
+  background: #ffebee;
+  border-radius: 4px;
+}
