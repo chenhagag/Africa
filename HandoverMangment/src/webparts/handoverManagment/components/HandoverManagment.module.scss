@@ -4,6 +4,7 @@
   padding: 20px;
   font-family: $ms-font-family-fallbacks;
   direction: rtl;
+
 }
 
 .headerCard {
@@ -103,13 +104,106 @@
   margin-top: 2px;
 }
 
+// Tabs
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: inherit;
+
+  &:hover {
+    color: #1a365d;
+  }
+}
+
+.tabActive {
+  color: #1a365d;
+  font-weight: 600;
+  border-bottom-color: #1a365d;
+}
+
+.tabIcon {
+  font-size: 16px;
+}
+
+// Towers layout - side by side
+.towersContainer {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  margin-top: 20px;
+}
+
+.towerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 400px;
+}
+
+.towerHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #37474f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px 8px 0 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.towerIcon {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.towerName {
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.towerStats {
+  display: flex;
+  gap: 12px;
+}
+
+.towerStat {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
 .buildingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0;
-  width: 550px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .roof {
@@ -124,41 +218,48 @@
 .floor {
   display: flex;
   flex-direction: row-reverse;
-  gap: 8px;
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 3px 8px;
   background: #f5f5f5;
   border: 1px solid #e0e0e0;
   border-top: none;
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  height: 42px;
 
   &:first-of-type {
     border-top: 1px solid #e0e0e0;
   }
 }
 
+.emptyFloor {
+  background: #eeeeee;
+  min-height: 20px;
+  opacity: 0.6;
+}
+
 .floorLabel {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: #666;
-  min-width: 55px;
+  min-width: 30px;
   text-align: center;
-  writing-mode: horizontal-tb;
 }
 
 .floorApartments {
   display: flex;
   flex-direction: row-reverse;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
 .apartment {
   flex: 1;
-  min-width: 50px;
-  height: 55px;
-  border-radius: 4px;
+  min-width: 28px;
+  height: 36px;
+  box-sizing: border-box;
+  border-radius: 3px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -166,35 +267,272 @@
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     z-index: 1;
   }
 }
 
 .apartmentNumber {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 700;
 }
 
-.apartmentStatus {
+.apartmentType {
+  font-size: 8px;
+  opacity: 0.85;
+  margin-top: 1px;
+}
+
+.publicUnit {
+  min-width: 28px;
+  height: 36px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
   font-size: 9px;
-  opacity: 0.9;
-  margin-top: 2px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+}
+
+.publicUnitName {
+  text-align: center;
+  line-height: 1.1;
+  padding: 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hasHandover {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+// Middle column - shared units between towers
+.middleColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 80px;
+  max-width: 200px;
+  align-self: flex-end;
+}
+
+.middleHeader {
+  height: 42px; // match towerHeader height
+}
+
+.middleBody {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.middleRoofSpacer {
+  height: 40px; // match roof height
+}
+
+.middleFloor {
+  display: flex;
+  gap: 2px;
+  height: 42px;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 3px 4px;
+}
+
+.middleFloorEmpty {
+  height: 42px;
+}
+
+.middleUnit {
+  flex: 1;
+  height: 36px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+// Summary table - full width in its own tab
+.summarySection {
+  margin-top: 8px;
+}
+
+.summaryTitle {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a365d;
+  margin: 0 0 16px 0;
+}
+
+.summaryTableWrapper {
+  overflow-x: auto;
+}
+
+.summaryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  direction: rtl;
+
+  th, td {
+    padding: 8px 14px;
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+  }
+
+  thead th {
+    font-weight: 600;
+    font-size: 13px;
+  }
+}
+
+.thSouth {
+  background: #37474f;
+  color: white;
+}
+
+.thNorth {
+  background: #455a64;
+  color: white;
+}
+
+.thProject {
+  background: #1a365d;
+  color: white;
+  font-weight: 700;
+}
+
+.thType {
+  background: #eceff1;
+  color: #1a365d;
+  font-weight: 600;
+}
+
+.thAvailable {
+  background: #e8f5e9;
+  color: #1a365d;
+}
+
+.thSold {
+  background: #e3f2fd;
+  color: #1a365d;
+}
+
+.thOwner {
+  background: #f3e5f5;
+  color: #1a365d;
+}
+
+.thHold {
+  background: #fff3e0;
+  color: #1a365d;
+}
+
+.thTotal {
+  background: #f5f5f5;
+  color: #1a365d;
+  font-weight: 600;
+}
+
+.tdType {
+  font-weight: 600;
+  background: #fafafa;
+  color: #333;
+}
+
+.tdAvailable {
+  color: #2e7d32;
+}
+
+.tdSold {
+  color: #1565c0;
+}
+
+.tdOwner {
+  color: #6a1b9a;
+}
+
+.tdHold {
+  color: #e65100;
+}
+
+.tdTotal {
+  font-weight: 600;
+  background: #f5f5f5;
+}
+
+.tdProject {
+  font-weight: 700;
+  background: #e8eaf6;
+  color: #1a365d;
+}
+
+.totalRow {
+  td {
+    font-weight: 700;
+    border-top: 2px solid #999;
+    background: #f5f5f5;
+  }
+}
+
+.unknownTower {
+  text-align: center;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #fff3e0;
+  color: #e65100;
+  border-radius: 6px;
+  font-size: 13px;
 }
 
 .legend {
   display: flex;
   gap: 16px;
-  margin-top: 20px;
+  margin-top: 12px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+
+  &:last-of-type {
+    margin-bottom: 80px;
+  }
+}
+
+.legendTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
 }
 
 .legendItem {

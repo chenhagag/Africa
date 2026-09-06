@@ -32,31 +32,63 @@ export class BuildingService {
       });
   }
 
-  public getApartments(listName: string, apartmentsPerFloor: number): Promise<IApartment[]> {
-    const url = `${this._siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Id,Title,msrAppNum&$top=5000&$orderby=Id`;
+  public getApartments(listName: string): Promise<IApartment[]> {
+    const fields = 'Id,Title,msrAppNum,Floor,Tower,msrAppStatus,HandoverStatus,FinishStatus,ApartmentType,Rooms,Standard,ShadowNumber,ContentTypeId,SpaceUnits,PublicUnitType';
+    const url = `${this._siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=${fields}&$top=5000&$orderby=Id`;
     return this._spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => response.json())
-      .then((data: { value?: Array<{ Id: number; Title: string; msrAppNum?: string | number }> }) => {
+      .then((data: { value?: Array<Record<string, unknown>> }) => {
         const items = data.value || [];
-        // POC: varying floor sizes pattern
-        const floorPattern = [6, 4, 3, 2, 6, 4, 5, 3];
-        const floorAssignments = this._assignFloors(items.length, floorPattern);
 
-        return items.map((item: { Id: number; Title: string; msrAppNum?: string | number }, index: number) => {
+        return items.map((item: Record<string, unknown>, index: number) => {
+          const spaceUnits = parseInt(String(item.SpaceUnits || '0'), 10) || 0;
+          const isPublicUnit = spaceUnits > 0;
+
           let apartmentNumber = 0;
-          if (item.msrAppNum !== undefined && item.msrAppNum !== null) {
-            apartmentNumber = parseInt(String(item.msrAppNum), 10) || 0;
+          if (!isPublicUnit) {
+            const rawAppNum = item.msrAppNum;
+            if (rawAppNum !== undefined && rawAppNum !== null) {
+              apartmentNumber = parseInt(String(rawAppNum), 10) || 0;
+            }
+            if (apartmentNumber <= 0) {
+              const extracted = this._extractApartmentNumber(String(item.Title || ''));
+              apartmentNumber = extracted > 0 ? extracted : (index + 1);
+            }
           }
-          if (apartmentNumber <= 0) {
-            const extracted = this._extractApartmentNumber(String(item.Title || ''));
-            apartmentNumber = extracted > 0 ? extracted : (index + 1);
+
+          const floor = (item.Floor !== undefined && item.Floor !== null) ? Number(item.Floor) : 0;
+          const tower = String(item.Tower || '');
+          const apartmentType = String(item.ApartmentType || '');
+
+          // Derive standard from apartment type if Standard field is empty
+          let standard = String(item.Standard || '');
+          if (!standard && apartmentType) {
+            const upper = apartmentType.toUpperCase();
+            if (upper.indexOf('PH') === 0) {
+              standard = 'פנטהאוס';
+            } else if (upper.charAt(upper.length - 1) === 'P') {
+              standard = 'פרימיום';
+            } else {
+              standard = 'סטנדרט';
+            }
           }
+
           return {
             id: Number(item.Id),
             title: String(item.Title || ''),
-            apartmentNumber: apartmentNumber,
-            floor: floorAssignments[index],
-            status: ''
+            apartmentNumber,
+            floor,
+            tower,
+            saleStatus: String(item.msrAppStatus || ''),
+            handoverStatus: String(item.HandoverStatus || ''),
+            finishStatus: String(item.FinishStatus || ''),
+            apartmentType,
+            rooms: parseInt(String(item.Rooms || '0'), 10) || 0,
+            standard,
+            shadowNumber: parseInt(String(item.ShadowNumber || '0'), 10) || 0,
+            isPublicUnit,
+            spaceUnits: isPublicUnit ? spaceUnits : 1,
+            publicUnitType: String(item.PublicUnitType || '')
           };
         });
       });
@@ -68,24 +100,6 @@ export class BuildingService {
       return `${window.location.origin}${listRelUrl}/DispForm.aspx?ID=${itemId}`;
     }
     return `${this._siteUrl}/Lists/${listName}/DispForm.aspx?ID=${itemId}`;
-  }
-
-  // POC: assign floors with varying sizes based on a repeating pattern
-  private _assignFloors(totalItems: number, pattern: number[]): number[] {
-    const assignments: number[] = [];
-    let floor = 1;
-    let patternIndex = 0;
-    let count = 0;
-    for (let i = 0; i < totalItems; i++) {
-      assignments.push(floor);
-      count++;
-      if (count >= pattern[patternIndex % pattern.length]) {
-        floor++;
-        patternIndex++;
-        count = 0;
-      }
-    }
-    return assignments;
   }
 
   private _extractApartmentNumber(title: string): number {

@@ -5,13 +5,28 @@ export interface IApartment {
   title: string;
   apartmentNumber: number;
   floor: number;
-  status: string;
+  tower: string;
+  saleStatus: string;
+  handoverStatus: string;
+  finishStatus: string;
+  apartmentType: string;
+  rooms: number;
+  standard: string;
+  shadowNumber: number;
+  isPublicUnit: boolean;
+  spaceUnits: number;
+  publicUnitType: string;
+}
+
+export interface IPublicUnitColors {
+  [type: string]: string;
 }
 
 export interface IHandoverManagmentProps {
   siteUrl: string;
   listName: string;
-  apartmentsPerFloor: number;
   spHttpClient: SPHttpClient;
-  statusColors: { [status: string]: string };
+  saleColors: { [status: string]: string };
+  finishColors: { [status: string]: string };
+  publicUnitColors: IPublicUnitColors;
 }

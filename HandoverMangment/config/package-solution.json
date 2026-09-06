@@ -3,7 +3,7 @@
   "solution": {
     "name": "handover-managment-client-side-solution",
     "id": "02352d59-7106-4ed9-aa72-68b2d21a534f",
-    "version": "1.0.0.0",
+    "version": "1.0.0.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "handover-managment Feature",
         "description": "The feature that activates elements of the handover-managment solution.",
         "id": "f926a70d-9d1a-4dd8-8494-ba80431c5d02",
-        "version": "1.0.0.0"
+        "version": "1.0.0.1"
       }
     ]
   },
