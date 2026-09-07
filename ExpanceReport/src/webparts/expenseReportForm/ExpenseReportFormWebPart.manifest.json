@@ -1,0 +1,22 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "d5e6f7a8-b9c0-4d1e-2f3a-4b5c6d7e8f9a",
+  "alias": "ExpenseReportFormWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": ["SharePointWebPart", "SharePointFullPage"],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Advanced" },
+    "title": { "default": "ExpenseReportForm" },
+    "description": { "default": "טופס החזר הוצאות אישיות" },
+    "officeFabricIconFontName": "Money",
+    "properties": {
+      "listName": "ExpenseReport",
+      "siteUrl": "https://africaisrael.sharepoint.com/ExpenseReports"
+    }
+  }]
+}

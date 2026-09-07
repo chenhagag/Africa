@@ -1,0 +1,534 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.expenseReportForm {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  text-align: right;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #0078d4;
+    padding-bottom: 16px;
+
+    .logo {
+      max-height: 60px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      color: #0078d4;
+      font-size: 24px;
+      margin: 0;
+    }
+  }
+
+  .formInfo {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+
+    .formGroup {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 14px;
+        color: #323130;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        border: 1px solid #8a8886;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-family: inherit;
+
+        &:focus {
+          outline: none;
+          border-color: #0078d4;
+          box-shadow: 0 0 0 1px #0078d4;
+        }
+      }
+    }
+  }
+
+  .userDropdown {
+    background: white;
+    border: 1px solid #8a8886;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    li {
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      border-bottom: 1px solid #f3f2f1;
+
+      &:hover {
+        background-color: #f3f2f1;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+    color: #323130;
+    margin: 24px 0 12px;
+    font-weight: 600;
+  }
+
+  .expenseTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+
+    th {
+      background: #0078d4;
+      color: white;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: right;
+      border: 1px solid #005a9e;
+    }
+
+    td {
+      padding: 6px 8px;
+      border: 1px solid #e1dfdd;
+      vertical-align: middle;
+
+      input, select {
+        width: 100%;
+        padding: 6px 8px;
+        font-size: 14px;
+        border: 1px solid #c8c6c4;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-family: inherit;
+        background: white;
+
+        &:focus {
+          outline: none;
+          border-color: #0078d4;
+        }
+      }
+
+      input[type="number"] {
+        text-align: left;
+        direction: ltr;
+      }
+    }
+
+    .deleteBtn {
+      background: none;
+      border: none;
+      color: #a4262c;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+
+      &:hover {
+        background: #fde7e9;
+      }
+    }
+
+    .totalRow {
+      td {
+        font-weight: 700;
+        background: #f3f2f1;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .addBtn {
+    background: #0078d4;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 24px;
+
+    &:hover {
+      background: #106ebe;
+    }
+  }
+
+  .attachmentsSection {
+    margin: 24px 0;
+    padding: 16px;
+    background: #faf9f8;
+    border: 1px solid #e1dfdd;
+    border-radius: 4px;
+
+    .attachmentsList {
+      margin-top: 8px;
+
+      .attachmentItem {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 0;
+        font-size: 14px;
+
+        .removeAttachment {
+          background: none;
+          border: none;
+          color: #a4262c;
+          cursor: pointer;
+          font-size: 14px;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    input[type="file"] {
+      margin-top: 8px;
+    }
+  }
+
+  .summarySection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    margin: 24px 0;
+    padding: 16px;
+    background: #f3f2f1;
+    border-radius: 4px;
+
+    .summaryItem {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 8px;
+      font-size: 14px;
+
+      .summaryLabel {
+        font-weight: 600;
+      }
+
+      .summaryValue {
+        direction: ltr;
+        text-align: left;
+      }
+    }
+
+    .summaryTotal {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 8px 4px;
+      border-top: 2px solid #323130;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  .signatureSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 24px 0;
+
+    .signatureBox {
+      border: 1px solid #c8c6c4;
+      border-radius: 4px;
+      padding: 12px;
+      text-align: center;
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .signatureImage {
+        display: block;
+        margin: 8px auto;
+        max-width: 300px;
+        max-height: 150px;
+        border: 1px solid #c8c6c4;
+        border-radius: 4px;
+        background: #fff;
+      }
+
+      .signatureCanvas {
+        border: 1px solid #c8c6c4;
+        border-radius: 4px;
+        cursor: crosshair;
+        background: #fff;
+        display: block;
+        margin: 8px auto;
+      }
+
+      .clearSignatureBtn {
+        background: none;
+        border: 1px solid #c8c6c4;
+        border-radius: 4px;
+        padding: 4px 16px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 13px;
+        color: #605e5c;
+        margin-top: 4px;
+
+        &:hover {
+          background: #f3f2f1;
+        }
+      }
+
+      .signatureLine {
+        border-bottom: 1px solid #323130;
+        height: 60px;
+        margin: 16px 20px 8px;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e1dfdd;
+
+    button {
+      padding: 10px 28px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      border: none;
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .saveBtn {
+      background: #edebe9;
+      color: #323130;
+
+      &:hover:not(:disabled) {
+        background: #d2d0ce;
+      }
+    }
+
+    .submitBtn {
+      background: #107c10;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: #0b6a0b;
+      }
+    }
+
+    .printBtn {
+      background: #0078d4;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: #106ebe;
+      }
+    }
+  }
+
+  .statusBar {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+
+    &.success {
+      background: #dff6dd;
+      color: #107c10;
+      border: 1px solid #107c10;
+    }
+
+    &.error {
+      background: #fde7e9;
+      color: #a4262c;
+      border: 1px solid #a4262c;
+    }
+  }
+
+  .loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0078d4;
+  }
+
+  // My reports list
+  .myReportsList {
+    margin-bottom: 24px;
+
+    h3 {
+      margin-bottom: 12px;
+      color: #323130;
+    }
+
+    .reportItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid #e1dfdd;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      &:hover {
+        background: #f3f2f1;
+      }
+
+      .reportDate {
+        font-weight: 600;
+      }
+
+      .reportTotal {
+        direction: ltr;
+      }
+
+      .reportStatus {
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+
+        &.draft {
+          background: #fff4ce;
+          color: #7a6400;
+        }
+
+        &.submitted {
+          background: #dff6dd;
+          color: #107c10;
+        }
+      }
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 14px;
+
+      button {
+        padding: 6px 16px;
+        border: 1px solid #8a8886;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 13px;
+
+        &:hover:not(:disabled) {
+          background: #f3f2f1;
+        }
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: default;
+        }
+      }
+    }
+
+    .newReportBtn {
+      background: #0078d4;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      margin-top: 12px;
+
+      &:hover {
+        background: #106ebe;
+      }
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .expenseReportForm {
+    .actions, .addBtn, .deleteBtn, .attachmentsSection input[type="file"],
+    .myReportsList, .statusBar, .newReportBtn {
+      display: none !important;
+    }
+
+    .expenseTable {
+      td input, td select {
+        border: none;
+        padding: 4px;
+        background: transparent;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+    }
+
+    .formInfo input {
+      border: none;
+      background: transparent;
+    }
+
+    .signatureSection {
+      .signatureBox {
+        break-inside: avoid;
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "expense-report-form-client-side-solution",
+    "id": "a3b7c8d1-e2f4-4a5b-9c6d-7e8f0a1b2c3d",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "User.Read.All"
+      }
+    ],
+    "metadata": {
+      "shortDescription": {
+        "default": "Expense Report Form"
+      },
+      "longDescription": {
+        "default": "Expense Report Form for Africa Israel Residences"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "expense-report-form Feature",
+        "description": "The feature that activates elements of the expense-report-form solution.",
+        "id": "b4c8d2e3-f5a6-4b7c-8d9e-0f1a2b3c4d5e",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/expense-report-form.sppkg"
+  }
+}

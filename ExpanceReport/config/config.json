@@ -1,0 +1,28 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "expense-report-form-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/expenseReportForm/ExpenseReportFormWebPart.js",
+          "manifest": "./src/webparts/expenseReportForm/ExpenseReportFormWebPart.manifest.json"
+        }
+      ]
+    },
+    "expense-migration-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/expenseMigration/ExpenseMigrationWebPart.js",
+          "manifest": "./src/webparts/expenseMigration/ExpenseMigrationWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ExpenseReportFormWebPartStrings": "lib/webparts/expenseReportForm/loc/{locale}.js",
+    "ExpenseMigrationWebPartStrings": "lib/webparts/expenseMigration/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+  }
+}
