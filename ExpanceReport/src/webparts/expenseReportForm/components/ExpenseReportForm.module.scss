@@ -139,8 +139,9 @@
       }
 
       input[type="number"] {
-        text-align: left;
-        direction: ltr;
+        text-align: right;
+        direction: rtl;
+        max-width: 100px;
       }
     }
 
@@ -253,6 +254,11 @@
       font-size: 16px;
       font-weight: 700;
     }
+  }
+
+  // Hidden on screen, visible on print
+  .printOnly {
+    display: none !important;
   }
 
   .signatureSection {
@@ -504,30 +510,163 @@
 // Print styles
 @media print {
   .expenseReportForm {
-    .actions, .addBtn, .deleteBtn, .attachmentsSection input[type="file"],
-    .myReportsList, .statusBar, .newReportBtn {
+    padding: 0;
+    font-size: 11px;
+    max-width: 100%;
+
+    .actions, .addBtn, .deleteBtn, .attachmentsSection,
+    .myReportsList, .statusBar, .newReportBtn, .clearSignatureBtn,
+    .userDropdown {
       display: none !important;
     }
 
-    .expenseTable {
-      td input, td select {
-        border: none;
-        padding: 4px;
-        background: transparent;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
+    // Show print-only elements (manager signature)
+    .printOnly {
+      display: block !important;
+    }
+
+    .header {
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+
+      h1 {
+        font-size: 16px;
+        margin: 0;
       }
     }
 
-    .formInfo input {
-      border: none;
+    .formInfo {
+      margin-bottom: 8px;
+      gap: 12px;
+
+      .formGroup label {
+        font-size: 11px;
+        margin-bottom: 1px;
+      }
+
+      input {
+        border: none;
+        background: transparent;
+        font-size: 11px;
+        padding: 1px;
+      }
+    }
+
+    .sectionTitle {
+      font-size: 12px;
+      margin: 8px 0 4px;
+    }
+
+    .expenseTable {
+      th {
+        padding: 3px 4px;
+        font-size: 10px;
+        background: #e0e0e0 !important;
+        color: #000 !important;
+        border: 1px solid #999;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      td {
+        padding: 1px 3px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        font-size: 10px;
+        line-height: 1.3;
+
+        input, select {
+          border: none !important;
+          padding: 0 !important;
+          font-size: 10px !important;
+          background: transparent !important;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: auto !important;
+          min-height: 0 !important;
+          line-height: 1.3 !important;
+        }
+
+        // Hide DatePicker chrome, show only text
+        :global {
+          .ms-DatePicker {
+            .ms-TextField-fieldGroup {
+              border: none !important;
+              background: transparent !important;
+              min-height: 0 !important;
+              height: auto !important;
+
+              &::after {
+                display: none !important;
+              }
+            }
+
+            .ms-TextField-field {
+              font-size: 10px !important;
+              padding: 0 !important;
+              height: auto !important;
+              min-height: 0 !important;
+              line-height: 1.3 !important;
+            }
+
+            i, .ms-DatePicker-event {
+              display: none !important;
+            }
+          }
+        }
+      }
+
+      .totalRow td {
+        border-top: 1.5px solid #000;
+        border-bottom: none;
+        padding-top: 3px;
+        font-size: 11px;
+      }
+    }
+
+    .summarySection {
+      padding: 6px;
+      margin: 8px 0;
+      gap: 2px 12px;
       background: transparent;
+      border: 1px solid #ccc;
+
+      .summaryItem {
+        padding: 1px 4px;
+        font-size: 10px;
+      }
+
+      .summaryTotal {
+        padding-top: 4px;
+        font-size: 11px;
+      }
     }
 
     .signatureSection {
+      margin: 8px 0;
+      gap: 12px;
+
       .signatureBox {
+        border: none;
+        padding: 4px 0;
         break-inside: avoid;
+
+        label {
+          font-size: 11px;
+          margin-bottom: 2px;
+        }
+
+        .signatureLine {
+          height: 30px;
+          margin: 4px 10px 2px;
+        }
+
+        .signatureCanvas, .signatureImage {
+          border: none;
+          max-height: 80px;
+        }
       }
     }
   }

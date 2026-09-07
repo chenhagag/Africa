@@ -199,9 +199,10 @@ export default class ExpenseReportForm extends React.Component<IExpenseReportFor
 
   private async loadMyReports(): Promise<void> {
     try {
-      // Load reports created by me OR submitted for me (Employee field)
+      // Get current user's login, then resolve their ID on the target site
       const currentUser = await sp.web.currentUser.get();
-      const userId = currentUser.Id;
+      const ensured = await this.web.ensureUser(currentUser.LoginName);
+      const userId = ensured.data.Id;
 
       const items = await this.web.lists.getByTitle(this.props.listName).items
         .select('Id', 'Created', 'TotalAmnt', 'Status', 'Employee/Title', 'Author/Title')
@@ -846,8 +847,8 @@ export default class ExpenseReportForm extends React.Component<IExpenseReportFor
           + הוסף הוצאה
         </button>
 
-        {/* Attachments */}
-        <div className={styles.attachmentsSection}>
+        {/* Attachments - hidden for now */}
+        <div className={styles.attachmentsSection} style={{ display: 'none' }}>
           <h2 className={styles.sectionTitle}>קבצים מצורפים (קבלות)</h2>
 
           {existingAttachments.length > 0 && (
@@ -945,42 +946,9 @@ export default class ExpenseReportForm extends React.Component<IExpenseReportFor
               </div>
             )}
           </div>
-          <div className={styles.signatureBox}>
+          <div className={`${styles.signatureBox} ${styles.printOnly}`}>
             <label>חתימת מנהל</label>
-            {this.state.managerSignatureUrl && !this.state.hasManagerDrawn ? (
-              <div>
-                <img src={this.state.managerSignatureUrl} alt="חתימת מנהל" className={styles.signatureImage} />
-                <button
-                  className={styles.clearSignatureBtn}
-                  onClick={() => this.setState({ managerSignatureUrl: '' })}
-                >
-                  חתום מחדש
-                </button>
-              </div>
-            ) : (
-              <div>
-                <canvas
-                  ref={this.managerCanvasRef}
-                  width={300}
-                  height={150}
-                  className={styles.signatureCanvas}
-                  onMouseDown={(e) => this.handleCanvasMouseDown('manager', e)}
-                  onMouseMove={(e) => this.handleCanvasMouseMove('manager', e)}
-                  onMouseUp={this.handleCanvasEnd}
-                  onMouseLeave={this.handleCanvasEnd}
-                  onTouchStart={(e) => this.handleCanvasTouchStart('manager', e)}
-                  onTouchMove={(e) => this.handleCanvasTouchMove('manager', e)}
-                  onTouchEnd={this.handleCanvasEnd}
-                  style={{ touchAction: 'none' }}
-                />
-                <button
-                  className={styles.clearSignatureBtn}
-                  onClick={() => this.clearSignature('manager')}
-                >
-                  נקה חתימה
-                </button>
-              </div>
-            )}
+            <div className={styles.signatureLine}></div>
           </div>
         </div>
 

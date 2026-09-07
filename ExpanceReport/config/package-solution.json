@@ -3,7 +3,7 @@
   "solution": {
     "name": "expense-report-form-client-side-solution",
     "id": "a3b7c8d1-e2f4-4a5b-9c6d-7e8f0a1b2c3d",
-    "version": "1.0.0.1",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
