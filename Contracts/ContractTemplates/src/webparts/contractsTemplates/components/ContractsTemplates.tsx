@@ -99,9 +99,10 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
     return `CONT-${ts}-${templateId}.docx`;
   };
   
-  const openWebEdit = (serverRelativeUrl: string) => {
+  const openInDesktop = (serverRelativeUrl: string) => {
     const path = serverRelativeUrl.startsWith("/") ? serverRelativeUrl : `/${serverRelativeUrl}`;
-    window.open(`${window.location.origin}${path}?web=1`, "_blank", "noopener,noreferrer");
+    const fullUrl = `${window.location.origin}${path}`;
+    window.location.href = `ms-word:ofe|u|${fullUrl}`;
   };
   
   
@@ -124,7 +125,7 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
         newFileName
       });
   
-      openWebEdit(res.newFileServerRelativeUrl);
+      openInDesktop(res.newFileServerRelativeUrl);
     } catch (e: any) {
       setError(e?.message || "שגיאה ביצירת מסמך מהתבנית.");
     } finally {

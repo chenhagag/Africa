@@ -33,7 +33,8 @@ const COMPANIES_LIST_DISPLAY_NAME = "חברות";
 const COMPANIES_FIELDS = {
   title: "Title",
   address: "Address",
-  hp: "hp"
+  hp: "hp",
+  hide: "hide"
 };
 
 const EXTRA_FIELDS_LIST_DISPLAY_NAME = "ניהול שדות נוספים";
@@ -387,11 +388,24 @@ async function getListId(siteId: string, token: string, displayName: string, wan
   throw new Error(`List not found: ${displayName}`);
 }
 
+async function getAllListItems(siteId: string, listId: string, token: string, selectFields: string): Promise<Array<{ id: string; fields: Record<string, any> }>> {
+  type PageResult = { value: Array<{ id: string; fields: Record<string, any> }>; "@odata.nextLink"?: string };
+  let url: string | null = `/sites/${siteId}/lists/${listId}/items?expand=fields($select=${selectFields})&$top=200`;
+  const all: Array<{ id: string; fields: Record<string, any> }> = [];
+  while (url) {
+    const isFullUrl = url.startsWith("http");
+    const res = isFullUrl
+      ? await (await fetch(url, { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } })).json() as PageResult
+      : await graph<PageResult>(url, token);
+    all.push(...(res.value || []));
+    url = res["@odata.nextLink"] || null;
+  }
+  return all;
+}
+
 async function getListItemsByField(siteId: string, listId: string, token: string, fieldInternalName: string): Promise<string[]> {
-  const res = await graph<{ value: Array<{ id: string; fields: Record<string, any> }> }>(
-    `/sites/${siteId}/lists/${listId}/items?expand=fields($select=${fieldInternalName})`, token
-  );
-  const values = res.value
+  const items = await getAllListItems(siteId, listId, token, fieldInternalName);
+  const values = items
     .map(it => (it.fields?.[fieldInternalName] ?? "").toString().trim())
     .filter(Boolean);
   return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b, "he"));
@@ -402,10 +416,7 @@ type ListItemFields = { id: string; fields: Record<string, any> };
 async function getListItemsFields(siteId: string, listId: string, token: string, selectFields: string[]): Promise<ListItemFields[]> {
   const unique = Array.from(new Set(selectFields.filter(Boolean)));
   const select = unique.join(",");
-  const res = await graph<{ value: Array<{ id: string; fields: Record<string, any> }> }>(
-    `/sites/${siteId}/lists/${listId}/items?expand=fields($select=${select})`, token
-  );
-  return res.value || [];
+  return getAllListItems(siteId, listId, token, select);
 }
 
 async function createListItem(siteId: string, listId: string, token: string, fields: Record<string, any>): Promise<{ id: string }> {
@@ -1008,12 +1019,15 @@ async function loadLookups() {
     const companyItems = await getListItemsFields(siteId, companiesListId, token, [
       COMPANIES_FIELDS.title,
       COMPANIES_FIELDS.address,
-      COMPANIES_FIELDS.hp
+      COMPANIES_FIELDS.hp,
+      COMPANIES_FIELDS.hide
     ]);
 
     companiesByTitle = new Map<string, Company>();
     const companyTitles: string[] = [];
     companyItems.forEach(it => {
+      const hideVal = it.fields?.[COMPANIES_FIELDS.hide];
+      if (hideVal === true || hideVal === "true" || hideVal === 1) return;
       const title = (it.fields?.[COMPANIES_FIELDS.title] ?? "").toString().trim();
       if (!title) return;
       const address = (it.fields?.[COMPANIES_FIELDS.address] ?? "").toString().trim();
