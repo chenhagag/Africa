@@ -19,6 +19,14 @@ const HANDOVER_STATUSES = [
   'מסירת חזקה מהנדס'
 ];
 
+const HANDOVER_ICONS: Record<string, string> = {
+  'זומן לטרום': '📅',
+  'טרום מסירה': '🔑',
+  'טרום מסירה מהנדס': '📋',
+  'מסירת חזקה': '🏠',
+  'מסירת חזקה מהנדס': '✔️'
+};
+
 // Room groups order for type breakdown
 const ROOM_ORDER = [2, 3, 4, 5, 6];
 
@@ -332,9 +340,19 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
               {HANDOVER_STATUSES.map((status: string) => (
                 <tr key={status}>
                   <td className={styles.tdTotal}>{southCounts[status]}</td>
-                  <td className={styles.tdType}>{status}</td>
+                  <td className={styles.tdType}>
+                    <span className={styles.statusWithIcon}>
+                      <span className={styles.statusIcon}>{HANDOVER_ICONS[status]}</span>
+                      {status}
+                    </span>
+                  </td>
                   <td className={styles.tdProject}>{southCounts[status] + northCounts[status]}</td>
-                  <td className={styles.tdType}>{status}</td>
+                  <td className={styles.tdType}>
+                    <span className={styles.statusWithIcon}>
+                      <span className={styles.statusIcon}>{HANDOVER_ICONS[status]}</span>
+                      {status}
+                    </span>
+                  </td>
                   <td className={styles.tdTotal}>{northCounts[status]}</td>
                 </tr>
               ))}
@@ -553,6 +571,7 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
                     const color = this._getApartmentColor(apt);
                     const outline = this._getFinishOutline(apt);
                     const hasHandover = !!apt.handoverStatus;
+                    const handoverIcon = HANDOVER_ICONS[apt.handoverStatus];
                     return (
                       <div
                         key={apt.id}
@@ -561,6 +580,9 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
                         onClick={() => this._onApartmentClick(apt)}
                         title={this._buildTooltip(apt)}
                       >
+                        {handoverIcon && (
+                          <span className={styles.handoverIcon}>{handoverIcon}</span>
+                        )}
                         <span className={styles.apartmentNumber}>{apt.apartmentNumber}</span>
                         {apt.apartmentType && (
                           <span className={styles.apartmentType}>{apt.apartmentType}</span>
@@ -716,6 +738,15 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
                   {FINISH_STATUSES_LEGEND.map((status: string) => (
                     <div key={status} className={styles.legendItem}>
                       <div className={styles.legendColor} style={{ border: `3px solid ${this.props.finishColors[status] || '#999'}`, backgroundColor: 'transparent' }} />
+                      <span>{status}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className={styles.legend}>
+                  <span className={styles.legendTitle}>סטטוס מסירה:</span>
+                  {HANDOVER_STATUSES.map((status: string) => (
+                    <div key={status} className={styles.legendItem}>
+                      <span className={styles.legendIcon}>{HANDOVER_ICONS[status]}</span>
                       <span>{status}</span>
                     </div>
                   ))}
