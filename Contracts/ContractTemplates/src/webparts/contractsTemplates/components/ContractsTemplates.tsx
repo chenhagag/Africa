@@ -3,7 +3,12 @@ import styles from "./ContractsTemplates.module.scss";
 import { SPFI } from "@pnp/sp";
 
 import { TemplateService } from "../services/TemplateService";
+import { SupplierImportService } from "../services/SupplierImportService";
+import { MadadImportService } from "../services/MadadImportService";
 import { ITemplateType, ITemplateLink } from "../models/models";
+
+import { SUPPLIERS_DATA } from "../data/suppliersData";
+import { MEDAD_DATA } from "../data/madadData";
 
 import {
   Spinner,
@@ -38,6 +43,14 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
 
   const [types, setTypes] = React.useState<ITemplateType[]>([]);
   const [allTemplates, setAllTemplates] = React.useState<ITemplateLink[]>([]);
+
+  // Supplier import state
+  const [importStatus, setImportStatus] = React.useState("");
+  const [importing, setImporting] = React.useState(false);
+
+  // Medad import state
+  const [madadImportStatus, setMadadImportStatus] = React.useState("");
+  const [madadImporting, setMadadImporting] = React.useState(false);
 
   const [view, setView] = React.useState<ViewState>("types");
   const [selectedType, setSelectedType] = React.useState<ITemplateType | undefined>();
@@ -90,6 +103,47 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
 
   const hasSearch = !!(search || "").trim();
 
+  const onImportSuppliers = async (): Promise<void> => {
+    if (!confirm("למחוק את כל הספקים הקיימים ולייבא מחדש מהקובץ?")) return;
+    setImporting(true);
+    setImportStatus("מתחיל...");
+    try {
+      const importService = new SupplierImportService(props.sp);
+
+      // Delete existing
+      setImportStatus("מוחק פריטים קיימים...");
+      const deleted = await importService.deleteAllItems((msg) => setImportStatus(msg));
+      setImportStatus(`נמחקו ${deleted} פריטים. מתחיל ייבוא...`);
+
+      // Import
+      const result = await importService.importData(SUPPLIERS_DATA, (msg) => setImportStatus(msg));
+      setImportStatus(`סיום! נוספו: ${result.added}, שגיאות: ${result.errors}`);
+    } catch (e: any) {
+      setImportStatus(`שגיאה: ${e.message}`);
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const onImportMedad = async (): Promise<void> => {
+    if (!confirm("למחוק את כל ערכי המדד הקיימים ולייבא מחדש מהקובץ?")) return;
+    setMadadImporting(true);
+    setMadadImportStatus("מתחיל...");
+    try {
+      const importService = new MadadImportService(props.sp);
+
+      setMadadImportStatus("מוחק פריטים קיימים...");
+      const deleted = await importService.deleteAllItems((msg) => setMadadImportStatus(msg));
+      setMadadImportStatus(`נמחקו ${deleted} פריטים. מתחיל ייבוא...`);
+
+      const result = await importService.importData(MEDAD_DATA, (msg) => setMadadImportStatus(msg));
+      setMadadImportStatus(`סיום! נוספו: ${result.added}, שגיאות: ${result.errors}`);
+    } catch (e: any) {
+      setMadadImportStatus(`שגיאה: ${e.message}`);
+    } finally {
+      setMadadImporting(false);
+    }
+  };
 
   const buildNewFileName = (templateId: number) => {
     const now = new Date();
@@ -99,10 +153,10 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
     return `CONT-${ts}-${templateId}.docx`;
   };
   
-  const openInDesktop = (serverRelativeUrl: string) => {
+  const openWebEdit = (serverRelativeUrl: string) => {
     const path = serverRelativeUrl.startsWith("/") ? serverRelativeUrl : `/${serverRelativeUrl}`;
     const fullUrl = `${window.location.origin}${path}`;
-    window.location.href = `ms-word:ofe|u|${fullUrl}`;
+    window.open(`${fullUrl}?web=1`, "_blank");
   };
   
   
@@ -125,7 +179,7 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
         newFileName
       });
   
-      openInDesktop(res.newFileServerRelativeUrl);
+      openWebEdit(res.newFileServerRelativeUrl);
     } catch (e: any) {
       setError(e?.message || "שגיאה ביצירת מסמך מהתבנית.");
     } finally {
@@ -269,6 +323,39 @@ export default function ContractsTemplates(props: ITemplatePickerProps) {
           </div>
         </div>
       )}
+      {/* ====== ייבוא זמני — מוסתר ======
+       * כפתורי ייבוא ספקים + ערכי מדד. הועברו בהצלחה (2026-10-05):
+       *   - ספקים: 7,040 שורות → רשימת "רשימת ספקים"
+       *   - ערכי מדד: 5,365 שורות → רשימת "ערכי מדד"
+       * TODO: למחוק בלוק זה + imports + services + data files כשלא צריך יותר כדוגמה.
+       *   קבצים למחיקה: SupplierImportService.ts, MadadImportService.ts, suppliersData.ts, madadData.ts
+       */}
+      {false && <div style={{ marginTop: 30, padding: 16, border: "1px dashed #ccc", borderRadius: 4, display: "flex", gap: 24 }}>
+        <div>
+          <DefaultButton
+            text="ייבוא ספקים מקובץ"
+            onClick={onImportSuppliers}
+            disabled={importing || loading}
+          />
+          {importStatus && (
+            <div style={{ marginTop: 8, fontSize: 13, color: importing ? "#0078d4" : "#333" }}>
+              {importStatus}
+            </div>
+          )}
+        </div>
+        <div>
+          <DefaultButton
+            text="ייבוא ערכי מדד מקובץ"
+            onClick={onImportMedad}
+            disabled={madadImporting || loading}
+          />
+          {madadImportStatus && (
+            <div style={{ marginTop: 8, fontSize: 13, color: madadImporting ? "#0078d4" : "#333" }}>
+              {madadImportStatus}
+            </div>
+          )}
+        </div>
+      </div>}
     </div>
   );
 }
