@@ -63,7 +63,7 @@ export default class HandoverManagmentWebPart extends BaseClientSideWebPart<IHan
       HandoverManagment,
       {
         siteUrl: this.properties.siteUrl || this.context.pageContext.web.absoluteUrl,
-        listName: this.properties.listName || 'andreius3',
+        listName: this.properties.listName || 'DUOTLV',
         spHttpClient: this.context.spHttpClient,
         saleColors: saleColors,
         finishColors: finishColors,
@@ -111,7 +111,7 @@ export default class HandoverManagmentWebPart extends BaseClientSideWebPart<IHan
                 PropertyPaneTextField('listName', {
                   label: 'שם הרשימה (בניין)',
                   description: 'שם הרשימה בSharePoint',
-                  value: 'andreius3'
+                  value: 'DUOTLV'
                 })
               ]
             },

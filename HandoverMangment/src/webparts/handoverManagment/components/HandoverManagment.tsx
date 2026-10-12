@@ -794,6 +794,7 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
             onDismiss={this._onModalDismiss}
           />
         )}
+
       </div>
     );
   }
