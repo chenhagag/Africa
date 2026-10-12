@@ -7,6 +7,12 @@ export interface IListInfo {
   RootFolder: { ServerRelativeUrl: string };
 }
 
+export interface IFieldInfo {
+  InternalName: string;
+  Title: string;
+  TypeAsString: string;
+}
+
 export class BuildingService {
   private _spHttpClient: SPHttpClient;
   private _siteUrl: string;
@@ -100,6 +106,27 @@ export class BuildingService {
       return `${window.location.origin}${listRelUrl}/DispForm.aspx?ID=${itemId}`;
     }
     return `${this._siteUrl}/Lists/${listName}/DispForm.aspx?ID=${itemId}`;
+  }
+
+  public getListFields(listName: string): Promise<IFieldInfo[]> {
+    const url = `${this._siteUrl}/_api/web/lists/getbytitle('${listName}')/fields?$filter=Hidden eq false and ReadOnlyField eq false&$select=InternalName,Title,TypeAsString&$top=200`;
+    return this._spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => response.json())
+      .then((data: { value?: IFieldInfo[] }) => data.value || []);
+  }
+
+  public getItemAllFields(listName: string, itemId: number): Promise<Record<string, unknown>> {
+    const url = `${this._siteUrl}/_api/web/lists/getbytitle('${listName}')/items(${itemId})`;
+    return this._spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => response.json());
+  }
+
+  public getEditFormUrl(listName: string, itemId: number): string {
+    const listRelUrl = this._listUrlMap[listName];
+    if (listRelUrl) {
+      return `${window.location.origin}${listRelUrl}/EditForm.aspx?ID=${itemId}`;
+    }
+    return `${this._siteUrl}/Lists/${listName}/EditForm.aspx?ID=${itemId}`;
   }
 
   private _extractApartmentNumber(title: string): number {

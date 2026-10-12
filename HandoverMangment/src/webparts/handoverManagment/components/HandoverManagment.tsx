@@ -5,6 +5,7 @@ import { BuildingService } from '../services/BuildingService';
 import { ComboBox, IComboBoxOption, IComboBox } from '@fluentui/react/lib/ComboBox';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { Icon } from '@fluentui/react/lib/Icon';
+import ApartmentDetailsModal from './ApartmentDetailsModal';
 
 const SALE_STATUSES = ['פנויה', 'מכורה', 'בעלים', 'הולד'];
 const FINISH_STATUSES_LEGEND = ['גמר מינימלי', 'גמר מלא סטנדרט', 'גמר מלא טיוב תכנון', 'דירת שיווק'];
@@ -37,6 +38,7 @@ interface IHandoverManagmentState {
   loading: boolean;
   error: string;
   activeTab: TabKey;
+  selectedApartment: IApartment | null;
 }
 
 export default class HandoverManagment extends React.Component<IHandoverManagmentProps, IHandoverManagmentState> {
@@ -51,7 +53,8 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
       selectedList: props.listName,
       loading: true,
       error: '',
-      activeTab: 'towers'
+      activeTab: 'towers',
+      selectedApartment: null
     };
   }
 
@@ -122,12 +125,11 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
   }
 
   private _onApartmentClick(apartment: IApartment): void {
-    const url = this._service.getItemFormUrl(this.state.selectedList, apartment.id);
-    const width = 800;
-    const height = 600;
-    const left = (window.screen.width - width) / 2;
-    const top = (window.screen.height - height) / 2;
-    window.open(url, 'ApartmentDetails', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+    this.setState({ selectedApartment: apartment });
+  }
+
+  private _onModalDismiss = (): void => {
+    this.setState({ selectedApartment: null });
   }
 
   private _groupByFloor(apartments: IApartment[]): Map<number, IApartment[]> {
@@ -644,7 +646,7 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
   }
 
   public render(): React.ReactElement<IHandoverManagmentProps> {
-    const { apartments, lists, selectedList, loading, error, activeTab } = this.state;
+    const { apartments, lists, selectedList, loading, error, activeTab, selectedApartment } = this.state;
     const towers = this._groupByTower(apartments);
     const hasTowerData = towers.south.length > 0 || towers.north.length > 0;
     const hasMiddle = towers.middle.length > 0;
@@ -782,6 +784,15 @@ export default class HandoverManagment extends React.Component<IHandoverManagmen
 
         {!loading && !error && apartments.length === 0 && selectedList && (
           <div className={styles.loading}>לא נמצאו דירות ברשימה זו</div>
+        )}
+
+        {selectedApartment && (
+          <ApartmentDetailsModal
+            apartment={selectedApartment}
+            service={this._service}
+            listName={selectedList}
+            onDismiss={this._onModalDismiss}
+          />
         )}
       </div>
     );
