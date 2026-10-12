@@ -377,16 +377,25 @@ async function getSiteId(token: string): Promise<string> {
 /* =========
    SP list helpers
    ========= */
-async function getListId(siteId: string, token: string, displayName: string, wantedServerRelativeUrl: string): Promise<string> {
-  const lists = await graph<{ value: Array<{ id: string; displayName: string; webUrl?: string }> }>(
+let cachedSiteLists: Array<{ id: string; displayName: string; webUrl?: string }> | null = null;
+
+async function getSiteLists(siteId: string, token: string): Promise<Array<{ id: string; displayName: string; webUrl?: string }>> {
+  if (cachedSiteLists) return cachedSiteLists;
+  const res = await graph<{ value: Array<{ id: string; displayName: string; webUrl?: string }> }>(
     `/sites/${siteId}/lists?$select=id,displayName,webUrl`, token
   );
+  cachedSiteLists = res.value;
+  return cachedSiteLists;
+}
 
-  let found = lists.value.find(l => l.displayName === displayName);
+async function getListId(siteId: string, token: string, displayName: string, wantedServerRelativeUrl: string): Promise<string> {
+  const lists = await getSiteLists(siteId, token);
+
+  let found = lists.find(l => l.displayName === displayName);
   if (found) return found.id;
 
   const wanted = wantedServerRelativeUrl.toLowerCase();
-  found = lists.value.find(l => (l.webUrl || "").toLowerCase().endsWith(wanted));
+  found = lists.find(l => (l.webUrl || "").toLowerCase().endsWith(wanted));
   if (found) return found.id;
 
   throw new Error(`List not found: ${displayName}`);
@@ -988,43 +997,49 @@ async function loadLookups() {
     const token = await getGraphToken();
     const siteId = await getSiteId(token);
 
-    setSelectDisabled("statusSelect", true, "— טוען סטטוס… —");
-    const statusListId = await getListId(siteId, token, STATUS_LIST_DISPLAY_NAME, STATUS_LIST_SERVER_RELATIVE_URL);
-    const statusValues = await getListItemsByField(siteId, statusListId, token, STATUS_FIELD_NAME);
+    // Phase 1: fetch all list IDs in parallel (single API call thanks to cache)
+    const [statusListId, templatesListId, sitesListId, munListId, idxListId, madadValListId, companiesListId, supTypeListId, suppliersListId] = await Promise.all([
+      getListId(siteId, token, STATUS_LIST_DISPLAY_NAME, STATUS_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, TEMPLATES_LIST_DISPLAY_NAME, TEMPLATES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, SITES_LIST_DISPLAY_NAME, SITES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, MUNICIPALITIES_LIST_DISPLAY_NAME, MUNICIPALITIES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, INDEX_TYPES_LIST_DISPLAY_NAME, INDEX_TYPES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, MADAD_VALUES_LIST_DISPLAY_NAME, MADAD_VALUES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, COMPANIES_LIST_DISPLAY_NAME, COMPANIES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, SUPPLIER_TYPES_LIST_DISPLAY_NAME, SUPPLIER_TYPES_LIST_SERVER_RELATIVE_URL),
+      getListId(siteId, token, SUPPLIERS_LIST_DISPLAY_NAME, SUPPLIERS_LIST_SERVER_RELATIVE_URL),
+    ]);
+
+    // Phase 2: fetch all list items in parallel
+    const [statusValues, templateValues, siteValues, munValues, idxValues, madadItems, companyItems, supTypes, supplierItems] = await Promise.all([
+      getListItemsByField(siteId, statusListId, token, STATUS_FIELD_NAME),
+      getListItemsByField(siteId, templatesListId, token, TEMPLATES_FIELD_NAME),
+      getListItemsByField(siteId, sitesListId, token, SITES_FIELD_NAME),
+      getListItemsByField(siteId, munListId, token, MUNICIPALITIES_FIELD_NAME),
+      getListItemsByField(siteId, idxListId, token, INDEX_TYPES_FIELD_NAME),
+      getListItemsFields(siteId, madadValListId, token, [MADAD_VALUES_FIELDS.date, MADAD_VALUES_FIELDS.value]),
+      getListItemsFields(siteId, companiesListId, token, [COMPANIES_FIELDS.title, COMPANIES_FIELDS.address, COMPANIES_FIELDS.hp, COMPANIES_FIELDS.hide]),
+      getListItemsByField(siteId, supTypeListId, token, SUPPLIER_TYPES_FIELD_NAME),
+      getListItemsFields(siteId, suppliersListId, token, [SUPPLIERS_FIELDS.title, SUPPLIERS_FIELDS.address, SUPPLIERS_FIELDS.type]),
+    ]);
+
+    // Phase 3: fill UI (synchronous, fast)
     fillSelectById("statusSelect", statusValues, "— בחר/י סטטוס —");
     setSelectDisabled("statusSelect", false);
 
-
-    setSelectDisabled("templateSelect", true, "— טוען תבניות… —");
-    const templatesListId = await getListId(siteId, token, TEMPLATES_LIST_DISPLAY_NAME, TEMPLATES_LIST_SERVER_RELATIVE_URL);
-    const templateValues = await getListItemsByField(siteId, templatesListId, token, TEMPLATES_FIELD_NAME);
     fillSelectById("templateSelect", templateValues, "— בחר/י תבנית —");
     setSelectDisabled("templateSelect", false);
 
-    setSelectDisabled("siteSelect", true, "— טוען אתרים… —");
-    const sitesListId = await getListId(siteId, token, SITES_LIST_DISPLAY_NAME, SITES_LIST_SERVER_RELATIVE_URL);
-    const siteValues = await getListItemsByField(siteId, sitesListId, token, SITES_FIELD_NAME);
     fillSelectById("siteSelect", siteValues, "— בחר/י אתר —");
     setSelectDisabled("siteSelect", false);
 
-    setSelectDisabled("municipalitySelect", true, "— טוען רשויות… —");
-    const munListId = await getListId(siteId, token, MUNICIPALITIES_LIST_DISPLAY_NAME, MUNICIPALITIES_LIST_SERVER_RELATIVE_URL);
-    const munValues = await getListItemsByField(siteId, munListId, token, MUNICIPALITIES_FIELD_NAME);
     fillSelectById("municipalitySelect", munValues, "— בחר/י רשות —");
     setSelectDisabled("municipalitySelect", false);
 
-    setSelectDisabled("costIndexTypeSelect", true, "— טוען סוגי מדדים… —");
-    const idxListId = await getListId(siteId, token, INDEX_TYPES_LIST_DISPLAY_NAME, INDEX_TYPES_LIST_SERVER_RELATIVE_URL);
-    const idxValues = await getListItemsByField(siteId, idxListId, token, INDEX_TYPES_FIELD_NAME);
     fillSelectById("costIndexTypeSelect", idxValues, "— בחר/י סוג מדד —");
     setSelectDisabled("costIndexTypeSelect", false);
 
-    // Load madad values list (date → points)
-    setSelectDisabled("costBaseIndexDateSelect", true, "— טוען ערכי מדד… —");
-    const madadValListId = await getListId(siteId, token, MADAD_VALUES_LIST_DISPLAY_NAME, MADAD_VALUES_LIST_SERVER_RELATIVE_URL);
-    const madadItems = await getListItemsFields(siteId, madadValListId, token, [
-      MADAD_VALUES_FIELDS.date, MADAD_VALUES_FIELDS.value
-    ]);
+    // Madad values (date → points)
     madadValuesByDate = new Map<string, string>();
     const madadDates: string[] = [];
     madadItems.forEach(it => {
@@ -1032,7 +1047,6 @@ async function loadLookups() {
       const val = (it.fields?.[MADAD_VALUES_FIELDS.value] ?? "").toString().trim();
       if (!rawDate) return;
       const d = rawDate.substring(0, 10); // YYYY-MM-DD
-      const label = d.split("-").reverse().join("/"); // DD/MM/YYYY
       madadValuesByDate.set(d, val);
       madadDates.push(d);
     });
@@ -1054,15 +1068,7 @@ async function loadLookups() {
       });
     }
 
-    setSelectDisabled("companyASelect", true, "— טוען חברות… —");
-    const companiesListId = await getListId(siteId, token, COMPANIES_LIST_DISPLAY_NAME, COMPANIES_LIST_SERVER_RELATIVE_URL);
-    const companyItems = await getListItemsFields(siteId, companiesListId, token, [
-      COMPANIES_FIELDS.title,
-      COMPANIES_FIELDS.address,
-      COMPANIES_FIELDS.hp,
-      COMPANIES_FIELDS.hide
-    ]);
-
+    // Companies
     companiesByTitle = new Map<string, Company>();
     const companyTitles: string[] = [];
     companyItems.forEach(it => {
@@ -1078,19 +1084,11 @@ async function loadLookups() {
     fillSelectById("companyASelect", Array.from(new Set(companyTitles)).sort((a, b) => a.localeCompare(b, "he")), "— בחר/י חברה —");
     setSelectDisabled("companyASelect", false);
 
-    setSelectDisabled("supplierTypeSelect", true, "— טוען סוגי ספקים… —");
-    const supTypeListId = await getListId(siteId, token, SUPPLIER_TYPES_LIST_DISPLAY_NAME, SUPPLIER_TYPES_LIST_SERVER_RELATIVE_URL);
-    const supTypes = await getListItemsByField(siteId, supTypeListId, token, SUPPLIER_TYPES_FIELD_NAME);
+    // Supplier types
     fillSelectById("supplierTypeSelect", supTypes, "— בחר/י סוג ספק —");
     setSelectDisabled("supplierTypeSelect", false);
 
-    const suppliersListId = await getListId(siteId, token, SUPPLIERS_LIST_DISPLAY_NAME, SUPPLIERS_LIST_SERVER_RELATIVE_URL);
-    const supplierItems = await getListItemsFields(siteId, suppliersListId, token, [
-      SUPPLIERS_FIELDS.title,
-      SUPPLIERS_FIELDS.address,
-      SUPPLIERS_FIELDS.type
-    ]);
-
+    // Suppliers
     suppliersAll = supplierItems
       .map(it => ({
         title: (it.fields?.[SUPPLIERS_FIELDS.title] ?? "").toString().trim(),
@@ -1162,6 +1160,25 @@ function toDateInputValue(val: any): string {
   return s.length >= 10 ? s.substring(0, 10) : s; // YYYY-MM-DD
 }
 
+/** YYYY-MM-DD → DD/MM/YYYY for display in Word document */
+function formatDateForDoc(isoDate: string): string {
+  if (!isoDate || isoDate.length < 10) return isoDate;
+  const [y, m, d] = isoDate.substring(0, 10).split("-");
+  if (!y || !m || !d) return isoDate;
+  return `${d}/${m}/${y}`;
+}
+
+/** DD/MM/YYYY → YYYY-MM-DD (reverse of formatDateForDoc, for loading from document back to date input) */
+function parseDateFromDoc(docDate: string): string {
+  if (!docDate) return "";
+  // Already ISO format
+  if (/^\d{4}-\d{2}-\d{2}/.test(docDate)) return docDate.substring(0, 10);
+  // DD/MM/YYYY format
+  const parts = docDate.split("/");
+  if (parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  return docDate;
+}
+
 /* =========
    ✅ Apply all loaded fields into UI + uiState
    ========= */
@@ -1183,7 +1200,7 @@ function applyLoadedFieldsToUI(fields: Record<string, any>) {
   const site = pickField(fields, "SiteName");
   const municipality = pickField(fields, "Municipality");
   const workDescription = pickField(fields, "WorkDescription");
-  const signDate = pickField(fields, "SignDate0");
+  const signDate = pickField(fields, "SignDate0", "SignDate", "signDate");
   const startDate = pickField(fields, "StartDate");
   const months = pickField(fields, "DurationMonths");
   const expectedEnd = pickField(fields, "ExpectedEndDate");
@@ -1828,10 +1845,10 @@ export async function runUpdateDoc() {
       [TAGS.municipality]: municipality,
       [TAGS.workDescription]: workDescription,
 
-      [TAGS.signDate]: signDate,
-      [TAGS.startDate]: startDate,
+      [TAGS.signDate]: formatDateForDoc(signDate),
+      [TAGS.startDate]: formatDateForDoc(startDate),
       [TAGS.months]: months,
-      [TAGS.expectedEndDate]: expectedEndDate,
+      [TAGS.expectedEndDate]: formatDateForDoc(expectedEndDate),
 
       [TAGS.status]: status,
 
@@ -1844,7 +1861,7 @@ export async function runUpdateDoc() {
       [TAGS.costContractScope]: uiState.cost.contractScope,
       [TAGS.costCurrency]: uiState.cost.currency,
       [TAGS.costIndexType]: uiState.cost.indexType,
-      [TAGS.costBaseIndexDate]: uiState.cost.baseIndexDate,
+      [TAGS.costBaseIndexDate]: formatDateForDoc(uiState.cost.baseIndexDate),
       [TAGS.costIndexMode]: uiState.cost.indexMode,
       [TAGS.costIndexPoints]: uiState.cost.indexPoints,
       [TAGS.costPaymentTerms]: uiState.cost.paymentTerms,
@@ -1854,7 +1871,7 @@ export async function runUpdateDoc() {
       [TAGS.tzadAPercent]: tzadAPercent,
       [TAGS.madadTypeTitle]: madadTypeTitle,
       [TAGS.isKnownTitle]: isKnownTitle,
-      [TAGS.madadBase]: madadBase,
+      [TAGS.madadBase]: formatDateForDoc(madadBase),
       [TAGS.madadPoints]: madadPoints,
       [TAGS.jobDesc]: jobDesc,
 
@@ -1910,10 +1927,10 @@ export async function loadFromDocumentIntoUI() {
       if (docValues[TAGS.site]) setSelectValue("siteSelect", docValues[TAGS.site]);
       if (docValues[TAGS.municipality]) setSelectValue("municipalitySelect", docValues[TAGS.municipality]);
       if (docValues[TAGS.workDescription]) setInputValue("workDescriptionInput", docValues[TAGS.workDescription]);
-      if (docValues[TAGS.signDate]) setInputValue("signDateInput", docValues[TAGS.signDate]);
-      if (docValues[TAGS.startDate]) setInputValue("startDateInput", docValues[TAGS.startDate]);
+      if (docValues[TAGS.signDate]) setInputValue("signDateInput", parseDateFromDoc(docValues[TAGS.signDate]));
+      if (docValues[TAGS.startDate]) setInputValue("startDateInput", parseDateFromDoc(docValues[TAGS.startDate]));
       if (docValues[TAGS.months]) setInputValue("monthsInput", docValues[TAGS.months]);
-      if (docValues[TAGS.expectedEndDate]) setInputValue("expectedEndDateInput", docValues[TAGS.expectedEndDate]);
+      if (docValues[TAGS.expectedEndDate]) setInputValue("expectedEndDateInput", parseDateFromDoc(docValues[TAGS.expectedEndDate]));
       if (docValues[TAGS.status]) setSelectValue("statusSelect", docValues[TAGS.status]);
 
       // --- Party A ---
@@ -1956,8 +1973,8 @@ export async function loadFromDocumentIntoUI() {
         setSelectValue("costIndexTypeSelect", docValues[TAGS.costIndexType]);
       }
       if (docValues[TAGS.costBaseIndexDate]) {
-        uiState.cost.baseIndexDate = docValues[TAGS.costBaseIndexDate];
-        setSelectValue("costBaseIndexDateSelect", docValues[TAGS.costBaseIndexDate]);
+        uiState.cost.baseIndexDate = parseDateFromDoc(docValues[TAGS.costBaseIndexDate]);
+        setSelectValue("costBaseIndexDateSelect", uiState.cost.baseIndexDate);
       }
       if (docValues[TAGS.costIndexMode]) {
         uiState.cost.indexMode = docValues[TAGS.costIndexMode];
