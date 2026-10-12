@@ -29,6 +29,9 @@ const MUNICIPALITIES_FIELD_NAME = "Title";
 const INDEX_TYPES_LIST_DISPLAY_NAME = "סוגי מדדים";
 const INDEX_TYPES_FIELD_NAME = "Title";
 
+const MADAD_VALUES_LIST_DISPLAY_NAME = "ערכי מדד";
+const MADAD_VALUES_FIELDS = { date: "MadadDate", value: "MadadValue" };
+
 const COMPANIES_LIST_DISPLAY_NAME = "חברות";
 const COMPANIES_FIELDS = {
   title: "Title",
@@ -185,6 +188,7 @@ const COMPANIES_LIST_SERVER_RELATIVE_URL = listUrl(COMPANIES_LIST_DISPLAY_NAME);
 const SUPPLIER_TYPES_LIST_SERVER_RELATIVE_URL = listUrl(SUPPLIER_TYPES_LIST_DISPLAY_NAME);
 const SUPPLIERS_LIST_SERVER_RELATIVE_URL = listUrl(SUPPLIERS_LIST_DISPLAY_NAME);
 const EXTRA_FIELDS_LIST_SERVER_RELATIVE_URL = listUrl(EXTRA_FIELDS_LIST_DISPLAY_NAME);
+const MADAD_VALUES_LIST_SERVER_RELATIVE_URL = listUrl(MADAD_VALUES_LIST_DISPLAY_NAME);
 
 /* =========
    MSAL
@@ -555,6 +559,7 @@ type Supplier = { title: string; address: string; type: string };
 
 let companiesByTitle = new Map<string, Company>();
 let suppliersAll: Supplier[] = [];
+let madadValuesByDate = new Map<string, string>();
 
 // Task 5: accumulates committed supplier names (append mode)
 let committedSupplierNames = "";
@@ -654,7 +659,7 @@ function refreshCostStateFromUI() {
   uiState.cost.contractScope = getInputValue("costContractScopeInput");
   uiState.cost.currency = getSelectValue("costCurrencySelect");
   uiState.cost.indexType = getSelectValue("costIndexTypeSelect");
-  uiState.cost.baseIndexDate = getInputValue("costBaseIndexDateInput");
+  uiState.cost.baseIndexDate = getSelectValue("costBaseIndexDateSelect");
   uiState.cost.indexMode = getCostIndexMode();
   uiState.cost.indexPoints = getInputValue("costIndexPointsInput");
   uiState.cost.paymentTerms = getSelectValue("costPaymentTermsSelect");
@@ -689,7 +694,7 @@ function wireCostUI() {
       const idxSel = document.getElementById("costIndexTypeSelect") as HTMLSelectElement | null;
       if (idxSel) idxSel.value = "";
 
-      setInputValue("costBaseIndexDateInput", "");
+      setSelectValue("costBaseIndexDateSelect", "");
       setCostIndexMode("");
       setInputValue("costIndexPointsInput", "");
 
@@ -718,7 +723,7 @@ function wireCostUI() {
     "costContractScopeInput",
     "costCurrencySelect",
     "costIndexTypeSelect",
-    "costBaseIndexDateInput",
+    "costBaseIndexDateSelect",
     "costIndexPointsInput",
     "costPaymentTermsSelect"
   ];
@@ -1014,6 +1019,41 @@ async function loadLookups() {
     fillSelectById("costIndexTypeSelect", idxValues, "— בחר/י סוג מדד —");
     setSelectDisabled("costIndexTypeSelect", false);
 
+    // Load madad values list (date → points)
+    setSelectDisabled("costBaseIndexDateSelect", true, "— טוען ערכי מדד… —");
+    const madadValListId = await getListId(siteId, token, MADAD_VALUES_LIST_DISPLAY_NAME, MADAD_VALUES_LIST_SERVER_RELATIVE_URL);
+    const madadItems = await getListItemsFields(siteId, madadValListId, token, [
+      MADAD_VALUES_FIELDS.date, MADAD_VALUES_FIELDS.value
+    ]);
+    madadValuesByDate = new Map<string, string>();
+    const madadDates: string[] = [];
+    madadItems.forEach(it => {
+      const rawDate = (it.fields?.[MADAD_VALUES_FIELDS.date] ?? "").toString().trim();
+      const val = (it.fields?.[MADAD_VALUES_FIELDS.value] ?? "").toString().trim();
+      if (!rawDate) return;
+      const d = rawDate.substring(0, 10); // YYYY-MM-DD
+      const label = d.split("-").reverse().join("/"); // DD/MM/YYYY
+      madadValuesByDate.set(d, val);
+      madadDates.push(d);
+    });
+    madadDates.sort();
+    const madadSelect = document.getElementById("costBaseIndexDateSelect") as HTMLSelectElement | null;
+    if (madadSelect) {
+      madadSelect.innerHTML = "";
+      madadSelect.append(new Option("— בחר/י תאריך מדד —", ""));
+      madadDates.forEach(d => {
+        const label = d.split("-").reverse().join("/");
+        madadSelect.append(new Option(label, d));
+      });
+      madadSelect.disabled = false;
+      madadSelect.addEventListener("change", () => {
+        const points = madadValuesByDate.get(madadSelect.value) ?? "";
+        setInputValue("costIndexPointsInput", points);
+        uiState.cost.baseIndexDate = madadSelect.value;
+        uiState.cost.indexPoints = points;
+      });
+    }
+
     setSelectDisabled("companyASelect", true, "— טוען חברות… —");
     const companiesListId = await getListId(siteId, token, COMPANIES_LIST_DISPLAY_NAME, COMPANIES_LIST_SERVER_RELATIVE_URL);
     const companyItems = await getListItemsFields(siteId, companiesListId, token, [
@@ -1282,7 +1322,7 @@ function applyLoadedFieldsToUI(fields: Record<string, any>) {
   if (uiState.cost.contractScope) setInputValue("costContractScopeInput", uiState.cost.contractScope);
   if (uiState.cost.currency) setSelectValue("costCurrencySelect", uiState.cost.currency);
   if (uiState.cost.indexType) setSelectValue("costIndexTypeSelect", uiState.cost.indexType);
-  if (uiState.cost.baseIndexDate) setInputValue("costBaseIndexDateInput", uiState.cost.baseIndexDate);
+  if (uiState.cost.baseIndexDate) setSelectValue("costBaseIndexDateSelect", uiState.cost.baseIndexDate);
   if (uiState.cost.indexMode) setCostIndexMode(uiState.cost.indexMode);
   if (uiState.cost.indexPoints) setInputValue("costIndexPointsInput", uiState.cost.indexPoints);
   if (uiState.cost.paymentTerms) setSelectValue("costPaymentTermsSelect", uiState.cost.paymentTerms);
@@ -1653,18 +1693,28 @@ async function updateDocumentFields(fields: Record<string, string | undefined>) 
 
     await context.sync();
 
+    // Phase 1: collect all CCs that need updating, load their font + paragraph
+    type CcInfo = {
+      cc: Word.ContentControl;
+      val: string;
+      range: Word.Range;
+      para: Word.Paragraph;
+    };
+    const toUpdate: CcInfo[] = [];
     const missing: string[] = [];
-    let updatedCount = 0;
 
     for (const { tag, col } of collections) {
       const val = (fields[tag] ?? "").toString();
-
-      // אם אין ערך – לא מעדכנים (כמו אצלך היום)
       if (!val) continue;
 
       if (col.items.length > 0) {
-        col.items.forEach(cc => cc.insertText(val, Word.InsertLocation.replace));
-        updatedCount += col.items.length;
+        col.items.forEach(cc => {
+          const range = cc.getRange();
+          range.load("font");
+          const para = range.paragraphs.getFirst();
+          para.load("alignment");
+          toUpdate.push({ cc, val, range, para });
+        });
       } else {
         missing.push(tag);
       }
@@ -1672,6 +1722,46 @@ async function updateDocumentFields(fields: Record<string, string | undefined>) 
 
     await context.sync();
 
+    // Phase 2: save formatting, insert text, restore formatting
+    const saved = toUpdate.map(({ range, para }) => ({
+      fontName: range.font.name,
+      fontSize: range.font.size,
+      bold: range.font.bold,
+      italic: range.font.italic,
+      color: range.font.color,
+      alignment: para.alignment,
+    }));
+
+    toUpdate.forEach(({ cc, val }) => {
+      cc.insertText(val, Word.InsertLocation.replace);
+    });
+
+    await context.sync();
+
+    // Phase 3: reapply font + paragraph on new ranges
+    const restoreRanges = toUpdate.map(({ cc }) => {
+      const r = cc.getRange();
+      r.load("font");
+      const p = r.paragraphs.getFirst();
+      p.load("alignment");
+      return { range: r, para: p };
+    });
+
+    await context.sync();
+
+    restoreRanges.forEach(({ range, para }, i) => {
+      const s = saved[i];
+      range.font.name = s.fontName;
+      range.font.size = s.fontSize;
+      range.font.bold = s.bold;
+      range.font.italic = s.italic;
+      range.font.color = s.color;
+      para.alignment = s.alignment;
+    });
+
+    await context.sync();
+
+    const updatedCount = toUpdate.length;
     const lbl = document.getElementById("item-subject");
     if (lbl) {
       if (missing.length) {
@@ -1867,7 +1957,7 @@ export async function loadFromDocumentIntoUI() {
       }
       if (docValues[TAGS.costBaseIndexDate]) {
         uiState.cost.baseIndexDate = docValues[TAGS.costBaseIndexDate];
-        setInputValue("costBaseIndexDateInput", docValues[TAGS.costBaseIndexDate]);
+        setSelectValue("costBaseIndexDateSelect", docValues[TAGS.costBaseIndexDate]);
       }
       if (docValues[TAGS.costIndexMode]) {
         uiState.cost.indexMode = docValues[TAGS.costIndexMode];

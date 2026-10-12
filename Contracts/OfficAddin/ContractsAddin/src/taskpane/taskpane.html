@@ -486,9 +486,9 @@
             <label for="costCompMethodSelect">אופן התמורה</label>
             <select id="costCompMethodSelect">
               <option value="">— בחר/י —</option>
-              <option value="אופן 1">אופן 1</option>
-              <option value="אופן 2">אופן 2</option>
-              <option value="אופן 3">אופן 3</option>
+              <option value="למדידה">למדידה</option>
+              <option value="מחיר קבוע/פאושלי">מחיר קבוע/פאושלי</option>
+              <option value="אחוז מהעלות">אחוז מהעלות</option>
             </select>
           </div>
 
@@ -515,8 +515,10 @@
           </div>
 
           <div class="field-item">
-            <label for="costBaseIndexDateInput">מדד בסיס (תאריך)</label>
-            <input id="costBaseIndexDateInput" type="date" />
+            <label for="costBaseIndexDateSelect">מדד בסיס (תאריך)</label>
+            <select id="costBaseIndexDateSelect">
+              <option value="">— טוען ערכי מדד… —</option>
+            </select>
           </div>
 
           <div class="field-item">
@@ -535,7 +537,7 @@
 
           <div class="field-item">
             <label for="costIndexPointsInput">נקודות מדד</label>
-            <input id="costIndexPointsInput" type="text" />
+            <input id="costIndexPointsInput" type="text" readonly style="background:#f0f0f0;" />
           </div>
 
           <div class="field-item">
