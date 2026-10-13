@@ -1200,7 +1200,7 @@ function applyLoadedFieldsToUI(fields: Record<string, any>) {
   const site = pickField(fields, "SiteName");
   const municipality = pickField(fields, "Municipality");
   const workDescription = pickField(fields, "WorkDescription");
-  const signDate = pickField(fields, "SignDate0", "SignDate", "signDate");
+  const signDate = pickField(fields, "signDate", "SignDate0");
   const startDate = pickField(fields, "StartDate");
   const months = pickField(fields, "DurationMonths");
   const expectedEnd = pickField(fields, "ExpectedEndDate");
