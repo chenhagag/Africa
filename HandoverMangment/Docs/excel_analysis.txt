@@ -1,0 +1,277 @@
+Sheet: מטריצת סטטוס עם מעליות
+Dimensions: A1:BP228
+
+================================================================================
+ROW 1 (group headers)
+================================================================================
+  Col A (index 1): 'פרויקט סמל דרום DUO TLV'
+  Col BP (index 68): 'עמודה1'
+
+================================================================================
+HEADER ROW (Row 2)
+================================================================================
+  Col A (index 1): 'סטטוס דירות מכורות - 14/04/2025'
+  Col BP (index 68): 'עמודה1'
+
+================================================================================
+ROW 3 (sub-header or data)
+================================================================================
+  Col BP (index 68): 'כותרות'
+
+================================================================================
+ROW 4 (sub-header or data)
+================================================================================
+  Col L (index 12): 'מגדל דרומי (2)'
+  Col AO (index 41): 'מגדל צפוני (1)'
+  Col BP (index 68): 'כותרות'
+
+================================================================================
+ROW 5 (sub-header or data)
+================================================================================
+  Col B (index 2): 'TS'
+  Col C (index 3): 'TS'
+  Col D (index 4): 'TS'
+  Col E (index 5): 'TS'
+  Col F (index 6): 'TS'
+  Col G (index 7): 'TS'
+  Col H (index 8): 'TS'
+  Col J (index 10): 'TS'
+  Col K (index 11): 'TS'
+  Col L (index 12): 'TS'
+  Col M (index 13): 'TS'
+  Col N (index 14): 'TS'
+  Col O (index 15): 'TS'
+  Col P (index 16): 'TS'
+  Col Q (index 17): 'TS'
+  Col R (index 18): 'TS'
+  Col S (index 19): 'TS'
+  Col T (index 20): 'TS'
+  Col U (index 21): 'TS'
+  Col V (index 22): 'TS'
+  Col W (index 23): 'TS'
+  Col X (index 24): 'TS'
+  Col Y (index 25): 'TS'
+  Col Z (index 26): 'TS'
+  Col AA (index 27): 'TS'
+  Col AB (index 28): 'TS'
+  Col AC (index 29): 'TS'
+  Col AD (index 30): 'TS'
+  Col AE (index 31): 'TS'
+  Col AF (index 32): 'TS'
+  Col AG (index 33): 'TS'
+  Col AI (index 35): 'TN'
+  Col AJ (index 36): 'TN'
+  Col AK (index 37): 'TN'
+  Col AL (index 38): 'TN'
+  Col AM (index 39): 'TN'
+  Col AN (index 40): 'TN'
+  Col AO (index 41): 'TN'
+  Col AP (index 42): 'TN'
+  Col AQ (index 43): 'TN'
+  Col AR (index 44): 'TN'
+  Col AS (index 45): 'TN'
+  Col AT (index 46): 'TN'
+  Col AU (index 47): 'TN'
+  Col AV (index 48): 'TN'
+  Col AW (index 49): 'TN'
+  Col AX (index 50): 'TN'
+  Col AY (index 51): 'TN'
+  Col BA (index 53): 'TN'
+  Col BB (index 54): 'TN'
+  Col BC (index 55): 'TN'
+  Col BD (index 56): 'TN'
+  Col BE (index 57): 'TN'
+  Col BF (index 58): 'TN'
+  Col BG (index 59): 'TN'
+  Col BH (index 60): 'TN'
+  Col BI (index 61): 'TN'
+  Col BJ (index 62): 'TN'
+  Col BK (index 63): 'TN'
+  Col BL (index 64): 'TN'
+  Col BM (index 65): 'TN'
+  Col BP (index 68): 'כותרות'
+
+================================================================================
+ROW 6 (sub-header or data)
+================================================================================
+  Col AH (index 34): 'מקרא'
+  Col BP (index 68): 'כותרות'
+
+================================================================================
+ROW 7 (column headers)
+================================================================================
+  Col A (index 1): 'דירה בקומה'
+  Col B (index 2): 'קומה 50'
+  Col C (index 3): 'דירה'
+  Col D (index 4): 'H-S'
+  Col E (index 5): 'G-S'
+  Col F (index 6): 'F-S'
+  Col G (index 7): 'E-S'
+  Col H (index 8): 337
+  Col AO (index 41): 331
+  Col BH (index 60): 'E-N'
+  Col BI (index 61): 'F-N'
+  Col BJ (index 62): 'G-N'
+  Col BK (index 63): 'H-N'
+  Col BL (index 64): 'דירה'
+  Col BM (index 65): 'קומה 50'
+  Col BN (index 66): 'דירה בקומה'
+  Col BP (index 68): 'דירה'
+
+--- Data Row 8 ---
+  Col B (index 2): 50
+  Col C (index 3): 'סטטוס'
+  Col H (index 8): 'O.PH5.TS.Ap.337'
+  Col I (index 9): 'O.PH5.TS.Ap.337'
+  Col J (index 10): 'O.PH5.TS.Ap.337'
+  Col K (index 11): 'O.PH5.TS.Ap.337'
+  Col L (index 12): 'O.PH5.TS.Ap.337'
+  Col M (index 13): 'O.PH5.TS.Ap.337'
+  Col N (index 14): 'O.PH5.TS.Ap.337'
+  Col O (index 15): 'O.PH5.TS.Ap.337'
+  Col P (index 16): 'O.PH5.TS.Ap.337'
+  Col Q (index 17): 'O.PH5.TS.Ap.337'
+  Col R (index 18): 'O.PH5.TS.Ap.337'
+  Col S (index 19): 'O.PH5.TS.Ap.337'
+  Col T (index 20): 'O.PH5.TS.Ap.337'
+  Col U (index 21): 'O.PH5.TS.Ap.337'
+  Col V (index 22): 'O.PH5.TS.Ap.337'
+  Col W (index 23): 'O.PH5.TS.Ap.337'
+  Col X (index 24): 'O.PH5.TS.Ap.337'
+  Col Y (index 25): 'O.PH5.TS.Ap.337'
+  Col Z (index 26): 'O.PH5.TS.Ap.337'
+  Col AA (index 27): 'O.PH5.TS.Ap.337'
+  Col AE (index 31): 'S.2.1'
+  Col AF (index 32): 'S.3.1'
+  Col AG (index 33): 'S.4.1'
+  Col AH (index 34): 'P.4.1'
+  Col AI (index 35): 'S.5.1'
+  Col AJ (index 36): 'P.5.1'
+  Col AK (index 37): 'PH.1'
+  Col AO (index 41): 'S.PH5.TN.Ap.331'
+  Col AP (index 42): 'S.PH5.TN.Ap.331'
+  Col AQ (index 43): 'S.PH5.TN.Ap.331'
+  Col AR (index 44): 'S.PH5.TN.Ap.331'
+  Col AS (index 45): 'S.PH5.TN.Ap.331'
+  Col AT (index 46): 'S.PH5.TN.Ap.331'
+  Col AU (index 47): 'S.PH5.TN.Ap.331'
+  Col AV (index 48): 'S.PH5.TN.Ap.331'
+  Col AW (index 49): 'S.PH5.TN.Ap.331'
+  Col AX (index 50): 'S.PH5.TN.Ap.331'
+  Col AY (index 51): 'S.PH5.TN.Ap.331'
+  Col AZ (index 52): 'S.PH5.TN.Ap.331'
+  Col BA (index 53): 'S.PH5.TN.Ap.331'
+  Col BB (index 54): 'S.PH5.TN.Ap.331'
+  Col BC (index 55): 'S.PH5.TN.Ap.331'
+  Col BD (index 56): 'S.PH5.TN.Ap.331'
+  Col BE (index 57): 'S.PH5.TN.Ap.331'
+  Col BF (index 58): 'S.PH5.TN.Ap.331'
+  Col BG (index 59): 'S.PH5.TN.Ap.331'
+  Col BL (index 64): 'סטטוס'
+  Col BM (index 65): 50
+  Col BP (index 68): 'סטטוס'
+
+--- Data Row 9 ---
+  Col C (index 3): '# צל'
+  Col H (index 8): 337
+  Col AE (index 31): "2 חד'"
+  Col AF (index 32): "3 חד'"
+  Col AG (index 33): "4 חד'"
+  Col AH (index 34): "4 חד'"
+  Col AI (index 35): "5 חד'"
+  Col AJ (index 36): "5 חד'"
+  Col AK (index 37): 'פנטהאוס'
+  Col AO (index 41): 331
+  Col BL (index 64): '# צל'
+  Col BP (index 68): 'צל'
+
+--- Data Row 10 ---
+  Col B (index 2): 183.48
+  Col C (index 3): 'טיפוס'
+  Col H (index 8): 5001
+  Col AE (index 31): 'סטנדרט'
+  Col AF (index 32): 'סטנדרט'
+  Col AG (index 33): 'סטנדרט'
+  Col AH (index 34): 'פרימיום'
+  Col AI (index 35): 'סטנדרט'
+  Col AJ (index 36): 'פרימיום'
+  Col AO (index 41): 5001
+  Col BL (index 64): 'טיפוס'
+  Col BM (index 65): 183.48
+  Col BP (index 68): 'טיפוס'
+
+--- Data Row 11 ---
+  Col A (index 1): '2 דירות בקומה'
+  Col B (index 2): 'קומה 49'
+  Col C (index 3): 'דירה'
+  Col D (index 4): 'אלונקה'
+  Col E (index 5): 'כבאים'
+  Col H (index 8): 336
+  Col P (index 16): 335
+  Col Y (index 25): 336
+  Col AE (index 31): 'בעלים'
+  Col AF (index 32): 'בעלים'
+  Col AG (index 33): 'בעלים'
+  Col AH (index 34): 'בעלים'
+  Col AI (index 35): 'בעלים'
+  Col AJ (index 36): 'בעלים'
+  Col AK (index 37): 'בעלים'
+  Col AO (index 41): 330
+  Col AQ (index 43): 329
+  Col AY (index 51): 330
+  Col BJ (index 62): 'כבאים'
+  Col BK (index 63): 'אלונקה'
+  Col BL (index 64): 'דירה'
+  Col BM (index 65): 'קומה 49'
+  Col BN (index 66): '2 דירות בקומה'
+  Col BP (index 68): 'דירה'
+
+--- Data Row 12 ---
+  Col B (index 2): 49
+  Col C (index 3): 'סטטוס'
+  Col H (index 8): 'O.PH4.TS.Ap.336'
+  Col J (index 10): 'O.PH4.TS.Ap.336'
+  Col K (index 11): 'O.PH4.TS.Ap.336'
+  Col L (index 12): 'O.PH4.TS.Ap.336'
+  Col M (index 13): 'O.PH4.TS.Ap.336'
+  Col N (index 14): 'O.PH4.TS.Ap.336'
+  Col O (index 15): 'O.PH4.TS.Ap.336'
+  Col P (index 16): 'O.PH3.TS.Ap.335'
+  Col Q (index 17): 'O.PH3.TS.Ap.335'
+  Col R (index 18): 'O.PH3.TS.Ap.335'
+  Col S (index 19): 'O.PH3.TS.Ap.335'
+  Col T (index 20): 'O.PH3.TS.Ap.335'
+  Col U (index 21): 'O.PH3.TS.Ap.335'
+  Col V (index 22): 'O.PH3.TS.Ap.335'
+  Col W (index 23): 'O.PH3.TS.Ap.335'
+  Col X (index 24): 'O.PH3.TS.Ap.335'
+  Col Y (index 25): 'O.PH4.TS.Ap.336'
+  Col Z (index 26): 'O.PH3.TS.Ap.335'
+  Col AA (index 27): 'O.PH4.TS.Ap.336'
+  Col AE (index 31): 'o.s.2'
+  Col AF (index 32): 'o.s.3'
+  Col AG (index 33): 'o.s.4'
+  Col AH (index 34): 'o.p.4'
+  Col AI (index 35): 'o.s.5'
+  Col AJ (index 36): 'o.p.5'
+  Col AK (index 37): 'o.ph'
+  Col AO (index 41): 'V.GM.PH4.TN.Ap.330'
+  Col AP (index 42): 'V.GM.PH4.TN.Ap.330'
+  Col AQ (index 43): 'V.GM.PH3.TN.Ap.329'
+  Col AR (index 44): 'V.GM.PH3.TN.Ap.329'
+  Col AS (index 45): 'V.GM.PH3.TN.Ap.329'
+  Col AT (index 46): 'V.GM.PH3.TN.Ap.329'
+  Col AU (index 47): 'V.GM.PH3.TN.Ap.329'
+  Col AV (index 48): 'V.GM.PH3.TN.Ap.329'
+  Col AW (index 49): 'V.GM.PH3.TN.Ap.329'
+  Col AX (index 50): 'V.GM.PH3.TN.Ap.329'
+  Col AY (index 51): 'V.GM.PH4.TN.Ap.330'
+  Col BA (index 53): 'V.GM.PH4.TN.Ap.330'
+  Col BB (index 54): 'V.GM.PH4.TN.Ap.330'
+  Col BC (index 55): 'V.GM.PH4.TN.Ap.330'
+  Col BD (index 56): 'V.GM.PH4.TN.Ap.330'
+  Col BE (index 57): 'V.GM.PH4.TN.Ap.330'
+  Col BF (index 58): 'V.GM.PH4.TN.Ap.330'
+  Col BL (index 64): 'סטטוס'
+  Col BM (index 65): 49
+  Col BP (index 68): 'סטטוס'

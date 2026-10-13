@@ -1,0 +1,234 @@
+MERGED CELLS:
+  A1:BN1 -> 'פרויקט סמל דרום DUO TLV'
+  A2:BN2 -> 'סטטוס דירות מכורות - 14/04/2025'
+  A7:A10 -> 'דירה בקומה'
+  D7:D10 -> 'H-S'
+  E7:E10 -> 'G-S'
+  F7:F10 -> 'F-S'
+  G7:G10 -> 'E-S'
+  BH7:BH10 -> 'E-N'
+  BI7:BI10 -> 'F-N'
+  BJ7:BJ10 -> 'G-N'
+  BK7:BK10 -> 'H-N'
+  BN7:BN10 -> 'דירה בקומה'
+  A11:A18 -> '2 דירות בקומה'
+  D11:D14 -> 'אלונקה'
+  E11:E14 -> 'כבאים'
+  H11:O11 -> 336
+  Y11:AA11 -> 336
+  AO11:AP11 -> 330
+  AY11:BG11 -> 330
+  BJ11:BJ14 -> 'כבאים'
+  BK11:BK14 -> 'אלונקה'
+  BN11:BN18 -> '2 דירות בקומה'
+
+ALL SHEETS:
+  מטריצת סטטוס עם מעליות
+  טבלת סטטוס
+  מטריצת סטטוס עם הולד
+  קודים
+
+================================================================================
+FULL FLOOR DATA - Rows 11-16 (floor 49)
+================================================================================
+--- Row 11 ---
+  Col A (1): '2 דירות בקומה'
+  Col B (2): 'קומה 49'
+  Col C (3): 'דירה'
+  Col D (4): 'אלונקה'
+  Col E (5): 'כבאים'
+  Col H (8): 336
+  Col P (16): 335
+  Col Y (25): 336
+  Col AE (31): 'בעלים'
+  Col AF (32): 'בעלים'
+  Col AG (33): 'בעלים'
+  Col AH (34): 'בעלים'
+  Col AI (35): 'בעלים'
+  Col AJ (36): 'בעלים'
+  Col AK (37): 'בעלים'
+  Col AO (41): 330
+  Col AQ (43): 329
+  Col AY (51): 330
+  Col BJ (62): 'כבאים'
+  Col BK (63): 'אלונקה'
+  Col BL (64): 'דירה'
+  Col BM (65): 'קומה 49'
+  Col BN (66): '2 דירות בקומה'
+  Col BP (68): 'דירה'
+
+--- Row 12 ---
+  Col B (2): 49
+  Col C (3): 'סטטוס'
+  Col H (8): 'O.PH4.TS.Ap.336'
+  Col J (10): 'O.PH4.TS.Ap.336'
+  Col K (11): 'O.PH4.TS.Ap.336'
+  Col L (12): 'O.PH4.TS.Ap.336'
+  Col M (13): 'O.PH4.TS.Ap.336'
+  Col N (14): 'O.PH4.TS.Ap.336'
+  Col O (15): 'O.PH4.TS.Ap.336'
+  Col P (16): 'O.PH3.TS.Ap.335'
+  Col Q (17): 'O.PH3.TS.Ap.335'
+  Col R (18): 'O.PH3.TS.Ap.335'
+  Col S (19): 'O.PH3.TS.Ap.335'
+  Col T (20): 'O.PH3.TS.Ap.335'
+  Col U (21): 'O.PH3.TS.Ap.335'
+  Col V (22): 'O.PH3.TS.Ap.335'
+  Col W (23): 'O.PH3.TS.Ap.335'
+  Col X (24): 'O.PH3.TS.Ap.335'
+  Col Y (25): 'O.PH4.TS.Ap.336'
+  Col Z (26): 'O.PH3.TS.Ap.335'
+  Col AA (27): 'O.PH4.TS.Ap.336'
+  Col AE (31): 'o.s.2'
+  Col AF (32): 'o.s.3'
+  Col AG (33): 'o.s.4'
+  Col AH (34): 'o.p.4'
+  Col AI (35): 'o.s.5'
+  Col AJ (36): 'o.p.5'
+  Col AK (37): 'o.ph'
+  Col AO (41): 'V.GM.PH4.TN.Ap.330'
+  Col AP (42): 'V.GM.PH4.TN.Ap.330'
+  Col AQ (43): 'V.GM.PH3.TN.Ap.329'
+  Col AR (44): 'V.GM.PH3.TN.Ap.329'
+  Col AS (45): 'V.GM.PH3.TN.Ap.329'
+  Col AT (46): 'V.GM.PH3.TN.Ap.329'
+  Col AU (47): 'V.GM.PH3.TN.Ap.329'
+  Col AV (48): 'V.GM.PH3.TN.Ap.329'
+  Col AW (49): 'V.GM.PH3.TN.Ap.329'
+  Col AX (50): 'V.GM.PH3.TN.Ap.329'
+  Col AY (51): 'V.GM.PH4.TN.Ap.330'
+  Col BA (53): 'V.GM.PH4.TN.Ap.330'
+  Col BB (54): 'V.GM.PH4.TN.Ap.330'
+  Col BC (55): 'V.GM.PH4.TN.Ap.330'
+  Col BD (56): 'V.GM.PH4.TN.Ap.330'
+  Col BE (57): 'V.GM.PH4.TN.Ap.330'
+  Col BF (58): 'V.GM.PH4.TN.Ap.330'
+  Col BL (64): 'סטטוס'
+  Col BM (65): 49
+  Col BP (68): 'סטטוס'
+
+--- Row 13 ---
+  Col C (3): '# צל'
+  Col H (8): 336
+  Col P (16): 335
+  Col Y (25): 336
+  Col AE (31): 'מכורה'
+  Col AF (32): 'מכורה'
+  Col AG (33): 'מכורה'
+  Col AH (34): 'מכורה'
+  Col AI (35): 'מכורה'
+  Col AJ (36): 'מכורה'
+  Col AK (37): 'מכורה'
+  Col AO (41): 330
+  Col AQ (43): 329
+  Col AY (51): 330
+  Col BL (64): '# צל'
+  Col BP (68): 'צל'
+
+--- Row 14 ---
+  Col B (2): 179.48
+  Col C (3): 'טיפוס'
+  Col H (8): 4901
+  Col P (16): 4902
+  Col Y (25): 4901
+  Col AO (41): 4901
+  Col AQ (43): 4902
+  Col AY (51): 4901
+  Col BL (64): 'טיפוס'
+  Col BM (65): 179.48
+  Col BP (68): 'טיפוס'
+
+--- Row 15 ---
+  Col B (2): 'קומה 48'
+  Col C (3): 'דירה'
+  Col H (8): 334
+  Col P (16): 333
+  Col Y (25): 334
+  Col AE (31): 'פנויה'
+  Col AF (32): 'פנויה'
+  Col AG (33): 'פנויה'
+  Col AH (34): 'פנויה'
+  Col AI (35): 'פנויה'
+  Col AJ (36): 'פנויה'
+  Col AK (37): 'פנויה'
+  Col AO (41): 328
+  Col AQ (43): 327
+  Col AY (51): 328
+  Col BL (64): 'דירה'
+  Col BM (65): 'קומה 48'
+  Col BP (68): 'דירה'
+
+--- Row 16 ---
+  Col B (2): 48
+  Col C (3): 'סטטוס'
+  Col H (8): 'V.GM.PH2.TS.Ap.334'
+  Col J (10): 'V.GM.PH2.TS.Ap.334'
+  Col K (11): 'V.GM.PH2.TS.Ap.334'
+  Col L (12): 'V.GM.PH2.TS.Ap.334'
+  Col M (13): 'V.GM.PH2.TS.Ap.334'
+  Col N (14): 'V.GM.PH2.TS.Ap.334'
+  Col O (15): 'V.GM.PH2.TS.Ap.334'
+  Col P (16): 'V.GM.PH1.TS.Ap.333'
+  Col Q (17): 'V.GM.PH1.TS.Ap.333'
+  Col R (18): 'V.GM.PH1.TS.Ap.333'
+  Col S (19): 'V.GM.PH1.TS.Ap.333'
+  Col T (20): 'V.GM.PH1.TS.Ap.333'
+  Col U (21): 'V.GM.PH1.TS.Ap.333'
+  Col V (22): 'V.GM.PH1.TS.Ap.333'
+  Col W (23): 'V.GM.PH1.TS.Ap.333'
+  Col X (24): 'V.GM.PH1.TS.Ap.333'
+  Col Y (25): 'V.GM.PH2.TS.Ap.334'
+  Col Z (26): 'V.GM.PH1.TS.Ap.333'
+  Col AA (27): 'V.GM.PH2.TS.Ap.334'
+  Col AE (31): 'v.s.2'
+  Col AF (32): 'v.s.3'
+  Col AG (33): 'v.s.4'
+  Col AH (34): 'v.p.4'
+  Col AI (35): 'v.s.5'
+  Col AJ (36): 'v.p.5'
+  Col AK (37): 'v.ph'
+  Col AO (41): 'V.GM.PH2.TN.Ap.328'
+  Col AP (42): 'V.GM.PH2.TN.Ap.328'
+  Col AQ (43): 'V.GM.PH1.TN.Ap.327'
+  Col AR (44): 'V.GM.PH1.TN.Ap.327'
+  Col AS (45): 'V.GM.PH1.TN.Ap.327'
+  Col AT (46): 'V.GM.PH1.TN.Ap.327'
+  Col AU (47): 'V.GM.PH1.TN.Ap.327'
+  Col AV (48): 'V.GM.PH1.TN.Ap.327'
+  Col AW (49): 'V.GM.PH1.TN.Ap.327'
+  Col AX (50): 'V.GM.PH1.TN.Ap.327'
+  Col AY (51): 'V.GM.PH2.TN.Ap.328'
+  Col BA (53): 'V.GM.PH2.TN.Ap.328'
+  Col BB (54): 'V.GM.PH2.TN.Ap.328'
+  Col BC (55): 'V.GM.PH2.TN.Ap.328'
+  Col BD (56): 'V.GM.PH2.TN.Ap.328'
+  Col BE (57): 'V.GM.PH2.TN.Ap.328'
+  Col BF (58): 'V.GM.PH2.TN.Ap.328'
+  Col BL (64): 'סטטוס'
+  Col BM (65): 48
+  Col BP (68): 'סטטוס'
+
+================================================================================
+LEGEND AREA (Rows 6-10, Cols AE-AK)
+================================================================================
+  Row 6, Col AH (34): 'מקרא'
+  Row 8, Col AE (31): 'S.2.1'
+  Row 8, Col AF (32): 'S.3.1'
+  Row 8, Col AG (33): 'S.4.1'
+  Row 8, Col AH (34): 'P.4.1'
+  Row 8, Col AI (35): 'S.5.1'
+  Row 8, Col AJ (36): 'P.5.1'
+  Row 8, Col AK (37): 'PH.1'
+  Row 9, Col AE (31): "2 חד'"
+  Row 9, Col AF (32): "3 חד'"
+  Row 9, Col AG (33): "4 חד'"
+  Row 9, Col AH (34): "4 חד'"
+  Row 9, Col AI (35): "5 חד'"
+  Row 9, Col AJ (36): "5 חד'"
+  Row 9, Col AK (37): 'פנטהאוס'
+  Row 10, Col AE (31): 'סטנדרט'
+  Row 10, Col AF (32): 'סטנדרט'
+  Row 10, Col AG (33): 'סטנדרט'
+  Row 10, Col AH (34): 'פרימיום'
+  Row 10, Col AI (35): 'סטנדרט'
+  Row 10, Col AJ (36): 'פרימיום'

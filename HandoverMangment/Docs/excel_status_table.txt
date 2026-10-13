@@ -1,0 +1,164 @@
+Sheet: טבלת סטטוס
+Dimensions: A1:Y670
+Max row: 670, Max col: 25
+
+MERGED CELLS (first 20 rows):
+
+================================================================================
+ROW 1
+================================================================================
+
+================================================================================
+ROW 2
+================================================================================
+  Col A (index 1): 'סימון'
+  Col B (index 2): 'סימון2'
+  Col C (index 3): 'מגדל'
+  Col D (index 4): 'קומה'
+  Col E (index 5): 'מספר דירה'
+  Col F (index 6): 'מספר צל'
+  Col G (index 7): 'טיפוס'
+  Col H (index 8): 'מספר חדרים'
+  Col I (index 9): 'סוג'
+  Col J (index 10): 'סוג מרפסת'
+  Col K (index 11): 'סטטוס'
+  Col L (index 12): 'סטטוס2'
+  Col M (index 13): 'סטטוס מסירה '
+  Col N (index 14): 'סטטוס גמר '
+  Col O (index 15): 'הערות טבלה אלון'
+  Col P (index 16): 'סטטוס ביצוע-תוכניות +בחירות גמר'
+  Col Q (index 17): 'עדכון ע"פ מייל ליאור מיום 02/06/2026 (14/06/2026)'
+  Col R (index 18): 'ספק ריצופים וכלים סניטרים'
+  Col S (index 19): 'תאריך חתימה'
+  Col T (index 20): 'שם רוכש/בעלים'
+  Col U (index 21): 'שיוך חניה 1'
+  Col V (index 22): 'שיוך חניה 2'
+  Col W (index 23): 'שיוך מחסן'
+  Col Y (index 25): 'מקרא לגמר דירות ע"פ PDF 31/03/2026'
+
+================================================================================
+HEADER ROW (Row 2) - ALL cells including empty
+================================================================================
+  Col A (index 1): 'סימון'
+  Col B (index 2): 'סימון2'
+  Col C (index 3): 'מגדל'
+  Col D (index 4): 'קומה'
+  Col E (index 5): 'מספר דירה'
+  Col F (index 6): 'מספר צל'
+  Col G (index 7): 'טיפוס'
+  Col H (index 8): 'מספר חדרים'
+  Col I (index 9): 'סוג'
+  Col J (index 10): 'סוג מרפסת'
+  Col K (index 11): 'סטטוס'
+  Col L (index 12): 'סטטוס2'
+  Col M (index 13): 'סטטוס מסירה '
+  Col N (index 14): 'סטטוס גמר '
+  Col O (index 15): 'הערות טבלה אלון'
+  Col P (index 16): 'סטטוס ביצוע-תוכניות +בחירות גמר'
+  Col Q (index 17): 'עדכון ע"פ מייל ליאור מיום 02/06/2026 (14/06/2026)'
+  Col R (index 18): 'ספק ריצופים וכלים סניטרים'
+  Col S (index 19): 'תאריך חתימה'
+  Col T (index 20): 'שם רוכש/בעלים'
+  Col U (index 21): 'שיוך חניה 1'
+  Col V (index 22): 'שיוך חניה 2'
+  Col W (index 23): 'שיוך מחסן'
+  Col X (index 24): None
+  Col Y (index 25): 'מקרא לגמר דירות ע"פ PDF 31/03/2026'
+
+--- Row 3 ---
+  Col A (index 1): 'O.S.2C.TS.Ap.1'
+  Col B (index 2): 'O.MH.S.2C.TS.Ap.1'
+  Col C (index 3): 'דרומי'
+  Col D (index 4): 1
+  Col E (index 5): 1
+  Col F (index 6): 101
+  Col G (index 7): '2C*'
+  Col H (index 8): 2
+  Col I (index 9): 'סטנדרט'
+  Col J (index 10): 'E'
+  Col K (index 11): 'בעלים'
+  Col L (index 12): 'בעלים'
+  Col M (index 13): 'מסירת חזקה'
+  Col S (index 19): datetime.datetime(2020, 7, 28, 0, 0)
+  Col T (index 20): 'ישפה נדל"ן בע"מ'
+  Col U (index 21): ''
+  Col V (index 22): ''
+  Col W (index 23): '3-12'
+  Col Y (index 25): 'גמר מינימלי'
+
+--- Row 4 ---
+  Col A (index 1): 'O.S.4G.TS.Ap.2'
+  Col B (index 2): 'O.S.4G.TS.Ap.2'
+  Col C (index 3): 'דרומי'
+  Col D (index 4): 1
+  Col E (index 5): 2
+  Col F (index 6): 102
+  Col G (index 7): '4G'
+  Col H (index 8): 4
+  Col I (index 9): 'סטנדרט'
+  Col J (index 10): '4G'
+  Col K (index 11): 'בעלים'
+  Col L (index 12): 'בעלים'
+  Col S (index 19): datetime.datetime(2020, 7, 28, 0, 0)
+  Col T (index 20): 'אביעד שוב'
+  Col U (index 21): '5064'
+  Col V (index 22): '5064A'
+  Col W (index 23): ''
+  Col Y (index 25): 'גמר מלא סטנדרט'
+
+--- Row 5 ---
+  Col A (index 1): 'O.S.4H.TS.Ap.3'
+  Col B (index 2): 'O.S.4H.TS.Ap.3'
+  Col C (index 3): 'דרומי'
+  Col D (index 4): 1
+  Col E (index 5): 3
+  Col F (index 6): 103
+  Col G (index 7): '4H'
+  Col H (index 8): 4
+  Col I (index 9): 'סטנדרט'
+  Col J (index 10): '4H'
+  Col K (index 11): 'בעלים'
+  Col L (index 12): 'בעלים'
+  Col S (index 19): datetime.datetime(2020, 7, 28, 0, 0)
+  Col T (index 20): 'יוסף יחזקאל '
+  Col U (index 21): '5065'
+  Col V (index 22): '5065A'
+  Col W (index 23): '3-35'
+  Col Y (index 25): 'גמר מלא- טיוב תכנון'
+
+--- Row 6 ---
+  Col A (index 1): 'S.S.2A.TS.Ap.4'
+  Col B (index 2): 'S.S.2A.TS.Ap.4'
+  Col C (index 3): 'דרומי'
+  Col D (index 4): 2
+  Col E (index 5): 4
+  Col F (index 6): 201
+  Col G (index 7): '2A'
+  Col H (index 8): 2
+  Col I (index 9): 'סטנדרט'
+  Col J (index 10): 'G'
+  Col K (index 11): 'מכורה'
+  Col L (index 12): 'מכורה'
+  Col S (index 19): datetime.datetime(2021, 11, 21, 0, 0)
+  Col T (index 20): 'תומר קוקו השקעות בע"מ'
+  Col Y (index 25): 'דירות זוהר לוי -160 מ"ר'
+
+--- Row 7 ---
+  Col A (index 1): 'O.S.2B.TS.Ap.5'
+  Col B (index 2): 'O.S.2B.TS.Ap.5'
+  Col C (index 3): 'דרומי'
+  Col D (index 4): 2
+  Col E (index 5): 5
+  Col F (index 6): 202
+  Col G (index 7): '2B'
+  Col H (index 8): 2
+  Col I (index 9): 'סטנדרט'
+  Col J (index 10): 'F'
+  Col K (index 11): 'בעלים'
+  Col L (index 12): 'בעלים'
+  Col S (index 19): datetime.datetime(2020, 7, 28, 0, 0)
+  Col T (index 20): 'טובה ראט זלצר'
+  Col U (index 21): ''
+  Col V (index 22): ''
+  Col W (index 23): '3-50'
+  Col Y (index 25): 'דירות זוהר לוי -4 חדרים'
